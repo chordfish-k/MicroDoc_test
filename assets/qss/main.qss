@@ -10,19 +10,34 @@ QLabel{
 
 
 
-
-
-
-/*main */
-#videoPage {
-	color: #ffffff;
-	font-size: 18px;
-	background-color: rgb(43, 48, 56);
-}
-
-/*LineEdit*/
 QLineEdit{
 	background-color: rgba(0, 0, 0,0);
 	border:none;
 	border-bottom:2px solid rgb(71, 75, 131);
 }
+
+#mainContent{
+	color: #ffffff;
+	font-size: 18px;
+	background-color: rgb(43, 48, 56);
+}
+QSplitter::handle {
+	height:1px;
+	background-color: #fff;
+}
+
+
+QPushButton {
+	background-color: transparent;
+	color: #ffffff;
+	font-size: 14px;
+	padding: 5px;
+	border: none;
+}
+QPushButton:hover {
+	background-color: rgb(62, 70, 86);
+}
+QPushButton:pressed {	
+	background-color: rgb(189, 147, 249);
+}
+

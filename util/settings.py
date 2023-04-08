@@ -6,13 +6,18 @@ class Settings:
     config_dict:dict = {}
     file_path:str = "./settings.ini"
 
-    def __init__(self, file_path = "./settings.ini"):
+    def __init__(self, file_path:str = "./settings.ini"):
         self.file_path = file_path
-        self.config.add_section('settings')
+        
+        if not self.config.has_section('settings'):
+            self.config.add_section('settings')
 
     
-    def addItem(self, key, value):
+    def setItem(self, key:str, value):
         self.config_dict[key] = value
+
+    def get(self, key:str):
+        return self.config_dict.get(key)
 
 
     def load(self):

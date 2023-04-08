@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *cpython-310.pyc
 *$py.class
+*_ui.py
 
 # C extensions
 *.so

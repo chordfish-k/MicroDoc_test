@@ -47,8 +47,6 @@ class VideoPlayerWidget(QWidget):
             self.timer = QTimer(self.window)
             self.timer.timeout.connect(self.nextFrame)  # timeout时，执行show_pic
 
-
-
         def captureNextFrame(self):
             ret, readFrame = self.capture.read()
             if (ret == True):
@@ -126,6 +124,9 @@ class VideoPlayerWidget(QWidget):
     video: Video
     video_zoom: QLabel
 
+    isLoaded = False
+    isPlaying = False
+
     def __init__(self, window):
         super().__init__()
         self.window = window
@@ -142,24 +143,34 @@ class VideoPlayerWidget(QWidget):
 
     def load(self, path):
         self.video = self.Video(self.window, path, self.video_zoom)
-        self.play()
-
+        self.isPlaying = False
+        self.isLoaded = True
 
 
     def play(self):
-        self.video.timer.start(int(1000 / self.video.fps))
+        if self.isLoaded:
+            self.video.timer.start(int(1000 / self.video.fps))
+            self.isPlaying = True
 
 
     def stop(self):
-        pass
+        if self.isLoaded and self.isPlaying:
+            self.isLoaded = False
+            self.isPlaying = False
+            self.video.timer.stop()
+            del self.video
+            self.video = None
+            self.clearScreen()
 
 
     def pause(self):
-        pass
+        if self.isLoaded and self.isPlaying:
+            self.video.timer.stop()
+            self.isPlaying = False
 
 
-    def clear(self):
-        pass
+    def clearScreen(self):
+        self.video_zoom.setPixmap(QPixmap())
 
 
     def setProgress(self, value):

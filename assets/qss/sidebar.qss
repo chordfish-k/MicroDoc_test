@@ -1,6 +1,6 @@
 /* Left Menu */
 #logo {
-	border-image: url(:/images/images/md.png);	
+	border-image: url(:/images/assets/images/images/md.png);	
 }
 #leftMenu .QPushButton {	
 	background-position: left center;
@@ -23,15 +23,11 @@
 	background-color: rgb(33, 37, 43);
 }
 #btnFile {
-	background-image: url(:/icons/icons/cil-folder.png)
+	background-image: url(:/icons/assets/images/icons/cil-folder.png)
 }
 #btnSettings {
-	background-image: url(:/icons/icons/cil-settings.png)
+	background-image: url(:/icons/assets/images/icons/cil-settings.png)
 }
 #btnSecondPage {
-	background-image:  url(:/icons/icons/cil-chart-line.png)
-}
-#logo {
-	padding: 4px;
-	background-image:url(:/images/images/md.png);
+	background-image:  url(:/icons/assets/images/icons/cil-chart-line.png)
 }

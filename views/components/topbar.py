@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow, QWidget, QPushButton
+from PySide6.QtWidgets import QMainWindow, QWidget,QPushButton
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QMouseEvent
 
@@ -41,11 +41,11 @@ class TopBarWidget(QWidget):
         if not self.isMaximized:
             self.window.showMaximized()
             self.tbBtnMaximize.setStyleSheet(
-                "background-image: url(:/icons/icons/icon_restore.png)")
+               "background-image: url(:/icons/assets/images/icons/icon_restore.png)")
         else:
             self.window.showNormal()
             self.tbBtnMaximize.setStyleSheet(
-                "background-image: url(:/icons/icons/icon_maximize.png)")
+                "background-image: url(:/icons/assets/images/icons/icon_maximize.png)")
         
         self.isMaximized = not self.isMaximized
 

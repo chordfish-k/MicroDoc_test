@@ -1,0 +1,31 @@
+#videoSlider::groove:horizontal {
+    border-radius: 5px;
+	background-color: rgb(52, 59, 72);
+    height: 20px;
+	margin: 0px;
+
+}
+#videoSlider::groove:horizontal:hover {
+	background-color: rgb(55, 62, 76);
+}
+#videoSlider::handle:horizontal {
+    background-color: rgb(189, 147, 249);
+    border: none;
+    height: 20px;
+    width: 30px;
+    margin: 0px;
+	border-radius: 5px;
+}
+#videoSlider::handle:horizontal:hover {
+    background-color: rgb(195, 155, 255);
+}
+#videoSlider::handle:horizontal:pressed {
+    background-color: rgb(255, 121, 198);
+}
+
+#btnStart {
+    background-image: url(:/icons/assets/images/icons/cil-media-play.png)
+}
+#btnStop {
+    background-image: url(:/icons/assets/images/icons/cil-media-stop.png)
+}

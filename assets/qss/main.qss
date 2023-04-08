@@ -46,6 +46,8 @@ QSplitter::handle:pressed {
 /* Button */
 QPushButton {
 	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center;
 	color: #ffffff;
 	font-size: 14px;
 	padding: 5px;

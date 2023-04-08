@@ -23,11 +23,11 @@
 	/*border-left: 3px solid rgb(44, 49, 58);*/
 }
 #tbBtnClose {
-	background-image: url(:/icons/icons/icon_close.png)
+	background-image: url(:/icons/assets/images/icons/icon_close.png)
 }
 #tbBtnMinimize {
-	background-image: url(:/icons/icons/icon_minimize.png)
+	background-image: url(:/icons/assets/images/icons/icon_minimize.png)
 }
 #tbBtnMaximize {
-	background-image: url(:/icons/icons/icon_maximize.png)
+	background-image: url(:/icons/assets/images/icons/icon_maximize.png)
 }

@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QMainWindow, QWidget, QPushButton
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QMouseEvent
+from PySide6.QtWidgets import QMainWindow, QWidget, QPushButton
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QMouseEvent
 
 import os
 
@@ -23,6 +23,14 @@ class TopBarWidget(QWidget):
 
         Assets.loadUi('topbar', self)
         Assets.loadQss('topbar', self)
+
+        self.initComponents()
+
+
+    def initComponents(self):
+        self.tbBtnClose = self.ui.tbBtnClose
+        self.tbBtnMinimize = self.ui.tbBtnMinimize
+        self.tbBtnMaximize = self.ui.tbBtnMaximize
 
         self.tbBtnClose.clicked.connect(self.window.close)
         self.tbBtnMinimize.clicked.connect(self.window.showMinimized)

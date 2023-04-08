@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QMainWindow, QWidget, QLabel
-from PyQt6.QtGui import QIcon, QPixmap, QImage
-from PyQt6.QtCore import QTimer
+from PySide6.QtWidgets import QMainWindow, QWidget, QLabel
+from PySide6.QtGui import QIcon, QPixmap, QImage
+from PySide6.QtCore import QTimer
 import os
 import cv2
 import time
@@ -132,6 +132,12 @@ class VideoPlayerWidget(QWidget):
 
         Assets.loadUi('video_player', self)
         # Assets.loadQss('video_player', self)
+
+        self.initComponents()
+
+
+    def initComponents(self):
+        self.video_zoom = self.ui.video_zoom
 
 
     def load(self, path):

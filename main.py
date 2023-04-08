@@ -1,7 +1,9 @@
-from PyQt6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication
 from views import main_window
 from util.settings import Settings
 import sys, os
+
+
 
 os.environ["QT_FONT_DPI"] = "96" 
 

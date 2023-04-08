@@ -1,4 +1,7 @@
 /* Left Menu */
+#logo {
+	border-image: url(:/images/images/md.png);	
+}
 #leftMenu .QPushButton {	
 	background-position: left center;
     background-repeat: no-repeat;

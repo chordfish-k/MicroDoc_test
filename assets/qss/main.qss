@@ -9,24 +9,41 @@ QLabel{
 }
 
 
-
 QLineEdit{
 	background-color: rgba(0, 0, 0,0);
 	border:none;
 	border-bottom:2px solid rgb(71, 75, 131);
 }
 
+/* Main */
 #mainContent{
 	color: #ffffff;
 	font-size: 18px;
 	background-color: rgb(43, 48, 56);
 }
+/* #leftSide {
+	padding-right: 4px;
+}
+#rightPart {
+	padding-left: 4px;
+} */
+
 QSplitter::handle {
-	height:1px;
-	background-color: #fff;
+	/*height:2px;
+	background-color: #aaa;*/
+	height:4px;
+	width: 4px;
+	background: rgb(33, 37, 43);
+}
+QSplitter::handle:hover {
+	background-color: rgb(62, 70, 86);
+}
+QSplitter::handle:pressed {
+	background-color: rgb(189, 147, 249);
 }
 
 
+/* Button */
 QPushButton {
 	background-color: transparent;
 	color: #ffffff;

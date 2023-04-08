@@ -1,7 +1,8 @@
-from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget,
+from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget,
                              QBoxLayout, QSplitter)
-from PyQt6.QtCore import QDir, Qt
-from PyQt6.QtGui import QIcon, QResizeEvent
+from PySide6.QtCore import QDir, Qt
+from PySide6.QtGui import QIcon, QMouseEvent
+from PySide6.QtUiTools import loadUiType, QUiLoader
 import os, sys
 
 from views.components import (topbar, sidebar, 
@@ -20,6 +21,7 @@ class MyApp(QMainWindow):
     topBar: QBoxLayout = None
     sideBar: QBoxLayout = None
     main: QBoxLayout = None
+    splitter: QSplitter = None
 
     topBarWidget: topbar.TopBarWidget = None
     sideBarWidget: sidebar.SideBarWidget = None
@@ -43,9 +45,13 @@ class MyApp(QMainWindow):
         self.initComponents()
         # 重设窗体大小
         self.resize(1088, 722)
-        
+
 
     def initComponents(self):
+        self.topBar = self.ui.topBar
+        self.sideBar = self.ui.sideBar
+        self.main = self.ui.main
+
         # Topbar组件
         self.topBarWidget = topbar.TopBarWidget(self)
         self.topBar.addWidget(self.topBarWidget)
@@ -64,12 +70,18 @@ class MyApp(QMainWindow):
         self.splitter.setOrientation(Qt.Orientation.Horizontal)
         self.splitter.setStretchFactor(0, 8)
         self.splitter.setStretchFactor(1, 5)
+        self.splitter.handle(1).setAttribute(Qt.WidgetAttribute.WA_Hover, True)
         self.main.addWidget(self.splitter)
 
 
     def setVideoPath(self, path):
         logger.debug('got path: '+ path)
         self.videoPlayerWidget.load(path)
+
+
+    def splitterMousePressEvent(self, e:QMouseEvent):
+        logger.debug('clicked')
+        return super().mousePressEvent(e)
 
 
 

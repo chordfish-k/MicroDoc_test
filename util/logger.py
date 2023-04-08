@@ -1,7 +1,7 @@
 import logging
 
 # 创建日志器对象
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("logger")
 
 # 设置logger可输出日志级别范围
 logger.setLevel(logging.DEBUG)
@@ -16,6 +16,6 @@ logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
 # 设置格式并赋予handler
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter('%(asctime)s - [%(name)s] - [%(levelname)s] - %(message)s')
 console_handler.setFormatter(formatter)
 file_handler.setFormatter(formatter)

@@ -1,3 +1,8 @@
 #subVideoBtnBg {
 	background-color: rgb(33, 37, 43);
 }
+
+QPushButton {
+    padding-top: 16px;
+    padding-bottom: 16px;
+}

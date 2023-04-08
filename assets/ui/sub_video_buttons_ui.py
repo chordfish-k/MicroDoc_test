@@ -31,8 +31,9 @@ class Ui_subVideoButtons(object):
         self.subVideoBtnBg.setObjectName(u"subVideoBtnBg")
         self.subVideoBtnBg.setStyleSheet(u"")
         self.subVideoBtnBgLayout = QHBoxLayout(self.subVideoBtnBg)
+        self.subVideoBtnBgLayout.setSpacing(0)
         self.subVideoBtnBgLayout.setObjectName(u"subVideoBtnBgLayout")
-        self.subVideoBtnBgLayout.setContentsMargins(9, 9, 9, 9)
+        self.subVideoBtnBgLayout.setContentsMargins(0, 0, 0, 0)
         self.sv_btn_camera = QPushButton(self.subVideoBtnBg)
         self.sv_btn_camera.setObjectName(u"sv_btn_camera")
 

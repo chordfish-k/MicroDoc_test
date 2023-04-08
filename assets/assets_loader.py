@@ -1,7 +1,11 @@
-from PyQt6.QtCore import QDir
-from PyQt6.QtWidgets import QWidget
-from PyQt6.uic import load_ui
+from PySide6.QtCore import QDir, QFile
+from PySide6.QtWidgets import QWidget, QMainWindow
+from PySide6.QtUiTools import loadUiType, QUiLoader
+
 import os
+
+from util.logger import logger
+
 
 class Assets:
 
@@ -22,4 +26,10 @@ class Assets:
     @staticmethod
     def loadUi(name:str, qtinstance):
         path = os.path.join(Assets.getAssetsPath('ui'), name + '.ui')
-        load_ui.loadUi(path, qtinstance)
+        
+        qtinstance.ui = loadUiType(path)[0]()
+        if qtinstance.ui:
+            logger.debug("loaded uifile succeed: " + path)
+            qtinstance.ui.setupUi(qtinstance)
+        else:
+            logger.warning("loaded uifile failed: " + path)

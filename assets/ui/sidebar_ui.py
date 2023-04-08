@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'sidebar.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.3.0
+## Created by: Qt User Interface Compiler version 6.5.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -17,7 +17,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QPushButton,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
-import resources_rc
 
 class Ui_leftMenuBg(object):
     def setupUi(self, leftMenuBg):
@@ -35,15 +34,12 @@ class Ui_leftMenuBg(object):
         self.topLogoInfo.setObjectName(u"topLogoInfo")
         self.topLogoInfo.setMinimumSize(QSize(60, 50))
         self.topLogoInfo.setMaximumSize(QSize(60, 50))
-        self.topLogoInfo.setStyleSheet(u"")
         self.topLogoInfo.setFrameShape(QFrame.NoFrame)
         self.topLogoInfo.setFrameShadow(QFrame.Raised)
         self.topLogoInfo.setLineWidth(0)
         self.logo = QLabel(self.topLogoInfo)
         self.logo.setObjectName(u"logo")
         self.logo.setGeometry(QRect(5, 0, 50, 50))
-        self.logo.setStyleSheet(u"")
-        self.logo.setPixmap(QPixmap(u":/images/images/md.png"))
         self.logo.setScaledContents(True)
 
         self.verticalLayout_3.addWidget(self.topLogoInfo)

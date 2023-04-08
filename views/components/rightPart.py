@@ -1,7 +1,7 @@
-from PyQt6.QtWidgets import (QMainWindow, QWidget, QLabel, 
+from PySide6.QtWidgets import (QMainWindow, QWidget, QLabel, 
                              QPushButton, QBoxLayout)
-from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtCore import QDir
+from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtCore import QDir
 import os
 
 from assets.assets_loader import Assets
@@ -28,6 +28,9 @@ class RightPartWidget(QWidget):
 
 
     def initComponents(self):
+        self.subVideo = self.ui.subVideo
+        self.subVideo = self.ui.subVideo
+
         self.videoWidget = videoPlayer.VideoPlayerWidget(self.window)
         self.subVideo.addWidget(self.videoWidget)
 

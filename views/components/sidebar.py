@@ -1,7 +1,7 @@
-from PyQt6.QtWidgets import (QMainWindow, QWidget, QLabel, 
+from PySide6.QtWidgets import (QMainWindow, QWidget, QLabel, 
                              QPushButton, QFileDialog)
-from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtCore import QDir
+from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtCore import QDir
 import os
 
 from assets.assets_loader import Assets
@@ -12,7 +12,6 @@ from util.settings import Settings
 class SideBarWidget(QWidget):
     window: QMainWindow
     
-    logo: QLabel
     btnFile: QPushButton
 
     def __init__(self, window):
@@ -22,6 +21,11 @@ class SideBarWidget(QWidget):
         Assets.loadUi('sidebar', self)
         Assets.loadQss('sidebar', self)
 
+        self.initComponents()
+    
+    
+    def initComponents(self):
+        self.btnFile = self.ui.btnFile
         self.btnFile.clicked.connect(self.openVideoFile)
 
 

@@ -1,0 +1,40 @@
+/* Left Menu */
+#leftMenu .QPushButton {	
+	background-position: left center;
+    background-repeat: no-repeat;
+	border: none;
+	border-left: 22px solid transparent;
+	background-color: transparent;
+	text-align: left;
+	padding-left: 44px;
+}
+#leftMenu .QPushButton:hover {
+	background-color: rgb(62, 70, 86);
+}
+#leftMenu .QPushButton:pressed {	
+	background-color: rgb(189, 147, 249);
+	color: rgb(255, 255, 255);
+}
+
+#leftMenuBg {	
+	background-color: rgb(33, 37, 43);
+}
+#topLogo {
+	background-color: rgb(33, 37, 43);
+	background-image: url(images/images/PyDracula.png);
+	background-position: centered;
+	background-repeat: no-repeat;
+}
+#btnFile {
+	background-image: url(:/icons/icons/cil-folder.png)
+}
+#btnSettings {
+	background-image: url(:/icons/icons/cil-settings.png)
+}
+#btnSecondPage {
+	background-image:  url(:/icons/icons/cil-chart-line.png)
+}
+#logo {
+	padding: 4px;
+	background-image:url(:/images/images/md.png);
+}

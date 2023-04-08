@@ -1,0 +1,28 @@
+QLabel{
+	color: #efefef;
+}
+/* Bg App */
+#bgApp {	
+	background-color: rgb(40, 44, 52);
+	border: 1px solid rgb(44, 49, 58);
+	border-radius: 16px;
+}
+
+
+
+
+
+
+/*main */
+#videoPage {
+	color: #ffffff;
+	font-size: 18px;
+	background-color: rgb(43, 48, 56);
+}
+
+/*LineEdit*/
+QLineEdit{
+	background-color: rgba(0, 0, 0,0);
+	border:none;
+	border-bottom:2px solid rgb(71, 75, 131);
+}

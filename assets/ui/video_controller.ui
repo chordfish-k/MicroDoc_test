@@ -71,14 +71,14 @@
    <item>
     <widget class="QLabel" name="lbCurrTime">
      <property name="text">
-      <string>00:00:00</string>
+      <string>00:00</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="lbEndTime">
      <property name="text">
-      <string>00:00:00</string>
+      <string>00:00</string>
      </property>
     </widget>
    </item>

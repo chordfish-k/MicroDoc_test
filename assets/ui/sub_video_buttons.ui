@@ -34,7 +34,7 @@
      <property name="styleSheet">
       <string notr="true"/>
      </property>
-     <layout class="QHBoxLayout" name="subVideoBtnBgLayout">
+     <layout class="QHBoxLayout" name="subVideoBtnBgLayout" stretch="1,1,1">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -61,6 +61,13 @@
        <widget class="QPushButton" name="svBtnFile">
         <property name="text">
          <string>打开本地文件</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="svBtnActive">
+        <property name="text">
+         <string>启动模型</string>
         </property>
        </widget>
       </item>

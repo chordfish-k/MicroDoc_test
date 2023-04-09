@@ -18,7 +18,7 @@ class RightPartWidget(QWidget):
     splitter: QSplitter = None
 
     videoWidget: videoPlayer.VideoPlayerWidget = None
-    subVideoButtonsWidget: subVideoButtons.SubVIdeoButtonsWidget = None
+    subVideoButtonsWidget: subVideoButtons.SubVideoButtonsWidget = None
 
     def __init__(self, window):
         super().__init__()
@@ -35,7 +35,7 @@ class RightPartWidget(QWidget):
         self.videoWidget = videoPlayer.VideoPlayerWidget(self.window)
         # self.subVideo.addWidget(self.videoWidget)
 
-        self.subVideoButtonsWidget = subVideoButtons.SubVIdeoButtonsWidget(self.window)
+        self.subVideoButtonsWidget = subVideoButtons.SubVideoButtonsWidget(self.window)
         # self.subVideo.addWidget(self.subVideoButtonsWidget)
 
         self.splitter = QSplitter()

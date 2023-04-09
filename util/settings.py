@@ -17,6 +17,12 @@ class Settings:
     def setItem(self, key:str, value):
         self.config_dict[key] = value
 
+
+    def setItemIfNone(self, key:str, value):
+        if not self.config_dict.get(key):
+            self.config_dict[key] = value
+
+
     def get(self, key:str):
         return self.config_dict.get(key)
 

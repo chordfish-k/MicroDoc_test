@@ -38,35 +38,57 @@ class VideoControllerWidget(QWidget):
         self.videoSlider = self.ui.videoSlider
         self.lbCurrTime = self.ui.lbCurrTime
         self.lbEndTime = self.ui.lbEndTime
-
+        
     
     def attachVideoPlayer(self, videoPlayer):
         self.player = videoPlayer
+        videoPlayer.setController(self)
         self.btnStart.clicked.connect(self.onPlayBtnPress)
         self.btnStop.clicked.connect(self.onStopBtnPress)
+        self.videoSlider.sliderPressed.connect(self.onSliderPressed)
+        self.videoSlider.sliderReleased.connect(self.onSliderRelease)
 
     
     def onPlayBtnPress(self):
-        if self.player.isLoaded:
-            if not self.player.isPlaying:
-                logger.debug("video started")
-                self.player.play()
-                self.btnStart.setStyleSheet(
-                    "background-image: url(:/icons/assets/images/icons/cil-media-pause.png)")
+        if self.player:
+            if self.player.isLoaded:
+                if not self.player.isPlaying:
+                    logger.debug("video started")
+                    self.player.play()
+                    self.btnStart.setStyleSheet(
+                        "background-image: url(:/icons/assets/images/icons/cil-media-pause.png)")
+                else:
+                    logger.debug("video paused")
+                    self.player.pause()
+                    self.btnStart.setStyleSheet(
+                        "background-image: url(:/icons/assets/images/icons/cil-media-play.png)")
             else:
-                logger.debug("video paused")
-                self.player.pause()
-                self.btnStart.setStyleSheet(
-                    "background-image: url(:/icons/assets/images/icons/cil-media-play.png)")
+                logger.warning("video file is not loaded!")
         else:
-            logger.warning("video file is not loaded!")
+            logger.warning("videoPlayer is not found!")
+
 
 
     def onStopBtnPress(self):
-        if self.player.isLoaded:
-            logger.debug("video stoped")
-            self.player.stop()
-            self.btnStart.setStyleSheet(
-                    "background-image: url(:/icons/assets/images/icons/cil-media-play.png)")
+        if self.player:
+            if self.player.isLoaded:
+                logger.debug("video stoped")
+                self.player.stop()
+                self.btnStart.setStyleSheet(
+                        "background-image: url(:/icons/assets/images/icons/cil-media-play.png)")
+            else:
+                logger.warning("video file is not loaded!")
         else:
-            logger.warning("video file is not loaded!")
+            logger.warning("videoPlayer is not found!")
+
+
+    def onSliderPressed(self):
+        if self.player:
+            self.player.pause()
+
+
+    def onSliderRelease(self):
+        if self.player:
+            # logger.debug("slider move")
+            self.player.setProgress(self.videoSlider.value())
+            self.player.play()

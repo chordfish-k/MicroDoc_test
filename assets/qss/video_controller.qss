@@ -1,26 +1,19 @@
-#videoSlider::groove:horizontal {
-    border-radius: 5px;
-	background-color: rgb(52, 59, 72);
-    height: 20px;
-	margin: 0px;
-
-}
-#videoSlider::groove:horizontal:hover {
-	background-color: rgb(55, 62, 76);
-}
-#videoSlider::handle:horizontal {
-    background-color: rgb(189, 147, 249);
+QSlider::groove:horizontal {
     border: none;
-    height: 20px;
-    width: 30px;
-    margin: 0px;
-	border-radius: 5px;
+    height: 4px;
+    background-color: rgb(52, 59, 72);
 }
-#videoSlider::handle:horizontal:hover {
+QSlider::handle:horizontal {
+    background-color: rgb(189, 147, 249);
+    width: 20px;
+    margin: -8px 0px -8px 0px;
+    border-radius: 10px;
+}
+QSlider::sub-page:horizontal {
     background-color: rgb(195, 155, 255);
 }
-#videoSlider::handle:horizontal:pressed {
-    background-color: rgb(255, 121, 198);
+QSlider::handle:horizontal:hover {
+    background-color: rgba(132, 85, 138, 255);
 }
 
 #btnStart {

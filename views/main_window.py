@@ -1,19 +1,22 @@
-from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget,
+from PySide6.QtWidgets import (QMainWindow, QWidget,
                              QBoxLayout, QVBoxLayout, QSplitter)
-from PySide6.QtCore import QDir, Qt
-from PySide6.QtGui import QIcon, QMouseEvent
-from PySide6.QtUiTools import loadUiType, QUiLoader
+from PySide6.QtCore import QDir, Qt, QTimer
+from PySide6.QtGui import QIcon, QImage, QMouseEvent
+from PIL import Image, ImageQt
 import os, sys
+import cv2
+import numpy as np
 
-from views.components import (topbar, sidebar, videoPlayer, 
-                              videoController, subVideoButtons)
+from views.components import (topbar, sidebar)
+from views import firstPage
 
 from assets.assets_loader import Assets
-import resources_rc
 
 from util.settings import Settings
 from util.logger import logger
+from model.face_cut.face_cut import FaceCut
 
+import resources_rc
 
 
 
@@ -23,13 +26,11 @@ class MyApp(QMainWindow):
     topBar: QBoxLayout = None
     sideBar: QBoxLayout = None
     main: QBoxLayout = None
-    splitter: QSplitter = None
 
     topBarWidget: topbar.TopBarWidget = None
     sideBarWidget: sidebar.SideBarWidget = None
-    videoPlayerWidget: videoPlayer.VideoPlayerWidget = None
-    subVideoPlayerWidget: videoPlayer.VideoPlayerWidget = None
-    videoControllerWidget: videoController.VideoControllerWidget = None
+    firstPageWidget: firstPage.FirstPageWidget = None
+
 
 
     def __init__(self, settings):
@@ -56,6 +57,11 @@ class MyApp(QMainWindow):
         # 重设窗体大小
         self.resize(1088, 722)
 
+        self.fc = FaceCut()
+        self.frame_dir = os.path.join(QDir.currentPath(), "frames")
+        if not os.path.exists(self.frame_dir):
+            os.mkdir(self.frame_dir)
+
 
     def initComponents(self):
         self.topBar = self.ui.topBar
@@ -69,47 +75,15 @@ class MyApp(QMainWindow):
         self.sideBarWidget = sidebar.SideBarWidget(self)
         self.sideBar.addWidget(self.sideBarWidget)
 
-        
-        leftBox = QVBoxLayout()
-        # VideoContent组件
-        self.videoPlayerWidget = videoPlayer.VideoPlayerWidget(self)
-        leftBox.addWidget(self.videoPlayerWidget)
-        self.videoControllerWidget = videoController.VideoControllerWidget(self)
-        self.videoControllerWidget.attachVideoPlayer(self.videoPlayerWidget)
-        leftBox.addWidget(self.videoControllerWidget)
-        leftBoxWidget = QWidget() 
-        leftBoxWidget.setLayout(leftBox)
-
-        rightSplitter = QSplitter(self)
-        rightSplitter.setOrientation(Qt.Orientation.Vertical)
-        self.subVideoPlayerWidget = videoPlayer.VideoPlayerWidget(self)
-        rightSplitter.addWidget(self.subVideoPlayerWidget)
-        self.subVideoButtonsWidget = subVideoButtons.SubVIdeoButtonsWidget(self, self.subVideoPlayerWidget)
-        rightSplitter.addWidget(self.subVideoButtonsWidget)
-        rightSplitter.setStretchFactor(0, 1)
-        rightSplitter.setStretchFactor(1, 4)
-        
-        
-        # 使用分离器装载
-        self.splitter = QSplitter(self)
-        self.splitter.setObjectName('mainContent')
-        self.splitter.addWidget(leftBoxWidget)
-        self.splitter.addWidget(rightSplitter)
-        self.splitter.setOrientation(Qt.Orientation.Horizontal)
-        self.splitter.setStretchFactor(0, 5)
-        self.splitter.setStretchFactor(1, 3)
-        self.splitter.handle(1).setAttribute(Qt.WidgetAttribute.WA_Hover, True)
-        self.main.addWidget(self.splitter)
+        self.firstPageWidget = firstPage.FirstPageWidget(self)
+        self.main.addWidget(self.firstPageWidget)
 
 
     def setVideoPath(self, path):
-        logger.debug('got path: '+ path)
-        self.videoPlayerWidget.load(path)
+        if self.firstPageWidget:
+            logger.debug('got path: '+ path)
+            self.firstPageWidget.videoPlayerWidget.load(path)
 
 
-    def splitterMousePressEvent(self, e:QMouseEvent):
-        logger.debug('clicked')
-        return super().mousePressEvent(e)
-
-
+    
 

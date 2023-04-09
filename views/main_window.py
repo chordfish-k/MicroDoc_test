@@ -6,7 +6,7 @@ from PySide6.QtUiTools import loadUiType, QUiLoader
 import os, sys
 
 from views.components import (topbar, sidebar, videoPlayer, 
-                              rightPart, videoController)
+                              videoController, subVideoButtons)
 
 from assets.assets_loader import Assets
 import resources_rc
@@ -18,7 +18,7 @@ from util.logger import logger
 
 
 class MyApp(QMainWindow):
-    settings = Settings()
+    settings: Settings = None
 
     topBar: QBoxLayout = None
     sideBar: QBoxLayout = None
@@ -28,16 +28,18 @@ class MyApp(QMainWindow):
     topBarWidget: topbar.TopBarWidget = None
     sideBarWidget: sidebar.SideBarWidget = None
     videoPlayerWidget: videoPlayer.VideoPlayerWidget = None
-    rightPartWidget: rightPart.RightPartWidget = None
+    subVideoPlayerWidget: videoPlayer.VideoPlayerWidget = None
     videoControllerWidget: videoController.VideoControllerWidget = None
 
 
-    def __init__(self):
+    def __init__(self, settings):
         super().__init__()
         # 加载UI
         Assets.loadUi('main_window', self)
         # 加载样式表
         Assets.loadQss('main', self)
+        # 导入设置
+        self.settings = settings
 
         # 窗体图标
         self.setWindowIcon(QIcon(":/icons/assets/images/icons/md.png"))
@@ -78,16 +80,24 @@ class MyApp(QMainWindow):
         leftBoxWidget = QWidget() 
         leftBoxWidget.setLayout(leftBox)
 
-        # RightPart组件
-        self.rightPartWidget = rightPart.RightPartWidget(self)
-        # 使用分离器装载VideoContent和RightPart
+        rightSplitter = QSplitter(self)
+        rightSplitter.setOrientation(Qt.Orientation.Vertical)
+        self.subVideoPlayerWidget = videoPlayer.VideoPlayerWidget(self)
+        rightSplitter.addWidget(self.subVideoPlayerWidget)
+        self.subVideoButtonsWidget = subVideoButtons.SubVIdeoButtonsWidget(self, self.subVideoPlayerWidget)
+        rightSplitter.addWidget(self.subVideoButtonsWidget)
+        rightSplitter.setStretchFactor(0, 1)
+        rightSplitter.setStretchFactor(1, 4)
+        
+        
+        # 使用分离器装载
         self.splitter = QSplitter(self)
         self.splitter.setObjectName('mainContent')
         self.splitter.addWidget(leftBoxWidget)
-        self.splitter.addWidget(self.rightPartWidget)
+        self.splitter.addWidget(rightSplitter)
         self.splitter.setOrientation(Qt.Orientation.Horizontal)
-        self.splitter.setStretchFactor(0, 8)
-        self.splitter.setStretchFactor(1, 5)
+        self.splitter.setStretchFactor(0, 5)
+        self.splitter.setStretchFactor(1, 3)
         self.splitter.handle(1).setAttribute(Qt.WidgetAttribute.WA_Hover, True)
         self.main.addWidget(self.splitter)
 

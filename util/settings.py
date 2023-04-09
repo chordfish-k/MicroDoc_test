@@ -8,6 +8,7 @@ class Settings:
 
     def __init__(self, file_path:str = "./settings.ini"):
         self.file_path = file_path
+        self.load()
         
         if not self.config.has_section('settings'):
             self.config.add_section('settings')
@@ -21,10 +22,10 @@ class Settings:
 
 
     def load(self):
-        self.config.read(self.file_path)
+        self.config.read(self.file_path, encoding='utf8')
         self.config_dict.clear()
         for item in self.config.items('settings'):
-            self.config_dict.append({item[0]: item[1]})
+            self.config_dict[item[0]] = item[1]
 
 
     def save(self):

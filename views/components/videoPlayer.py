@@ -5,7 +5,10 @@ import os
 import cv2
 import time
 import numpy as np
+from typing import Union
 from assets.assets_loader import Assets
+from util.settings import Settings
+
 
 
 class VideoPlayerWidget(QWidget):
@@ -19,8 +22,7 @@ class VideoPlayerWidget(QWidget):
         screen_label: QLabel = None
         # 播放用timer
         timer: QTimer = None  
-        # 播放状态
-        isPlaying: bool = False
+
 
         
         def __init__(self, window, path, screen_label):
@@ -42,6 +44,9 @@ class VideoPlayerWidget(QWidget):
 
             t = time.gmtime(self.total_time)
             self.str_end_time = '{:02d}' .format(int(time.strftime("%H", t))*60 + int(time.strftime("%M", t))) + time.strftime(":%S", t)
+
+            #else:
+            #    self.capture = cv2.VideoCapture(path)
 
             # 初始化计时器
             self.timer = QTimer(self.window)
@@ -124,8 +129,10 @@ class VideoPlayerWidget(QWidget):
     video: Video
     video_zoom: QLabel
 
+    # 播放状态
     isLoaded = False
     isPlaying = False
+    isOpenedCamera: bool = False
 
     def __init__(self, window):
         super().__init__()
@@ -181,4 +188,35 @@ class VideoPlayerWidget(QWidget):
         pass
 
 
+    def toggleCamera(self):
+        if not self.isOpenedCamera:
+            self.openCamera()
+        else:
+            self.closeCamera()
 
+
+    def openCamera(self):
+        settings:Settings = self.window.settings
+
+        self.video = self.Video(self.window, 0, self.video_zoom)
+
+
+        self.video.timer.start()
+        self.isOpenedCamera = True
+
+        # if settings.record_when_open_camera:
+        #     self.start_record()
+
+        # self.clean_datas() #清空图表
+
+        # 禁用子视频窗口的按钮
+        # self.__ui.pushButton_open_sub.setEnabled(False)
+        # self.__ui.pushButton_stop_sub.setEnabled(False)
+
+
+    def closeCamera(self):
+        self.video.timer.stop()
+        del self.video
+        self.video = None
+        self.clearScreen()
+        self.isOpenedCamera = False

@@ -5,8 +5,9 @@ from PySide6.QtCore import QDir
 import os
 
 from assets.assets_loader import Assets
-
+from util.logger import logger
 from util.settings import Settings
+
 
 
 class SideBarWidget(QWidget):
@@ -30,15 +31,16 @@ class SideBarWidget(QWidget):
 
 
     def openVideoFile(self):
-
-        current_path = QDir.currentPath()
+        settings:Settings = self.window.settings
+        last_path = settings.get('last_dir_path')
+        logger.debug("last_path: " + last_path)
+        current_path = QDir.currentPath() if not last_path else last_path
         title = '选择视频文件'
         filt = "视频文件(*.wmv *avi *.mp4 *.mov);;所有文件(*.*)"
         file_path, filt = QFileDialog.getOpenFileName(self, title, current_path, filt)
         if file_path:
 
             # 存储上次打开的文件夹路径
-            settings:Settings = self.window.settings
             path = settings.get('last_dir_path')
             self.last_dir_path = os.path.dirname(file_path)  if not path else path
             settings.setItem('last_dir_path', self.last_dir_path)

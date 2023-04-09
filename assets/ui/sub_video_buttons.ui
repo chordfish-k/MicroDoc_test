@@ -51,14 +51,14 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QPushButton" name="sv_btn_camera">
+       <widget class="QPushButton" name="svBtnCamera">
         <property name="text">
          <string>打开摄像头</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="sv_btn_file">
+       <widget class="QPushButton" name="svBtnFile">
         <property name="text">
          <string>打开本地文件</string>
         </property>

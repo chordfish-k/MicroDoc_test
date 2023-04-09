@@ -11,6 +11,6 @@ settings = Settings()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    myapp = main_window.MyApp()
+    myapp = main_window.MyApp(settings)
     myapp.show()
     sys.exit(app.exec())

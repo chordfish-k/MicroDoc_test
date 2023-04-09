@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (QMainWindow, QWidget, QLabel, 
-                             QPushButton, QBoxLayout)
+                             QPushButton, QBoxLayout, QSplitter)
 from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtCore import QDir
+from PySide6.QtCore import QDir, Qt
 import os
 
 from assets.assets_loader import Assets
@@ -15,6 +15,7 @@ class RightPartWidget(QWidget):
 
     subVideo: QBoxLayout = None
     subVideoBtn: QBoxLayout = None
+    splitter: QSplitter = None
 
     videoWidget: videoPlayer.VideoPlayerWidget = None
     subVideoButtonsWidget: subVideoButtons.SubVIdeoButtonsWidget = None
@@ -29,10 +30,20 @@ class RightPartWidget(QWidget):
 
     def initComponents(self):
         self.subVideo = self.ui.subVideo
-        self.subVideo = self.ui.subVideo
+        self.subVideoBtn = self.ui.subVideoBtn
 
         self.videoWidget = videoPlayer.VideoPlayerWidget(self.window)
-        self.subVideo.addWidget(self.videoWidget)
+        # self.subVideo.addWidget(self.videoWidget)
 
         self.subVideoButtonsWidget = subVideoButtons.SubVIdeoButtonsWidget(self.window)
-        self.subVideo.addWidget(self.subVideoButtonsWidget)
+        # self.subVideo.addWidget(self.subVideoButtonsWidget)
+
+        self.splitter = QSplitter()
+        self.splitter.setObjectName('mainContent')
+        self.splitter.addWidget(self.videoWidget)
+        self.splitter.addWidget(self.subVideoButtonsWidget)
+        self.splitter.setOrientation(Qt.Orientation.Vertical)
+        self.splitter.setStretchFactor(0, 3)
+        self.splitter.setStretchFactor(1, 1)
+        self.subVideo.addWidget(self.splitter)
+

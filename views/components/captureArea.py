@@ -33,9 +33,6 @@ class CaptureAreaWidget(QWidget):
         self.layout = self.ui.scrollAreaLayout
         self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
-        a = CaptureItemWidget()
-        a.setStatus("")
-        self.layout.addWidget(a)
 
 
         

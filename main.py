@@ -11,8 +11,9 @@ settings = Settings()
 settings.setItemIfNone('last_dir_path', "")
 settings.setItemIfNone('camera_flipX', "True")
 settings.setItemIfNone('camera_output', "True")
-settings.setItemIfNone('min_accepted_probability', "0.3")
+settings.setItemIfNone('min_accepted_probability', "0.4")
 settings.setItemIfNone('use_gpu', "False")
+settings.setItemIfNone('output_duration', "4")
 settings.save()
 
 

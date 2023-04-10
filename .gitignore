@@ -1,6 +1,7 @@
 # some dirs
 .vscode/
 frames/
+captures/
 
 # model
 model.pth

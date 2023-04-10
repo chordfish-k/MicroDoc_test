@@ -92,7 +92,7 @@ class VideoPlayerWidget(QWidget):
             #    self.capture = cv2.VideoCapture(path)
 
             # 初始化计时器
-            self.timer = QTimer(self.window)
+            self.timer = QTimer()
             self.timer.timeout.connect(self.nextFrame)  # timeout时，执行show_pic
             
             # 设置进度条最大值
@@ -162,7 +162,6 @@ class VideoPlayerWidget(QWidget):
 
         # 计时器：获取下一帧并显示
         def nextFrame(self):
-            # logger.debug("next")
             try:
                 self.captureNextFrame()
                 tmp_frame = self.convertFrame()
@@ -170,18 +169,15 @@ class VideoPlayerWidget(QWidget):
                 self.showPic(tmp_frame)
 
                 if (self.frame_count == self.frame_now):
-                    # 播放到结尾，停止播放
+                    # 播放到结尾，重新开始
                     self.setVideoSecondPosition(0)
-                    # 重置计数器
-                    # self.output_counter = 0
-                    # self.on_pushButton_start_pressed()
+
             except TypeError:
                 logger.warning('No Frame')
-                #self.timer_player.stop()
 
             # 传递给事件
             if self.frameReadEvent:
-                #pass
+                #logger.debug(self.str_current_time)
                 self.frameReadEvent(self.currentFrame.copy())
 
 
@@ -234,7 +230,7 @@ class VideoPlayerWidget(QWidget):
     def play(self):
         if self.isLoaded:
             logger.debug("fps: "+ str(self.video.fps))
-            self.video.timer.start(33)
+            self.video.timer.start(1000//self.video.fps)
             self.isPlaying = True
 
             # if self.video.audio_player:

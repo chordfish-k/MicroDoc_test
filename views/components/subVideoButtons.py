@@ -10,7 +10,7 @@ from views.components import videoPlayer
 from util.settings import Settings
 from util.logger import logger
 
-from model.manager import Manager
+
 
 
 class SubVideoButtonsWidget(QWidget):
@@ -22,18 +22,19 @@ class SubVideoButtonsWidget(QWidget):
 
     videoWidget: videoPlayer.VideoPlayerWidget = None
 
+    manager = None
 
-    def __init__(self, window, videoWidget):
+
+    def __init__(self, window, videoWidget, manager):
         super().__init__()
         self.window = window
         self.videoWidget = videoWidget
+        self.manager = manager
 
         Assets.loadUi('sub_video_buttons', self)
         Assets.loadQss('sub_video_buttons', self)
 
         self.initComponents()
-
-        self.modelManager = Manager(self.window.settings)
 
 
     def initComponents(self):
@@ -44,10 +45,6 @@ class SubVideoButtonsWidget(QWidget):
         self.svBtnCamera.clicked.connect(self.toggleCamera)
         self.svBtnFile.clicked.connect(self.toggleFile)
         self.svBtnActive.clicked.connect(self.toggleActive)
-
-        self.modelTimer = QTimer()
-        self.modelTimer.timeout.connect(self.onModelTimer)
-        self.modelTimer.start()
 
 
     def toggleCamera(self):
@@ -87,15 +84,10 @@ class SubVideoButtonsWidget(QWidget):
         
 
     def toggleActive(self):
-        if not self.modelManager.modelActive:
-            self.modelManager.modelActive = True
+        if not self.manager.modelActive:
+            self.manager.modelActive = True
         else:
-            self.modelManager.modelActive = False
+            self.manager.modelActive = False
 
         self.svBtnActive.setText(
-            "停止模型" if self.modelManager.modelActive else "启动模型")
-
-
-    def onModelTimer(self):
-        if self.modelManager.modelActive:
-            self.modelManager.activate_network()
+            "停止模型" if self.manager.modelActive else "启动模型")

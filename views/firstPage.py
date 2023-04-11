@@ -7,7 +7,7 @@ import os, sys
 import cv2
 import numpy as np
 
-from views.components import (videoPlayer, captureArea,
+from views.components import (myChart, videoPlayer, captureArea, 
                               videoController, subVideoButtons)
 
 from assets.assets_loader import Assets
@@ -46,15 +46,38 @@ class FirstPageWidget(QWidget):
 
 
     def initComponents(self):
-        leftBox = QVBoxLayout()
+        """
+        self
+            |_splitter
+                |_leftSplitter
+                |   |_videoBoxWidget
+                |   |   |_videoPlayerWidget
+                |   |   |_videoControllerWidget
+                |   |_chartWidget
+                |_rightSplitter
+                    |_subVideoPlayerWidget
+                    |_subVLayoutWidget
+                        |_captureAreaWidget
+        """        
+
+        leftSplitter = QSplitter(self)
+        leftSplitter.setOrientation(Qt.Orientation.Vertical)
+        videoBoxWidget = QWidget()
+        videoBox = QVBoxLayout(videoBoxWidget)
         # VideoContent组件
         self.videoPlayerWidget = videoPlayer.VideoPlayerWidget(self.window)
-        leftBox.addWidget(self.videoPlayerWidget)
+        videoBox.addWidget(self.videoPlayerWidget)
         self.videoControllerWidget = videoController.VideoControllerWidget(self.window)
         self.videoControllerWidget.attachVideoPlayer(self.videoPlayerWidget)
-        leftBox.addWidget(self.videoControllerWidget)
-        leftBoxWidget = QWidget() 
-        leftBoxWidget.setLayout(leftBox)
+        videoBox.addWidget(self.videoControllerWidget)
+        leftSplitter.addWidget(videoBoxWidget) 
+
+        # MyChart
+        self.chartWidget = myChart.MyChartWidget(self)
+        leftSplitter.addWidget(self.chartWidget)
+
+        leftSplitter.setStretchFactor(0, 2)
+        leftSplitter.setStretchFactor(1, 3)
 
         rightSplitter = QSplitter(self)
         rightSplitter.setOrientation(Qt.Orientation.Vertical)
@@ -75,13 +98,13 @@ class FirstPageWidget(QWidget):
         rightSplitter.addWidget(subVLayoutWidget)
         
         rightSplitter.setStretchFactor(0, 1)
-        rightSplitter.setStretchFactor(1, 4)
+        rightSplitter.setStretchFactor(1, 6)
         
         
         # 使用分离器装载
         self.splitter = QSplitter(self)
         self.splitter.setObjectName(u'mainContent')
-        self.splitter.addWidget(leftBoxWidget)
+        self.splitter.addWidget(leftSplitter)
         self.splitter.addWidget(rightSplitter)
         self.splitter.setOrientation(Qt.Orientation.Horizontal)
         self.splitter.setStretchFactor(0, 5)
@@ -93,6 +116,7 @@ class FirstPageWidget(QWidget):
         layout.addWidget(self.splitter)
         self.setLayout(layout)
 
+        self.modelManager.setChartWidget(self.chartWidget)
 
     def onModelTimer(self):
         if self.modelManager.modelActive:

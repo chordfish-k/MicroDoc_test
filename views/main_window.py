@@ -1,11 +1,8 @@
 from PySide6.QtWidgets import (QMainWindow, QWidget,
                              QBoxLayout, QVBoxLayout, QSplitter)
-from PySide6.QtCore import QDir, Qt, QTimer
-from PySide6.QtGui import QIcon, QImage, QMouseEvent
-from PIL import Image, ImageQt
-import os, sys
-import cv2
-import numpy as np
+from PySide6.QtCore import QDir, Qt
+from PySide6.QtGui import QIcon
+import os
 
 from views.components import (topbar, sidebar)
 from views import firstPage

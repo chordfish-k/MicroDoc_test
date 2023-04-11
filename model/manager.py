@@ -9,6 +9,7 @@ from torchvision import transforms
 from PySide6.QtCore import QTimer, Signal, QDir
 from PySide6.QtGui import QImage
 
+from views.components.myChart import MyChartWidget
 from model.face_cut.face_cut import FaceCut
 from util.logger import logger
 from util.settings import Settings
@@ -32,6 +33,8 @@ class Manager:
     fc: FaceCut = FaceCut()
 
     outputFn = None
+
+    chart: MyChartWidget = None
 
     # timer: QTimer = None
     # timerRunning: False
@@ -75,6 +78,9 @@ class Manager:
 
     def setOutputFn(self, fn):
         self.outputFn = fn
+
+    def setChartWidget(self, chart):
+        self.chart = chart
 
     def softmax(self, tensor):
         array = tensor.cpu().numpy()
@@ -152,7 +158,7 @@ class Manager:
                     with torch.no_grad():
                         result = self.softmax(output[0])
                         #logger.debug(result)
-                        self.global_result = result
+                        self.chart.update_series(result)
                         # self.global_result = [random.random(), random.random(), random.random()]
                         # print(self.global_result)
                         result_probability = np.max(result)

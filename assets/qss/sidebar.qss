@@ -28,6 +28,9 @@
 #btnSettings {
 	background-image: url(:/icons/assets/images/icons/cil-settings.png)
 }
+#btnFirstPage {
+	background-image:  url(:/icons/assets/images/icons/cil-chart.png)
+}
 #btnSecondPage {
 	background-image:  url(:/icons/assets/images/icons/cil-chart-line.png)
 }

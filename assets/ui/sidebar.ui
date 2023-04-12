@@ -193,7 +193,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btnSecondPage">
+          <widget class="QPushButton" name="btnFirstPage">
            <property name="minimumSize">
             <size>
              <width>60</width>
@@ -202,6 +202,19 @@
            </property>
            <property name="styleSheet">
             <string notr="true"/>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnSecondPage">
+           <property name="minimumSize">
+            <size>
+             <width>60</width>
+             <height>50</height>
+            </size>
            </property>
            <property name="text">
             <string/>

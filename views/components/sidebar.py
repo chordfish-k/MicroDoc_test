@@ -11,9 +11,11 @@ from util.settings import Settings
 
 
 class SideBarWidget(QWidget):
-    window: QMainWindow
+    window: QMainWindow = None
     
-    btnFile: QPushButton
+    btnFile: QPushButton = None
+    btnFirstPage: QPushButton = None
+    btnSecondPage: QPushButton = None
 
     def __init__(self, window):
         super().__init__()
@@ -27,7 +29,12 @@ class SideBarWidget(QWidget):
     
     def initComponents(self):
         self.btnFile = self.ui.btnFile
+        self.btnFirstPage = self.ui.btnFirstPage
+        self.btnSecondPage = self.ui.btnSecondPage
+
         self.btnFile.clicked.connect(self.openVideoFile)
+        self.btnFirstPage.clicked.connect(self.window.openFirstPage)
+        self.btnSecondPage.clicked.connect(self.window.openSecondPage)
 
 
     def openVideoFile(self):
@@ -48,5 +55,3 @@ class SideBarWidget(QWidget):
 
             # 调用MyApp的函数来处理
             self.window.setVideoPath(file_path)
-
-        

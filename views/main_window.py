@@ -5,7 +5,7 @@ from PySide6.QtGui import QIcon
 import os
 
 from views.components import (topbar, sidebar)
-from views import firstPage
+from views import firstPage, testPage
 
 from assets.assets_loader import Assets
 
@@ -27,7 +27,7 @@ class MyApp(QMainWindow):
     topBarWidget: topbar.TopBarWidget = None
     sideBarWidget: sidebar.SideBarWidget = None
     firstPageWidget: firstPage.FirstPageWidget = None
-
+    secondPageWidget: testPage.TestPageWidget = None
 
 
     def __init__(self, settings):
@@ -59,7 +59,7 @@ class MyApp(QMainWindow):
         if not os.path.exists(self.frame_dir):
             os.mkdir(self.frame_dir)
 
-
+        
     def initComponents(self):
         self.topBar = self.ui.topBar
         self.sideBar = self.ui.sideBar
@@ -73,6 +73,7 @@ class MyApp(QMainWindow):
         self.sideBar.addWidget(self.sideBarWidget)
 
         self.firstPageWidget = firstPage.FirstPageWidget(self)
+        self.secondPageWidget = testPage.TestPageWidget(self)
         self.main.addWidget(self.firstPageWidget)
 
 
@@ -82,5 +83,29 @@ class MyApp(QMainWindow):
             self.firstPageWidget.videoPlayerWidget.load(path)
 
 
-    
+    def openFirstPage(self):
+        self.main.replaceWidget(self.secondPageWidget, self.firstPageWidget)
+        self.firstPageWidget.show()
+        self.secondPageWidget.hide()
+        # if self.main.itemAt(0):
+        #     wid = self.main.itemAt(0).widget()
+        #     if wid is not self.firstPageWidget:
+        #         self.main.replaceWidget(wid, self.firstPageWidget)
+        #         # wid.deleteLater()
+        #         #self.firstPageWidget = firstPage.FirstPageWidget(self)
+        # #self.main.addWidget(self.firstPageWidget)
+            
+        
+    def openSecondPage(self):
+        self.main.replaceWidget(self.firstPageWidget, self.secondPageWidget)
+        self.firstPageWidget.hide()
+        self.secondPageWidget.show()
+        # if self.main.itemAt(0):
+        #     wid = self.main.itemAt(0).widget()
+        #     if wid is not self.secondPageWidget:
+        #         self.main.replaceWidget(wid, self.secondPageWidget)
+        #         # wid.deleteLater()
+        #         #self.secondPageWidget = testPage.TestPageWidget(self)
+        # #self.main.addWidget(self.secondPageWidget)
+
 

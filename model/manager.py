@@ -18,7 +18,7 @@ from util.settings import Settings
 class Manager:
     settings:Settings = None
 
-    img_que = Queue()
+    img_que = Queue(maxsize=100)
     min_prob = 0.3
     pre_result = "None"
     
@@ -121,7 +121,7 @@ class Manager:
 
     # 多线程激活网络
     def activate_network(self):
-        if self.img_que.empty():
+        if self.img_que.empty() or not self.modelActive:
             #logger.debug("empty")
             return
         #logger.debug(str(self.img_que.qsize()))

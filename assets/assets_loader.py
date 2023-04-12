@@ -14,6 +14,10 @@ class Assets:
         return os.path.join(QDir.currentPath(),  'assets', dirName)
 
 
+    #@staticmethod
+    #def solveQssVar(name:str, )
+
+
     @staticmethod
     def loadQss(name:str, qtinstance):
         path = os.path.join(Assets.getAssetsPath('qss'), name + '.qss')
@@ -22,6 +26,8 @@ class Assets:
             res = f.read()
         if res:
             qtinstance.setStyleSheet(res)
+
+    
     
     @staticmethod
     def loadUi(name:str, qtinstance):

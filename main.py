@@ -6,6 +6,8 @@ import sys, os
 
 
 os.environ["QT_FONT_DPI"] = "96" 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 settings = Settings()
 settings.setItemIfNone('theme', "dark")
 settings.setItemIfNone('last_dir_path', "")

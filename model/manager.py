@@ -93,15 +93,15 @@ class Manager:
     # 加载3分类模型
     def load_model(self):
         model_path = "model/test/model.pth"
-        if self.settings.get('use_gpu'):
+        device = torch.device('cpu')
+        if self.settings.get('use_gpu')=="True":
             if torch.cuda.is_available():
-                self.swin_trans = torch.load(model_path, map_location=torch.device('cuda'))
+                device = torch.device('cuda:0')
             else:
                 logger.warning('CUDA gpu is not available, switch to cpu')
-                self.swin_trans = torch.load(model_path, map_location=torch.device('cpu'))
-        else:
-            self.swin_trans = torch.load(model_path, map_location=torch.device('cpu'))
-
+                device = torch.device('cpu')
+        logger.debug(f'model is running on {device}')
+        self.swin_trans = torch.load(model_path, map_location=device)
 
     def addImage(self, img):
         self.img_que.put(img)

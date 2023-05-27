@@ -158,7 +158,8 @@ class Manager:
                     with torch.no_grad():
                         result = self.softmax(output[0])
                         #logger.debug(result)
-                        self.chart.update_series(result)
+                        if self.chart:
+                            self.chart.update_series(result)
                         # self.global_result = [random.random(), random.random(), random.random()]
                         # print(self.global_result)
                         result_probability = np.max(result)

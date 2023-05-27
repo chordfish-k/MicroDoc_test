@@ -1,6 +1,6 @@
 /* Top Buttons */
 #topBar .QPushButton { 
-	background-color: rgba(255, 255, 255, 0); 
+	background-color: transparent; 
 	border: none;  
 	border-radius: 5px; 
 	background-color: transparent;
@@ -8,18 +8,18 @@
 	background-position: center;
 }
 #topBar .QPushButton:hover { 
-	background-color: rgb(30, 33, 38);  
+	background-color: $secondaryVariantColor;  
 }
 #topBar .QPushButton:pressed { 
-	background-color: rgb(23, 26, 30); 
+	background-color: $secondaryVariantColor; 
 }
 #title {
 	background-color: transparent;
-	color: #efefef;
+	color: $fontColor;
 	font: 700 11pt "Microsoft YaHei UI";
 }
 #contentTopBg{	
-	background-color: rgb(33, 37, 43);
+	background-color: $backgroundVariantColor;
 	/*border-left: 3px solid rgb(44, 49, 58);*/
 }
 #tbBtnClose {

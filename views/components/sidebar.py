@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (QMainWindow, QWidget, QLabel, 
                              QPushButton, QFileDialog)
 from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtCore import QDir
+from PySide6.QtCore import QDir, Qt
 import os
 
 from assets.assets_loader import Assets
@@ -13,9 +13,11 @@ from util.settings import Settings
 class SideBarWidget(QWidget):
     window: QMainWindow = None
     
-    btnFile: QPushButton = None
+    btnTheme: QPushButton = None
     btnFirstPage: QPushButton = None
     btnSecondPage: QPushButton = None
+
+    __pages = []
 
     def __init__(self, window):
         super().__init__()
@@ -28,10 +30,33 @@ class SideBarWidget(QWidget):
     
     
     def initComponents(self):
+        self.btnTheme.clicked.connect(self.window.switchTheme)
 
         # self.btnFile.clicked.connect(self.openVideoFile)
-        self.btnFirstPage.clicked.connect(self.window.openFirstPage)
-        self.btnSecondPage.clicked.connect(self.window.openSecondPage)
+        self.__pages = [
+            (self.btnFirstPage, 1),
+            (self.btnSecondPage, 2),
+        ]
+
+        for b, p in self.__pages:
+            b.clicked.connect(self.changePage(p, b))
+
+        self.changePage(self.__pages[0][1], self.__pages[0][0])()
+
+    # 函数闭包，有参转无参
+    def changePage(self, index, btn:QPushButton):
+        def __changePage():
+            
+            for b, _ in self.__pages:
+                b.setProperty("selected", False)
+                b.setStyle(btn.style())
+
+            btn.setProperty("selected", True)
+            btn.setStyle(btn.style())
+
+            self.window.changePage(index)
+            
+        return __changePage
 
 
     def openVideoFile(self):

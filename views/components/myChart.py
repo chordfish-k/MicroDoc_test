@@ -5,19 +5,26 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QHBoxLayout
 
 from assets.assets_loader import Assets
+from util.settings import Settings
 
 class MyChartWidget(QWidget):
     chart: QChart = None
+    settings: Settings = None
 
-
-    def __init__(self, parent):
+    def __init__(self, parent, settings):
         super().__init__()
+        self.settings = settings
         self.initComponents()
         Assets.loadQss("my_chart", self)
 
 
     def initComponents(self):
         # 图表初始化
+        fontColor: QColor = None
+        if self.settings.get("theme").startswith("light"):
+            fontColor = QColor(0, 0, 0)
+        else:
+            fontColor = QColor(255, 255, 255)
         ### 表1
         # 创建折线视图
         self.data_index = 0
@@ -44,15 +51,18 @@ class MyChartWidget(QWidget):
         self.x_Aix.setLabelFormat("%u")
         self.x_Aix.setTickCount(11)  # 10+1
         self.x_Aix.setMinorTickCount(1)
-        self.x_Aix.setLabelsColor(QColor(255, 255, 255))
+        self.x_Aix.setLabelsColor(fontColor)
+        self.x_Aix.setLinePenColor(fontColor)
+        self.x_Aix.setGridLineColor(fontColor)
 
         self.y_Aix = QValueAxis() 
         self.y_Aix.setRange(0.00, 1.00)
         self.y_Aix.setGridLineVisible(False)  # 隐藏参考线
         self.y_Aix.setMinorGridLineVisible(False)
         self.y_Aix.setTickCount(5)
-        self.y_Aix.setLabelsColor(QColor(255, 255, 255))
-
+        self.y_Aix.setLabelsColor(fontColor)
+        self.y_Aix.setLinePenColor(fontColor)
+        self.y_Aix.setGridLineColor(fontColor)
 
         # 画坐标轴
         self.chart.addAxis(self.x_Aix, Qt.AlignmentFlag.AlignBottom)
@@ -73,7 +83,7 @@ class MyChartWidget(QWidget):
         self.chartview = QChartView(self.chart)
         # self.chart.setTitle("简单折线图")
         self.chart.legend().setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.chart.legend().setLabelColor(QColor(255, 255, 255))
+        self.chart.legend().setLabelColor(fontColor)
         self.chartview.setRenderHint(QPainter.RenderHint.Antialiasing)  # 抗锯齿
         self.chartview.setGeometry(0, 0, 600, 600)
 
@@ -83,20 +93,24 @@ class MyChartWidget(QWidget):
         self.chart2.setBackgroundVisible(False)
 
         self.y_Aix2 = QCategoryAxis()
-        self.y_Aix2.setLabelsColor(QColor(255,255,255))
+        self.y_Aix2.setLinePenColor(fontColor)
+        self.y_Aix2.setLabelsColor(fontColor)
+        self.y_Aix2.setGridLineColor(fontColor)
         self.y_Aix2.append("Positive", 0.5)
         self.y_Aix2.append("Neutral", 1)
         self.y_Aix2.append("Negative", 1.5)
         self.y_Aix2.setRange(0,1.5)
 
         self.x_Aix2 = QValueAxis()
+        self.x_Aix2.setLinePenColor(fontColor)
         self.x_Aix2.setRange(0.00, self.x_data_length)
         self.x_Aix2.setGridLineVisible(False)
         self.x_Aix2.setMinorGridLineVisible(False)  # 隐藏参考线
         self.x_Aix2.setLabelFormat("%u")
         self.x_Aix2.setTickCount(11)  # 10+1
         self.x_Aix2.setMinorTickCount(1)
-        self.x_Aix2.setLabelsColor(QColor(255, 255, 255))
+        self.x_Aix2.setLabelsColor(fontColor)
+        self.x_Aix2.setGridLineColor(fontColor)
 
         self.chart2.addAxis(self.y_Aix2, Qt.AlignmentFlag.AlignLeft)
         self.chart2.addAxis(self.x_Aix2, Qt.AlignmentFlag.AlignBottom)
@@ -110,7 +124,7 @@ class MyChartWidget(QWidget):
         self.chartview2 = QChartView(self.chart2)
         #self.chart2.legend().setAlignment(Qt.AlignmentFlag.AlignRight)
         self.chart2.legend().hide()
-        self.chart2.legend().setLabelColor(QColor(255, 255, 255))
+        self.chart2.legend().setLabelColor(fontColor)
         self.chartview2.setRenderHint(QPainter.RenderHint.Antialiasing)  # 抗锯齿
         self.chartview2.setGeometry(0, 0, 600, 600)
 

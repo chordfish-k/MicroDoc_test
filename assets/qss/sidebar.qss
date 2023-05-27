@@ -1,29 +1,33 @@
 /* Left Menu */
 #logo {
-	border-image: url(:/images/assets/images/images/md.png);	
+	border-image: url(:/images/assets/images/images/logo.png);	
 }
 #leftMenu .QPushButton {	
-	background-position: left center;
+	background-position: center center;
     background-repeat: no-repeat;
 	background-color: transparent;
-	border: none;
-	border-left: 22px solid transparent;
+	border-left: 4px solid transparent;
 	text-align: left;
 	padding-left: 44px;
 }
+#leftMenu QPushButton[selected=true] {
+	border-left: 4px solid $secondaryColor;
+}
 #leftMenu .QPushButton:hover {
-	background-color: rgb(62, 70, 86);
+	background-color: $secondaryVariantColor;
 }
 #leftMenu .QPushButton:pressed {	
-	background-color: rgb(189, 147, 249);
-	color: rgb(255, 255, 255);
+	background-color: $secondaryVariantColor;
 }
 
 #leftMenuBg {	
-	background-color: rgb(33, 37, 43);
+	background-color: $backgroundVariantColor;
 }
 #btnFile {
 	background-image: url(:/icons/assets/images/icons/cil-folder.png)
+}
+#btnTheme {
+	background-image: url(:/icons/assets/images/icons/cil-lightbulb.png)
 }
 #btnSettings {
 	background-image: url(:/icons/assets/images/icons/cil-settings.png)

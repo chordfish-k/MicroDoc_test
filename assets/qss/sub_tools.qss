@@ -1,11 +1,12 @@
 QPushButton {
-    background-color: rgb(33, 37, 43);
+    background-color: $primaryVariantColor;
+    color: $secondaryFontColor;
     padding-top: 16px;
     padding-bottom: 16px;
 }
 QPushButton:hover {
-	background-color: rgb(62, 70, 86);
+	background-color: $secondaryVariantColor;
 }
 QPushButton:pressed {	
-	background-color: rgb(189, 147, 249);
+	background-color: $secondaryVariantColor;
 }

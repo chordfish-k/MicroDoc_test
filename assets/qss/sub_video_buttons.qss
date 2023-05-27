@@ -1,8 +1,15 @@
 #subVideoBtnBg {
-	background-color: rgb(33, 37, 43);
+	background-color: $backgroundVariantColor;
 }
-
 QPushButton {
+    background-color: $primaryVariantColor;
+    color: $secondaryFontColor;
     padding-top: 16px;
     padding-bottom: 16px;
+}
+QPushButton:hover {
+	background-color: $secondaryVariantColor;
+}
+QPushButton:pressed {	
+	background-color: $secondaryVariantColor;
 }

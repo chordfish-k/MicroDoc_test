@@ -67,6 +67,7 @@ class FirstPageWidget(QWidget):
 
         videoBoxWidget = QWidget()
         videoBox = QVBoxLayout(videoBoxWidget)
+        videoBox.setContentsMargins(0, 0, 0, 0)
         # VideoContent组件
         self.videoPlayerWidget = videoPlayer.VideoPlayerWidget(self.window)
         videoBox.addWidget(self.videoPlayerWidget)
@@ -112,14 +113,4 @@ class FirstPageWidget(QWidget):
         layout.addWidget(self.splitter)
         self.setLayout(layout)
 
-    # def onModelTimer(self):
-    #     if self.modelManager.modelActive:
-    #         self.modelManager.activate_network()
 
-
-    # def showResult(self, img_path:str, time:str, state:str):
-    #     logger.debug("output: "+img_path)
-    #     logger.debug(time + state)
-    #     item = CaptureItemWidget()
-    #     item.setStatus(img_path, time, state)
-    #     self.captureAreaWidget.layout.addWidget(item)

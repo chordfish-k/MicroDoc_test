@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import (QMainWindow, QWidget,
+from PySide6.QtWidgets import (QMainWindow, QWidget, QStackedWidget,
                              QBoxLayout, QVBoxLayout, QSplitter)
 from PySide6.QtCore import QDir, Qt
 from PySide6.QtGui import QIcon
@@ -15,14 +15,12 @@ from model.face_cut.face_cut import FaceCut
 
 import resources_rc
 
-
-
 class MyApp(QMainWindow):
     settings: Settings = None
 
     topBar: QBoxLayout = None
     sideBar: QBoxLayout = None
-    main: QBoxLayout = None
+    main: QStackedWidget = None
 
     topBarWidget: topbar.TopBarWidget = None
     sideBarWidget: sidebar.SideBarWidget = None
@@ -32,17 +30,18 @@ class MyApp(QMainWindow):
 
     def __init__(self, settings):
         super().__init__()
+        # 导入设置
+        self.settings = settings
         # 加载UI
         Assets.loadUi('main_window', self)
         # 加载样式表
+        Assets.loadQdef(self.settings.get('theme'))
         Assets.loadQss('main', self)
-        # 导入设置
-        self.settings = settings
 
         # 窗体图标
-        self.setWindowIcon(QIcon(":/icons/assets/images/icons/md.png"))
+        self.setWindowIcon(QIcon(":/icons/assets/images/icons/logo_fill.png"))
         import ctypes
-        myappid = 'MicreDoc' # arbitrary string
+        myappid = 'MicroDoc' # arbitrary string
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
         # 隐藏原有标题栏
@@ -68,41 +67,22 @@ class MyApp(QMainWindow):
         # Sidebar组件
         self.sideBarWidget = sidebar.SideBarWidget(self)
         self.sideBar.addWidget(self.sideBarWidget)
-
-        self.firstPageWidget = firstPage.FirstPageWidget(self)
-        self.secondPageWidget = secondPage.SecondPageWidget(self)
-        self.main.addWidget(self.firstPageWidget)
-
-
-    def setVideoPath(self, path):
-        if self.firstPageWidget:
-            logger.debug('got path: '+ path)
-            self.firstPageWidget.videoPlayerWidget.load(path)
-
-
-    def openFirstPage(self):
-        self.main.replaceWidget(self.secondPageWidget, self.firstPageWidget)
-        self.firstPageWidget.show()
-        self.secondPageWidget.hide()
-        # if self.main.itemAt(0):
-        #     wid = self.main.itemAt(0).widget()
-        #     if wid is not self.firstPageWidget:
-        #         self.main.replaceWidget(wid, self.firstPageWidget)
-        #         # wid.deleteLater()
-        #         #self.firstPageWidget = firstPage.FirstPageWidget(self)
-        # #self.main.addWidget(self.firstPageWidget)
-            
+        # stackWidget
+        self.main.addWidget(firstPage.FirstPageWidget(self))
+        self.main.addWidget(secondPage.SecondPageWidget(self))
         
-    def openSecondPage(self):
-        self.main.replaceWidget(self.firstPageWidget, self.secondPageWidget)
-        self.firstPageWidget.hide()
-        self.secondPageWidget.show()
-        # if self.main.itemAt(0):
-        #     wid = self.main.itemAt(0).widget()
-        #     if wid is not self.secondPageWidget:
-        #         self.main.replaceWidget(wid, self.secondPageWidget)
-        #         # wid.deleteLater()
-        #         #self.secondPageWidget = testPage.TestPageWidget(self)
-        # #self.main.addWidget(self.secondPageWidget)
+        self.changePage(1)
 
+
+    def changePage(self, index=1):
+        self.main.setCurrentIndex(index)
+        
+
+    def getCurrentPageIndex(self):
+        return self.main.currentIndex()
+
+
+    def switchTheme(self):
+        Assets.loadQdef(self.settings.get('theme'))
+        pass
 

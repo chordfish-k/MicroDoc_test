@@ -1,8 +1,11 @@
-$primaryColor = rgb(40, 44, 52);     
-$primaryVariantColor = rgb(62, 70, 86);
+$primaryColor: rgb(33, 37, 43);
+$primaryVariantColor: rgb(40, 44, 52);
 
-$fontColor = white;
-$backgroundColor = rgb(43, 48, 56);
+$fontColor: white;
+$secondaryFontColor: white;
 
-$secondaryColor = rgb(189, 147, 249);     
-$secondaryVariantColor = rgb(159, 121, 213);
+$backgroundColor: rgb(43, 48, 56);
+$backgroundVariantColor: rgb(40, 44, 52);
+
+$secondaryColor: rgb(189, 147, 249);     
+$secondaryVariantColor: rgb(159, 121, 213);

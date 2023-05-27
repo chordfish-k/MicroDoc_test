@@ -76,11 +76,11 @@ class SecondPageWidget(QWidget):
         self.videoPlayerWidget.setFrameReadEvent(self.modelManager.onFrameRead)
         videoBox.addWidget(self.videoPlayerWidget)
         # chartWidget
-        self.chartWidget = myChart.MyChartWidget(leftSplitter)
+        self.chartWidget = myChart.MyChartWidget(leftSplitter, self.window.settings)
         self.modelManager.setChartWidget(self.chartWidget)
         leftSplitter.addWidget(self.chartWidget)
 
-        leftSplitter.setStretchFactor(0, 3)
+        leftSplitter.setStretchFactor(0, 2)
         leftSplitter.setStretchFactor(1, 2)
         leftSplitter.handle(1).setAttribute(Qt.WidgetAttribute.WA_Hover, True)
 
@@ -117,4 +117,4 @@ class SecondPageWidget(QWidget):
         logger.debug(time + state)
         item = CaptureItemWidget()
         item.setStatus(img_path, time, state)
-        self.captureAreaWidget.layout.addWidget(item)
+        self.captureAreaWidget.scrollAreaLayout.addWidget(item)

@@ -61,11 +61,30 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="main">
-          <property name="spacing">
+         <widget class="QStackedWidget" name="main">
+          <property name="lineWidth">
            <number>0</number>
           </property>
-         </layout>
+          <widget class="QWidget" name="Page1" native="true">
+           <layout class="QVBoxLayout" name="page1">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+           </layout>
+          </widget>
+         </widget>
         </item>
        </layout>
       </item>

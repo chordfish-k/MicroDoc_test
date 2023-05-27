@@ -1,24 +1,40 @@
+#outside {
+    background-color: $primaryVariantColor;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
 QSlider::groove:horizontal {
     border: none;
     height: 4px;
-    background-color: rgb(52, 59, 72);
+    background-color: $backgroundColor;
 }
 QSlider::handle:horizontal {
-    background-color: rgb(189, 147, 249);
+    background-color: $secondaryVariantColor;
     width: 20px;
     margin: -8px 0px -8px 0px;
     border-radius: 10px;
 }
 QSlider::sub-page:horizontal {
-    background-color: rgb(195, 155, 255);
+    background-color: $secondaryVariantColor;
 }
 QSlider::handle:horizontal:hover {
-    background-color: rgba(132, 85, 138, 255);
+    background-color: $secondaryVariantColor;
 }
 
-#btnStart {
+
+/* #btnStop {
+    background-image: url(:/icons/assets/images/icons/cil-media-stop.png)
+} */
+QLabel {
+    color: $secondaryFontColor;
+}
+#btnStart { 
+    background-color: $backgroundVariantColor;
     background-image: url(:/icons/assets/images/icons/cil-media-play.png)
 }
-#btnStop {
-    background-image: url(:/icons/assets/images/icons/cil-media-stop.png)
+#btnStart:hover { 
+	background-color: $primaryColor;  
+}
+#btnStart:pressed { 
+	background-color: $primaryColor; 
 }

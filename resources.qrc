@@ -1,9 +1,15 @@
 <RCC>
   <qresource prefix="images">
+    <file>assets/images/images/logo_fill.png</file>
+    <file>assets/images/images/logo.png</file>
     <file>assets/images/images/slider_groove.png</file>
+    <file>assets/images/images/logo_color.png</file>
     <file>assets/images/images/md.png</file>
   </qresource>
   <qresource prefix="icons">
+    <file>assets/images/icons/logo_fill.png</file>
+    <file>assets/images/icons/logo_color.png</file>
+    <file>assets/images/icons/logo.png</file>
     <file>assets/images/icons/cil-3d.png</file>
     <file>assets/images/icons/cil-4k.png</file>
     <file>assets/images/icons/cil-account-logout.png</file>

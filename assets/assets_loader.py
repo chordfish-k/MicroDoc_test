@@ -1,3 +1,4 @@
+"""
 from PySide6.QtCore import QDir, QFile
 from PySide6.QtWidgets import QWidget, QMainWindow
 from PySide6.QtUiTools import loadUiType, QUiLoader
@@ -86,7 +87,7 @@ class Assets:
                 # 去除空字符
                 line = line.strip()
                 # 去除分号
-                kv = line.split('=')
+                kv = line.split(':')
                 if len(kv) == 2:
                     key = kv[0].strip()
                     # 要以$符号开头
@@ -132,10 +133,10 @@ class Assets:
             if qtinstance.ui:
                 logger.debug("loaded uifile succeed: " + path)
                 qtinstance.ui.setupUi(qtinstance)
+                for k in qtinstance.ui.__dict__:
+                    qtinstance.__dict__[k] = qtinstance.ui.__dict__[k]
             else:
                 logger.warning("loaded uifile failed: " + path)
         else:
             return qtinstance
 
-
-"""

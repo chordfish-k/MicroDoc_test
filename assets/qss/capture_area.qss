@@ -10,17 +10,18 @@ QScrollBar{
     padding: 1px;
     height: 10px;
     width: 13px;
+    background-color:$backgroundColor;
 }
 QScrollBar::add-line, QScrollBar::sub-line,QScrollBar::add-page, QScrollBar::sub-page {
     width: 0px;
     background: transparent;
 }
 QScrollBar:hover{
-    background-color:#999;
+    background-color:$secondaryColor;
 }
 QScrollBar::handle{
     border-radius: 3px;
-    background:#777;
+    background: $backgroundVariantColor;
     min-width: 16px;
     min-height: 16px;
 }

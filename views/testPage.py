@@ -22,10 +22,7 @@ class TestPageWidget(QWidget):
 
 
     def initComponents(self):
-        self.btnSelModel = self.ui.btnSelModel
-        self.btnSelData = self.ui.btnSelData
-        self.btnTest = self.ui.btnTest
-        self.lbResult = self.ui.lbResult
+
 
         self.btnSelModel.clicked.connect(self.selectModel)
         self.btnSelData.clicked.connect(self.selectData)

@@ -209,8 +209,7 @@ class VideoPlayerWidget(QWidget):
 
 
     def initComponents(self):
-        self.video_zoom = self.ui.video_zoom
-
+        pass
 
     def load(self, path):
         if self.isLoaded:
@@ -239,7 +238,7 @@ class VideoPlayerWidget(QWidget):
 
 
     def stop(self):
-        if self.isLoaded and self.isPlaying:
+        if self.isLoaded:
             self.isLoaded = False
             self.isPlaying = False
             self.video.timer.stop()

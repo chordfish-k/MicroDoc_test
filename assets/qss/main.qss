@@ -52,6 +52,8 @@ QPushButton {
 	font-size: 14px;
 	padding: 5px;
 	border: none;
+    padding-top: 16px;
+    padding-bottom: 16px;
 }
 QPushButton:hover {
 	background-color: rgb(62, 70, 86);
@@ -60,3 +62,9 @@ QPushButton:pressed {
 	background-color: rgb(189, 147, 249);
 }
 
+
+QCheckBox {
+	color: #ffffff;
+	font-size: 16px;
+	margin: 6px;
+}

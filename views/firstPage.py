@@ -1,14 +1,15 @@
-from PySide6.QtWidgets import (QMainWindow, QWidget, 
-                             QBoxLayout, QVBoxLayout, QSplitter)
+from PySide6.QtWidgets import (QMainWindow, QWidget, QPushButton, QLabel,
+                             QBoxLayout, QVBoxLayout, QSplitter, QCheckBox)
 from PySide6.QtCore import QDir, Qt, QTimer
-from PySide6.QtGui import QIcon, QImage, QPixmap, QMouseEvent
+from PySide6.QtGui import QIcon, QImage, QPixmap, QMouseEvent, QResizeEvent
 from PIL import Image, ImageQt
 import os, sys
 import cv2
 import numpy as np
 
 from views.components import (myChart, videoPlayer, captureArea, 
-                              videoController, subVideoButtons)
+                              videoController, subVideoButtons,
+                              subTools)
 
 from assets.assets_loader import Assets
 
@@ -24,20 +25,13 @@ class FirstPageWidget(QWidget):
     videoPlayerWidget: videoPlayer.VideoPlayerWidget = None
     subVideoPlayerWidget: videoPlayer.VideoPlayerWidget = None
     videoControllerWidget: videoController.VideoControllerWidget = None
-    captureAreaWidget: captureArea.CaptureAreaWidget = None
+    subToolsWidget: subTools.SubToolsWidget = None
+    # captureAreaWidget: captureArea.CaptureAreaWidget = None
 
-    modelTimer1 = None
 
     def __init__(self, window):
         super().__init__()
         self.window = window
-
-        self.modelManager = Manager(self.window.settings)
-        self.modelManager.setOutputFn(self.showResult)
-
-        self.modelTimer1 = QTimer()
-        self.modelTimer1.timeout.connect(self.onModelTimer)
-        self.modelTimer1.start(1)
        
         # 加载组件
         self.initComponents()
@@ -78,6 +72,7 @@ class FirstPageWidget(QWidget):
         videoBox.addWidget(self.videoPlayerWidget)
         self.videoControllerWidget = videoController.VideoControllerWidget(self.window)
         self.videoControllerWidget.attachVideoPlayer(self.videoPlayerWidget)
+        self.videoControllerWidget.setShowStopBtn(False)
         videoBox.addWidget(self.videoControllerWidget)
 
         # MyChart
@@ -89,22 +84,15 @@ class FirstPageWidget(QWidget):
 
         rightSplitter = QSplitter(self)
         rightSplitter.setOrientation(Qt.Orientation.Vertical)
+        # right UP
         self.subVideoPlayerWidget = videoPlayer.VideoPlayerWidget(self.window)
         rightSplitter.addWidget(self.subVideoPlayerWidget)
-        
-        subVLayout = QVBoxLayout(self)
-        subVLayout.setContentsMargins(0, 0, 0, 0)
-        self.subVideoButtonsWidget = subVideoButtons.SubVideoButtonsWidget(self.window, self.subVideoPlayerWidget, self.modelManager)
-        subVLayout.addWidget(self.subVideoButtonsWidget)
-        # 绑定帧事件
-        self.subVideoPlayerWidget.setFrameReadEvent(self.modelManager.onFrameRead)
+        # right DOWN
+        self.subToolsWidget = subTools.SubToolsWidget(
+            self.window, self.videoPlayerWidget,
+            self.subVideoPlayerWidget, self.videoControllerWidget)
+        rightSplitter.addWidget(self.subToolsWidget)
 
-        self.captureAreaWidget = captureArea.CaptureAreaWidget(self.window)
-        subVLayout.addWidget(self.captureAreaWidget)
-        subVLayoutWidget = QWidget()
-        subVLayoutWidget.setLayout(subVLayout)
-        rightSplitter.addWidget(subVLayoutWidget)
-        
         rightSplitter.setStretchFactor(0, 1)
         rightSplitter.setStretchFactor(1, 8)
         
@@ -115,7 +103,7 @@ class FirstPageWidget(QWidget):
         self.splitter.addWidget(videoBoxWidget)
         self.splitter.addWidget(rightSplitter)
         self.splitter.setOrientation(Qt.Orientation.Horizontal)
-        self.splitter.setStretchFactor(0, 5)
+        self.splitter.setStretchFactor(0, 3)
         self.splitter.setStretchFactor(1, 2)
         self.splitter.handle(1).setAttribute(Qt.WidgetAttribute.WA_Hover, True)
 
@@ -124,18 +112,14 @@ class FirstPageWidget(QWidget):
         layout.addWidget(self.splitter)
         self.setLayout(layout)
 
-        # self.modelManager.setChartWidget(self.chartWidget)
-
-    def onModelTimer(self):
-        if self.modelManager.modelActive:
-            self.modelManager.activate_network()
+    # def onModelTimer(self):
+    #     if self.modelManager.modelActive:
+    #         self.modelManager.activate_network()
 
 
-    def showResult(self, img_path:str, time:str, state:str):
-        logger.debug("output: "+img_path)
-        logger.debug(time + state)
-        item = CaptureItemWidget()
-        item.setStatus(img_path, time, state)
-        self.captureAreaWidget.layout.addWidget(item)
-
-
+    # def showResult(self, img_path:str, time:str, state:str):
+    #     logger.debug("output: "+img_path)
+    #     logger.debug(time + state)
+    #     item = CaptureItemWidget()
+    #     item.setStatus(img_path, time, state)
+    #     self.captureAreaWidget.layout.addWidget(item)

@@ -29,8 +29,6 @@ class RightPartWidget(QWidget):
 
 
     def initComponents(self):
-        self.subVideo = self.ui.subVideo
-        self.subVideoBtn = self.ui.subVideoBtn
 
         self.videoWidget = videoPlayer.VideoPlayerWidget(self.window)
         # self.subVideo.addWidget(self.videoWidget)

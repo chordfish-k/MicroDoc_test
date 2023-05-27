@@ -22,6 +22,8 @@ class VideoControllerWidget(QWidget):
 
     player: videoPlayer.VideoPlayerWidget = None
 
+    showStopBtn: bool = True
+
 
     def __init__(self, window):
         super().__init__()
@@ -68,6 +70,9 @@ class VideoControllerWidget(QWidget):
             logger.warning("videoPlayer is not found!")
 
 
+    def setShowStopBtn(self, isShow):
+        self.showStopBtn = isShow
+        self.btnStop.setVisible(isShow)
 
     def onStopBtnPress(self):
         if self.player:

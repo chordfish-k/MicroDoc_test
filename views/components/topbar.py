@@ -42,6 +42,7 @@ class TopBarWidget(QWidget):
             self.window.showMaximized()
             self.tbBtnMaximize.setStyleSheet(
                "background-image: url(:/icons/assets/images/icons/icon_restore.png)")
+            
         else:
             self.window.showNormal()
             self.tbBtnMaximize.setStyleSheet(

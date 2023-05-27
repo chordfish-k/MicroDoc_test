@@ -5,7 +5,7 @@ from PySide6.QtGui import QIcon
 import os
 
 from views.components import (topbar, sidebar)
-from views import firstPage, testPage
+from views import firstPage, secondPage
 
 from assets.assets_loader import Assets
 
@@ -27,7 +27,7 @@ class MyApp(QMainWindow):
     topBarWidget: topbar.TopBarWidget = None
     sideBarWidget: sidebar.SideBarWidget = None
     firstPageWidget: firstPage.FirstPageWidget = None
-    secondPageWidget: testPage.TestPageWidget = None
+    secondPageWidget: secondPage.SecondPageWidget = None
 
 
     def __init__(self, settings):
@@ -61,9 +61,6 @@ class MyApp(QMainWindow):
 
         
     def initComponents(self):
-        self.topBar = self.ui.topBar
-        self.sideBar = self.ui.sideBar
-        self.main = self.ui.main
 
         # Topbar组件
         self.topBarWidget = topbar.TopBarWidget(self)
@@ -73,7 +70,7 @@ class MyApp(QMainWindow):
         self.sideBar.addWidget(self.sideBarWidget)
 
         self.firstPageWidget = firstPage.FirstPageWidget(self)
-        self.secondPageWidget = testPage.TestPageWidget(self)
+        self.secondPageWidget = secondPage.SecondPageWidget(self)
         self.main.addWidget(self.firstPageWidget)
 
 

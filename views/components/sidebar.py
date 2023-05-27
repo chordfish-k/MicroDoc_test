@@ -28,11 +28,8 @@ class SideBarWidget(QWidget):
     
     
     def initComponents(self):
-        self.btnFile = self.ui.btnFile
-        self.btnFirstPage = self.ui.btnFirstPage
-        self.btnSecondPage = self.ui.btnSecondPage
 
-        self.btnFile.clicked.connect(self.openVideoFile)
+        # self.btnFile.clicked.connect(self.openVideoFile)
         self.btnFirstPage.clicked.connect(self.window.openFirstPage)
         self.btnSecondPage.clicked.connect(self.window.openSecondPage)
 

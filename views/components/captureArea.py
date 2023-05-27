@@ -17,7 +17,7 @@ from util.logger import logger
 
 class CaptureAreaWidget(QWidget):
     window: QMainWindow = None
-    layout: QVBoxLayout = None
+    scrollAreaLayout: QVBoxLayout = None
 
     def __init__(self, window):
         super().__init__()
@@ -30,8 +30,7 @@ class CaptureAreaWidget(QWidget):
 
 
     def initComponents(self):
-        self.layout = self.ui.scrollAreaLayout
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+        self.scrollAreaLayout.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
 
 

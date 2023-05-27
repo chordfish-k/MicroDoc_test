@@ -38,9 +38,6 @@ class SubVideoButtonsWidget(QWidget):
 
 
     def initComponents(self):
-        self.svBtnCamera = self.ui.svBtnCamera
-        self.svBtnFile = self.ui.svBtnFile
-        self.svBtnActive = self.ui.svBtnActive
 
         self.svBtnCamera.clicked.connect(self.toggleCamera)
         self.svBtnFile.clicked.connect(self.toggleFile)

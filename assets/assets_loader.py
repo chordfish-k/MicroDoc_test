@@ -37,6 +37,8 @@ class Assets:
         if qtinstance.ui:
             logger.debug("loaded uifile succeed: " + path)
             qtinstance.ui.setupUi(qtinstance)
+            for k in qtinstance.ui.__dict__:
+                qtinstance.__dict__[k] = qtinstance.ui.__dict__[k]
         else:
             logger.warning("loaded uifile failed: " + path)
 

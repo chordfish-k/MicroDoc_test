@@ -59,8 +59,10 @@ class SubToolsWidget(QWidget):
     def toggleRecord(self):
         if self.isRecording:
             self.stopRecord()
+            self.stBtnStartRecord.setText("开始录制")
         else:
             self.startRecord()
+            self.stBtnStartRecord.setText("停止录制")
 
 
     def openVideoFile(self):
@@ -122,7 +124,7 @@ class SubToolsWidget(QWidget):
         video_path = os.path.join('videos', str(time_str) + '.avi')
         print(video_path)
 
-        self.videoOut = cv2.VideoWriter(video_path, self.fourcc, self.window.settings.getFloat("capture_video_fps"), (640, 480))
+        self.videoOut = cv2.VideoWriter(video_path, self.fourcc, self.window.settings.get("capture_video_fps", float), (640, 480))
 
     ## 停止录制
     def stopRecord(self):

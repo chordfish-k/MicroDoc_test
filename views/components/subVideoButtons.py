@@ -57,7 +57,7 @@ class SubVideoButtonsWidget(QWidget):
         if not self.videoWidget.isLoaded:
             
             settings:Settings = self.window.settings
-            last_path = settings.get('last_dir_path')
+            last_path = "videos"#settings.get('last_dir_path')
             logger.debug("last_path: " + last_path)
             current_path = QDir.currentPath() if not last_path else last_path
             title = '选择视频文件'

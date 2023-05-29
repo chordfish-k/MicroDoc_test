@@ -49,7 +49,7 @@
         <enum>QFrame::NoFrame</enum>
        </property>
        <property name="text">
-        <string>data</string>
+        <string>no rescource</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

@@ -18,6 +18,7 @@ class VideoPlayerWidget(QWidget):
     window: QMainWindow = None
     video = None
     video_zoom: QLabel = None
+    hint_text: str = 'no rescource'
 
     controller: None
     hasController = False
@@ -203,7 +204,7 @@ class VideoPlayerWidget(QWidget):
         self.window = window
 
         Assets.loadUi('video_player', self)
-        # Assets.loadQss('video_player', self)
+        Assets.loadQss('video_player', self)
 
         self.initComponents()
 
@@ -262,6 +263,7 @@ class VideoPlayerWidget(QWidget):
 
     def clearScreen(self):
         self.video_zoom.setPixmap(QPixmap())
+        self.setHintText()
 
 
     def setProgress(self, value):
@@ -323,3 +325,9 @@ class VideoPlayerWidget(QWidget):
 
         if self.video:
             self.video.setFrameReadEvent(self.frameReadEvent)
+
+
+    def setHintText(self, text:str=None):
+        if text:
+            self.hintText = text
+        self.video_zoom.setText(self.hintText)

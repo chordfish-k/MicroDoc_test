@@ -73,6 +73,7 @@ class SecondPageWidget(QWidget):
         videoBox.setContentsMargins(0, 0, 0, 0)
         # videoBoxWidget
         self.videoPlayerWidget = videoPlayer.VideoPlayerWidget(self.window)
+        self.videoPlayerWidget.setHintText("未加载视频")
         self.videoPlayerWidget.setFrameReadEvent(self.modelManager.onFrameRead)
         videoBox.addWidget(self.videoPlayerWidget)
         # chartWidget

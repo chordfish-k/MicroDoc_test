@@ -70,6 +70,7 @@ class FirstPageWidget(QWidget):
         videoBox.setContentsMargins(0, 0, 0, 0)
         # VideoContent组件
         self.videoPlayerWidget = videoPlayer.VideoPlayerWidget(self.window)
+        self.videoPlayerWidget.setHintText("请选择情绪诱发视频")
         videoBox.addWidget(self.videoPlayerWidget)
         self.videoControllerWidget = videoController.VideoControllerWidget(self.window)
         self.videoControllerWidget.attachVideoPlayer(self.videoPlayerWidget)
@@ -87,6 +88,7 @@ class FirstPageWidget(QWidget):
         rightSplitter.setOrientation(Qt.Orientation.Vertical)
         # right UP
         self.subVideoPlayerWidget = videoPlayer.VideoPlayerWidget(self.window)
+        self.subVideoPlayerWidget.setHintText("摄像头未连接")
         rightSplitter.addWidget(self.subVideoPlayerWidget)
         # right DOWN
         self.subToolsWidget = subTools.SubToolsWidget(

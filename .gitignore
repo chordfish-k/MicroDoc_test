@@ -2,7 +2,7 @@
 .vscode/
 frames/
 captures/
-videos/
+videos/*
 
 # model
 model.pth

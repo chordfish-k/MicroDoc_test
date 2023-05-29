@@ -108,7 +108,7 @@ class VideoPlayerWidget(QWidget):
                 if not self.isFile:
                     settings:Settings = self.window.settings
 
-                    if settings.get('camera_flipX') == 'True':
+                    if settings.get('camera_flipX', bool):
                         cv2.flip(readFrame, 1, readFrame)
 
                     

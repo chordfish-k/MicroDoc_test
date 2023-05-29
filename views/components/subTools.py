@@ -3,6 +3,8 @@ from PySide6.QtWidgets import (QMainWindow, QWidget, QLabel, QCheckBox,
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtCore import QDir, QTimer
 import os
+import cv2
+import datetime
 
 from assets.assets_loader import Assets
 from views.components import videoPlayer, videoController
@@ -26,6 +28,9 @@ class SubToolsWidget(QWidget):
     subVideoWidget: videoPlayer.VideoPlayerWidget = None
     videoBar: videoController.VideoControllerWidget = None
 
+    isRecording: bool = False
+    videoOut: cv2.VideoWriter = None
+
 
     def __init__(self, window, videoWidget, subVideoWidget, videoBar):
         super().__init__()
@@ -43,11 +48,19 @@ class SubToolsWidget(QWidget):
     def initComponents(self):
         self.stBtnChooseSubVideo.clicked.connect(self.toggleFile)
         self.stCbCamera.clicked.connect(self.toggleCamera)
+        self.stBtnStartRecord.clicked.connect(self.toggleRecord)
+        self.subVideoWidget.setFrameReadEvent(self.captureFrame)
 
 
     def toggleCamera(self):
         logger.debug('toggle camera')
         self.subVideoWidget.toggleCamera()
+
+    def toggleRecord(self):
+        if self.isRecording:
+            self.stopRecord()
+        else:
+            self.startRecord()
 
 
     def openVideoFile(self):
@@ -86,11 +99,49 @@ class SubToolsWidget(QWidget):
             "关闭本地文件" if self.videoWidget.isLoaded else "打开本地文件")
         
 
-    def toggleActive(self):
-        if not self.manager.modelActive:
-            self.manager.modelActive = True
-        else:
-            self.manager.modelActive = False
+    # def toggleActive(self):
+    #     if not self.manager.modelActive:
+    #         self.manager.modelActive = True
+    #     else:
+    #         self.manager.modelActive = False
 
-        self.svBtnActive.setText(
-            "停止模型" if self.manager.modelActive else "启动模型")
+    #     self.svBtnActive.setText(
+    #         "停止模型" if self.manager.modelActive else "启动模型")
+
+
+    ## 开始录制
+    def startRecord(self):
+        self.isRecording = True
+
+        if not self.subVideoWidget.isOpenedCamera:
+            return
+
+        # 新建一个视频文件
+        self.fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+        time_str = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        video_path = os.path.join('videos', str(time_str) + '.avi')
+        print(video_path)
+
+        self.videoOut = cv2.VideoWriter(video_path, self.fourcc, self.window.settings.getFloat("capture_video_fps"), (640, 480))
+
+    ## 停止录制
+    def stopRecord(self):
+        self.isRecording = False
+
+        if not self.subVideoWidget.isOpenedCamera:
+            return
+            # 释放画面缓存
+        self.videoOut.release()
+        self.videoOut = None
+
+        # 重置计数器
+        # self.output_counter = 0
+
+
+    def captureFrame(self, img):
+        # 将画面写入文件
+        if not self.subVideoWidget.isOpenedCamera:
+            return
+        if self.isRecording and self.videoOut:
+                ret, readFrame = self.subVideoWidget.video.capture.read()
+                self.videoOut.write(readFrame)

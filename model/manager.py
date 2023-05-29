@@ -42,8 +42,8 @@ class Manager:
 
     def __init__(self, settings):
         self.settings = settings
-        self.min_prob = float(self.settings.get('min_accepted_probability'))
-        self.duration = int(self.settings.get('output_duration'))
+        self.min_prob = self.settings.get('min_accepted_probability', float)
+        self.duration = self.settings.get('output_duration', int)
 
         self.transform_test = transforms.Compose(
         [
@@ -59,7 +59,7 @@ class Manager:
         # 加载模型
         self.load_model()
         # 
-        self.min_prob = float(self.settings.get("min_accepted_probability"))
+        self.min_prob = self.settings.get("min_accepted_probability", float)
 
         # 表情捕获文件夹
         self.captures_path = os.path.join(QDir.currentPath(),  "captures")
@@ -94,7 +94,7 @@ class Manager:
     def load_model(self):
         model_path = "model/test/model.pth"
         device = torch.device('cpu')
-        if self.settings.get('use_gpu')=="True":
+        if self.settings.get('use_gpu', bool):
             if torch.cuda.is_available():
                 device = torch.device('cuda:0')
             else:

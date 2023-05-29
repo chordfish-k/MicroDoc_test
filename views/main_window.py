@@ -5,7 +5,7 @@ from PySide6.QtGui import QIcon
 import os
 
 from views.components import (topbar, sidebar)
-from views import firstPage, secondPage
+from views import firstPage, secondPage, thirdPage, forthPage
 
 from assets.assets_loader import Assets
 
@@ -26,6 +26,7 @@ class MyApp(QMainWindow):
     sideBarWidget: sidebar.SideBarWidget = None
     firstPageWidget: firstPage.FirstPageWidget = None
     secondPageWidget: secondPage.SecondPageWidget = None
+    thirdPageWidget: thirdPage.ThirdPageWidget = None
 
 
     def __init__(self, settings):
@@ -51,7 +52,7 @@ class MyApp(QMainWindow):
         # 加载组件
         self.initComponents()
         # 重设窗体大小
-        self.resize(1088, 722)
+        self.resize(self.settings.get("default_width", int), self.settings.get("default_height", int))
 
         self.fc = FaceCut()
         self.frame_dir = os.path.join(QDir.currentPath(), "frames")
@@ -68,8 +69,11 @@ class MyApp(QMainWindow):
         self.sideBarWidget = sidebar.SideBarWidget(self)
         self.sideBar.addWidget(self.sideBarWidget)
         # stackWidget
+        # 装载页面
         self.main.addWidget(firstPage.FirstPageWidget(self))
         self.main.addWidget(secondPage.SecondPageWidget(self))
+        self.main.addWidget(thirdPage.ThirdPageWidget(self))
+        self.main.addWidget(forthPage.ForthPageWidget(self))
         
         self.changePage(1)
 

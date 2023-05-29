@@ -118,7 +118,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="svBtnStartRecord">
+    <widget class="QPushButton" name="stBtnStartRecord">
      <property name="minimumSize">
       <size>
        <width>0</width>

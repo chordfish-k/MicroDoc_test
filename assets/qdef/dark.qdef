@@ -5,6 +5,7 @@ $fontColor: white;
 $secondaryFontColor: white;
 
 $backgroundColor: rgb(43, 48, 56);
+$backgroundLightColor: rgb(241,241,241);
 $backgroundVariantColor: rgb(40, 44, 52);
 
 $secondaryColor: rgb(189, 147, 249);     

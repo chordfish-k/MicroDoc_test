@@ -23,8 +23,10 @@ class Settings:
             self.config_dict[key] = value
 
 
-    def get(self, key:str):
-        return self.config_dict.get(key)
+    def get(self, key:str, value_type:type=str):
+        if value_type is bool:
+             return True if self.config_dict.get(key) == 'True' else False
+        return value_type(self.config_dict.get(key))
 
 
     def load(self):

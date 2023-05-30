@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QLabel
 from PySide6.QtGui import QIcon, QPixmap, QImage
-from PySide6.QtCore import QTimer, QThread
+from PySide6.QtCore import QTimer, QThread, Signal
 from PySide6 import QtMultimedia
 import os
 import cv2
@@ -15,6 +15,7 @@ from util.settings import Settings
 
 
 class VideoPlayerWidget(QWidget):
+
     window: QMainWindow = None
     video = None
     video_zoom: QLabel = None
@@ -30,11 +31,21 @@ class VideoPlayerWidget(QWidget):
     isPlaying = False
     isOpenedCamera: bool = False
 
+    stopped: Signal = Signal()
     
-
+    class PlayMode:
+            ONCE = 0
+            LOOP = 1
+            
+    playMode: PlayMode = PlayMode.ONCE
 ####[class Video start]###########################################################
     
     class Video:
+
+        
+
+        
+
         VIDEO_WIDTH = 640
 
         widget = None
@@ -169,9 +180,13 @@ class VideoPlayerWidget(QWidget):
 
                 self.showPic(tmp_frame)
 
-                if (self.frame_count == self.frame_now):
+                if self.frame_count == self.frame_now:
                     # 播放到结尾，重新开始
-                    self.setVideoSecondPosition(0)
+                    if self.widget.playMode == self.widget.PlayMode.LOOP:
+                        self.setVideoSecondPosition(0)
+                    elif self.widget.playMode == self.widget.PlayMode.ONCE:
+                        self.widget.stopped.emit()
+                        
 
             except TypeError:
                 logger.warning('No Frame')
@@ -331,3 +346,7 @@ class VideoPlayerWidget(QWidget):
         if text:
             self.hintText = text
         self.video_zoom.setText(self.hintText)
+
+
+    def setPlayMode(self, mode: PlayMode):
+        self.playMode = mode

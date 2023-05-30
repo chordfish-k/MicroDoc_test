@@ -50,7 +50,8 @@ class SubToolsWidget(QWidget):
         self.stCbCamera.clicked.connect(self.toggleCamera)
         self.stBtnStartRecord.clicked.connect(self.toggleRecord)
         self.subVideoWidget.setFrameReadEvent(self.captureFrame)
-
+        self.videoWidget.stopped.connect(self.toggleFile)
+        
 
     def toggleCamera(self):
         logger.debug('toggle camera')
@@ -76,12 +77,13 @@ class SubToolsWidget(QWidget):
         file_name = os.path.split(file_path)[-1]
         if file_path:
             # 存储上次打开的文件夹路径
-            path = settings.get('last_dir_path')
-            self.last_dir_path = os.path.dirname(file_path)  if not path else path
-            settings.setItem('last_dir_path', self.last_dir_path)
+            path = os.path.dirname(file_path)
+            settings.setItem('last_dir_path', path)
             settings.save()
-
+            logger.debug("this_path: " + file_path)
             return file_path, file_name
+        else:
+            return None, None
 
 
     def toggleFile(self):
@@ -91,6 +93,8 @@ class SubToolsWidget(QWidget):
             path, name = self.openVideoFile()
             if path:
                 self.videoWidget.load(path)
+                #self.videoWidget.setPlayMode(
+                # videoPlayer.VideoPlayerWidget.PlayMode.LOOP)
                 self.stLbCurrFile.setText(f"当前文件：{name}")
 
         else:

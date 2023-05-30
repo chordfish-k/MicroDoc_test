@@ -30,13 +30,15 @@ class Settings:
 
 
     def load(self):
-        self.config.read(self.file_path, encoding='utf8')
+        self.config.read(self.file_path, encoding='gbk')
         self.config_dict.clear()
         for item in self.config.items('settings'):
             self.config_dict[item[0]] = item[1]
 
 
     def save(self):
+        logger.debug("output config")
+        print(self.config_dict)
         if self.file_path:
             for key in self.config_dict:
                 self.config.set('settings', key, self.config_dict[key])

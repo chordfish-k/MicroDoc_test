@@ -7,6 +7,8 @@ from PySide6.QtWidgets import QWidget, QLabel, QHBoxLayout
 
 from util.logger import logger
 
+import os
+
 #侧边栏组件，显示捕获的微表情状态
 class CaptureItemWidget(QWidget):
     def __init__(self):
@@ -31,6 +33,8 @@ class CaptureItemWidget(QWidget):
         self.box.addWidget(self.qjudgeLabel)
         self.setLayout(self.box)
 
+        self.setToolTip("双击查看")
+
 
     # 信息设置
     def setStatus(self, img_path: str, timestamp='00:00:00', judge='Null'):
@@ -48,47 +52,11 @@ class CaptureItemWidget(QWidget):
         self.qjudgeLabel.setText(self.judge)
 
 
-    class Thread_1(QThread):  # 线程1
-        over = Signal(QThread)
-        def __init__(self, img:Image):
-            super().__init__()
-            self.img = img
-
-        def run(self):
-            self.img.show()
-            self.over.emit(self)
-
-
-
     #双击打开图片查看
     def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:
         
         if event.buttons() == Qt.MouseButton.LeftButton:
-            #self.open_dialog(self.img)
-            img = Image.open(self.img_path)
 
-            if img:
-                def onImgClose1():
-                    self.pth1.quit()
-                    self.pth1 = None
-                    logger.debug("close img broswer thread1")
-
-                def onImgClose2():
-                    self.pth2.quit()
-                    self.pth2 = None
-                    logger.debug("close img broswer thread2")
-
-                if not self.pth1:
-                    #self.pth = self.pth1
-                    self.pth1 = self.Thread_1(img)
-                    self.pth1.start()
-                    self.pth1.over.connect(onImgClose1)
-                    logger.debug("start img broswer thread1")
-                elif not self.pth2:
-                    #self.pth = self.pth2
-                    self.pth2 = self.Thread_1(img)
-                    self.pth2.start()
-                    self.pth2.over.connect(onImgClose2)
-                    logger.debug("start img broswer thread2")
-
+            os.startfile(self.img_path)
+        
             event.accept()

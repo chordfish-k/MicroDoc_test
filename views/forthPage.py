@@ -34,4 +34,6 @@ class ForthPageWidget(QWidget):
         splitter.setStretchFactor(0, 5)
         splitter.setStretchFactor(1, 5)
 
+        splitter.handle(1).setDisabled(True) # 不可拖动分割器
+
         self.outside.layout().addWidget(splitter)

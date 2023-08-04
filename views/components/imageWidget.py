@@ -1,26 +1,33 @@
 from typing import Union
-from PySide6.QtGui import QPixmap, QResizeEvent
-from PySide6.QtWidgets import QLabel, QWidget, QHBoxLayout
-from PySide6.QtCore import QDir, Qt
+from PySide6.QtGui import QPixmap, QResizeEvent, QPainter, QPen
+from PySide6.QtWidgets import QLabel, QWidget, QHBoxLayout, QFrame
+from PySide6.QtCore import QDir, Qt, QRect, QEvent, QObject,QSize
 import os
 from PIL import ImageQt, Image
 
-
 class ImageWidget(QWidget):
     
-    __imglb: QLabel = None
+    imglb: QLabel = None
     __img: QPixmap = None
     __imgsize: tuple = (0,0)
+
+    _inited: bool = False
     
     def __init__(self, parent):
         super().__init__(parent)
         
+
         layout = QHBoxLayout(self)
-        self.__imglb = QLabel()
-        self.__imglb.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.__imglb)
+        self.imglb = QLabel(self)
+        self.imglb.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.imglb)
         layout.setContentsMargins(0,0,0,0)
         self.setLayout(layout)
+        self.imglb.setScaledContents(True)
+
+        self.imglb.setMouseTracking(True) # 监听鼠标
+        self.setMouseTracking(True)
+
 
 
     def loadImage(self, path: str):
@@ -28,26 +35,24 @@ class ImageWidget(QWidget):
         self.__imgsize = (self.__img.width(), self.__img.height())
         self.refreshImage()
 
+    
+    def loadImage(self, img : Image):
+        self.__img = ImageQt.toqpixmap(img)
+        self.__imgsize = (self.__img.width(), self.__img.height())
+        self.refreshImage()
+
 
     def refreshImage(self):
-        self.__imglb.setPixmap(self.__img)
-        w, h = self.size().toTuple()
-        lw, lh = self.__imgsize
-        pw, ph = w, h
-        
-        if w/h <= lw/lh:
-            # fit width
-            ph = int(lh * w / lw)
-        else:
-            # fit height
-            pw = int(lw * h / lh)
-        self.__imglb.setPixmap(self.__img.scaled(pw, ph))  # 拉伸图片
+        pixmap = self.__img
+        pixmap = pixmap.scaled(self.imglb.size()-QSize(10,10), Qt.AspectRatioMode.KeepAspectRatio,
+                               Qt.TransformationMode.SmoothTransformation)
+        self.imglb.setPixmap(pixmap)
 
 
-    def resizeEvent(self, event: QResizeEvent) -> None:
+    def resizeEvent(self, event):
         self.refreshImage()
-        return super().resizeEvent(event)
 
     
     def setAlignment(self, flag: Qt.AlignmentFlag):
-        self.__imglb.setAlignment(flag)
+        self.imglb.setAlignment(flag)
+

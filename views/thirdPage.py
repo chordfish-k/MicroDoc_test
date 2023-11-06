@@ -65,7 +65,7 @@ class ThirdPageWidget(QWidget):
                 btn.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
                 btn.loadImage(ic)
                 btn.setIndex(i*5+j)
-                btn.click.connect(self.onGridBtnClick);
+                btn.click.connect(self.onGridBtnClick)
                 
 
                 self.rightGridLayout.addWidget(btn, i, j)

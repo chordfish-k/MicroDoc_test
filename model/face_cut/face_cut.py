@@ -12,7 +12,7 @@ class FaceCut:
         path = QDir.currentPath()+ "/model/face_cut/haarcascade_frontalface_default.xml"
         self.detector = cv2.CascadeClassifier(path)
 
-    def face_cut(self, image: np.ndarray, **kwargs)->np.ndarray:
+    def face_cut(self, image: np.ndarray, **kwargs)->np.ndarray|None:
         if self.detector == None:
             return
         

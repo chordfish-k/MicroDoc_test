@@ -57,6 +57,7 @@ class SubVideoButtonsWidget(QWidget):
         if not self.videoWidget.isLoaded:
             
             settings:Settings = self.window.settings
+            # 默认打开存放录制视频的文件夹
             last_path = "videos"#settings.get('last_dir_path')
             logger.debug("last_path: " + last_path)
             current_path = QDir.currentPath() if not last_path else last_path

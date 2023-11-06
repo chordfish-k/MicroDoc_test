@@ -2,14 +2,17 @@ from PySide6.QtCharts import (QChart, QChartView, QLineSeries,
                               QValueAxis, QCategoryAxis)
 from PySide6.QtGui import QColor, QPainter
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QWidget, QHBoxLayout
+from PySide6.QtWidgets import QSizePolicy, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QSpacerItem
 
 from assets.assets_loader import Assets
 from util.settings import Settings
 
 class MyChartWidget(QWidget):
     chart: QChart = None
+    btn: QPushButton = None
     settings: Settings = None
+
+    data1 = [[],[],[]]
 
     def __init__(self, parent, settings):
         super().__init__()
@@ -135,13 +138,24 @@ class MyChartWidget(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.chartview)
         layout.addWidget(self.chartview2)
-        self.setLayout(layout)
+
+        self.btn = QPushButton()
+        self.btn.setText("导出")
+        self.btn.clicked.connect(self.outputData)
+        layout2 = QHBoxLayout()
+        layout2.addWidget(self.btn)
+
+        layout3 = QVBoxLayout()
+        layout3.addItem(layout)
+        layout3.addItem(layout2)
+        self.setLayout(layout3)
 
         # 增加数据点
-    def add_chartDatas(self, series: QLineSeries, data):
+    def add_chartDatas(self, series, data):
         if series.count() == self.x_data_length:
             series.removePoints(0, int(self.x_data_length / 2))
         series.append(self.data_index, data)
+        
 
 
     #清除数据
@@ -160,6 +174,10 @@ class MyChartWidget(QWidget):
         self.add_chartDatas(self.series_2, result[1])
         self.add_chartDatas(self.series_1, result[0])
 
+        self.data1[2].append(str.format("{:.0f}", result[2]*1000))
+        self.data1[1].append(str.format("{:.0f}", result[0]*1000))
+        self.data1[0].append(str.format("{:.0f}", result[0]*1000))
+
         averge = 0.333
         for i in range(0,3):
             if result[i] > averge:
@@ -173,3 +191,7 @@ class MyChartWidget(QWidget):
             right = self.data_index + self.x_data_length / 2
             self.x_Aix.setRange(left, right)
             self.x_Aix2.setRange(left, right)
+
+    def outputData(self):
+        print(self.data1)
+        pass

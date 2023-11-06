@@ -194,7 +194,7 @@ class VideoPlayerWidget(QWidget):
             # 传递给事件
             if self.frameReadEvent:
                 #logger.debug(self.str_current_time)
-                self.frameReadEvent(self.currentFrame.copy())
+                self.frameReadEvent(self.currentFrame.copy(), self.str_current_time)
 
 
             # 设置进度条
@@ -350,3 +350,6 @@ class VideoPlayerWidget(QWidget):
 
     def setPlayMode(self, mode: PlayMode):
         self.playMode = mode
+        
+    def getCurrentTime(self):
+        return self.video.current_time if self.video else 0

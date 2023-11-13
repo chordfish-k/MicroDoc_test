@@ -17,25 +17,24 @@ from util.settings import Settings
 from util.logger import logger
 from model.manager import Manager
 from views.components.captureItem import CaptureItemWidget
+from views.components.imageWidget import ImageWidget
+from views.components.myQWidget import MyQWidget
 
-class UserPageWidget(QWidget):
+class UserPageWidget(MyQWidget):
+
     window: QMainWindow = None
 
-
     def __init__(self, window):
-        super().__init__()
+       
         self.window = window
        
-
-        Assets.loadUi("user_page", self)
-    
-        # 加载组件
-        self.initComponents()
+        super().__init__(window=window, name="user_page")
 
         
 
 
     def initComponents(self):
-       
+    #    img = ImageWidget.fromQLabel(self.ui.loginPage, self.ui.img)
+    #    img.loadImage("assets/images/images/logo_fill.png")
        pass
 

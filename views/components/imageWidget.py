@@ -13,12 +13,12 @@ class ImageWidget(QWidget):
 
     _inited: bool = False
     
-    def __init__(self, parent):
+    def __init__(self, parent, label:QLabel=None):
         super().__init__(parent)
         
 
         layout = QHBoxLayout(self)
-        self.imglb = QLabel(self)
+        self.imglb = QLabel(self) if label==None else label
         self.imglb.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.imglb)
         layout.setContentsMargins(0,0,0,0)
@@ -27,6 +27,7 @@ class ImageWidget(QWidget):
 
         self.imglb.setMouseTracking(True) # 监听鼠标
         self.setMouseTracking(True)
+        
 
 
 
@@ -56,3 +57,5 @@ class ImageWidget(QWidget):
     def setAlignment(self, flag: Qt.AlignmentFlag):
         self.imglb.setAlignment(flag)
 
+    # def fromQLabel(parent, lb: QLabel):
+    #     return ImageWidget(parent, label=lb)

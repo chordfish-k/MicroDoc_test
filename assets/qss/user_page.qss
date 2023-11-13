@@ -1,0 +1,33 @@
+QLineEdit{
+	background-color: transparent;
+	border:none;
+    color:$secondaryFontColor;
+    font-size:18px;
+	border-bottom:2px solid $primaryColor;
+    margin-top:10px;
+    padding:5px; 
+}
+
+QLineEdit:focus {
+    border-bottom:2px solid $secondaryColor;
+}
+
+QPushButton {
+    background-color:$primaryColor;
+}
+
+QPushButton:hover {
+    background-color:$secondaryColor;
+}
+
+QPushButton:pressed {
+    background-color:$secondaryVariantColor;
+}
+
+#gridStackedWidget {
+    background-color: $backgroundColor;
+}
+
+#img {
+    border-image: url(:/images/assets/images/images/logo_fill.png);
+}

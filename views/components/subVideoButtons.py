@@ -27,15 +27,12 @@ class SubVideoButtonsWidget(MyQWidget):
 
 
     def __init__(self, window, videoWidget, manager):
-        super().__init__(window=window, name="sub_video_buttons")
+        
         self.window = window
         self.videoWidget = videoWidget
         self.manager = manager
 
-        # Assets.loadUi('sub_video_buttons', self)
-        # Assets.loadQss('sub_video_buttons', self)
-
-        self.initComponents()
+        super().__init__(window=window, name="sub_video_buttons")
 
 
     def initComponents(self):
@@ -43,6 +40,14 @@ class SubVideoButtonsWidget(MyQWidget):
         # self.svBtnCamera.clicked.connect(self.toggleCamera)
         self.svBtnFile.clicked.connect(self.toggleFile)
         self.svBtnActive.clicked.connect(self.toggleActive)
+
+    
+    def connectChartsWidget(self, charts):
+        self.charts = charts
+
+
+    def connectCaptureAreaWidget(self, capture):
+        self.captureArea = capture
 
 
     def toggleCamera(self):
@@ -53,7 +58,7 @@ class SubVideoButtonsWidget(MyQWidget):
 
 
     def toggleFile(self):
-        logger.debug('toggle file')
+        logger.debug('toggle file-----------------------')
 
         if not self.videoWidget.isLoaded:
             
@@ -74,7 +79,9 @@ class SubVideoButtonsWidget(MyQWidget):
 
                 self.videoWidget.load(file_path)
                 self.videoWidget.play()
-
+                
+                self.charts.clean_datas()
+                self.captureArea.cleanAll()
         else:
             self.videoWidget.stop()
 

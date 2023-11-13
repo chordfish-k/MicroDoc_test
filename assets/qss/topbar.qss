@@ -31,3 +31,24 @@
 #tbBtnMaximize {
 	background-image: url(:/icons/assets/images/icons/icon_maximize.png)
 }
+
+#btnLogout {
+    font-size: 14px;
+	padding: auto 5px;
+	margin-bottom: 8px;
+	border-radius: 5px; 
+	background-color: $primaryVariantColor;
+	/* margin-bottom: 4px; */
+}
+
+#btnLogout.QPushButton:hover { 
+	background-color: $secondaryVariantColor;  
+}
+#btnLogout.QPushButton:pressed { 
+	background-color: $secondaryVariantColor; 
+}
+
+#lbUserTag {
+    color: $fontColor;
+	font-size: 14px;
+}

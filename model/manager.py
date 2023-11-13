@@ -159,7 +159,6 @@ class Manager:
                 # print(output)
                 with torch.no_grad():
                     result = self.softmax(output[0])
-                    #logger.debug(result)
                     if self.chart:
                         self.chart.update_series(result)
                     # self.global_result = [random.random(), random.random(), random.random()]

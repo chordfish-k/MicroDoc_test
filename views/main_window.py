@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import (QMainWindow, QWidget, QStackedWidget,
                              QBoxLayout, QVBoxLayout, QSplitter)
-from PySide6.QtCore import QDir, Qt
+from PySide6.QtCore import QDir, Qt, Signal
 from PySide6.QtGui import QIcon
 import os
 
@@ -30,6 +30,8 @@ class MyApp(QMainWindow):
     thirdPageWidget: thirdPage.ThirdPageWidget = None
     forthPageWidget: forthPage.ForthPageWidget = None
     userPageWidget: userPage.UserPageWidget = None
+
+    logouted: Signal = Signal()
 
 
     def __init__(self, settings):
@@ -112,3 +114,22 @@ class MyApp(QMainWindow):
             v = self.__dict__[k]
             if isinstance(v, MyQWidget):
                 v.refresh()
+
+
+    def loginSuccess(self, data=None):
+        if (data):
+            self.settings.setItem("token", data['token'])
+            self.settings.setItem("account", data['phone'])
+            self.settings.setItem("user", data['name'])
+            self.settings.save()
+
+        self.topBarWidget.refreshUserTag()
+
+    
+    def doLogout(self):
+        self.settings.setItem("token", "")
+        self.settings.setItem("user", "")
+        self.settings.save()
+
+        self.topBarWidget.refreshUserTag()
+        self.logouted.emit()

@@ -36,5 +36,10 @@ class CaptureAreaWidget(MyQWidget):
         self.scrollAreaLayout.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
 
+    def cleanAll(self):
+        for i in range(self.scrollAreaLayout.count()):
+	        self.scrollAreaLayout.itemAt(i).widget().deleteLater()
+
+
 
         

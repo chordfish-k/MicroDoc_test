@@ -9,7 +9,7 @@ import datetime
 from assets.assets_loader import Assets
 from views.components import videoPlayer, videoController
 
-from util.settings import Settings
+from util.settings import settings
 from util.logger import logger
 from views.components.myQWidget import MyQWidget
 
@@ -69,7 +69,6 @@ class SubToolsWidget(MyQWidget):
 
 
     def openVideoFile(self):
-        settings:Settings = self.window.settings
         last_path = settings.get('last_dir_path')
         logger.debug("last_path: " + last_path)
         current_path = QDir.currentPath() if not last_path else last_path

@@ -1,12 +1,15 @@
-from PySide6.QtWidgets import QMainWindow, QWidget,QPushButton
+from PySide6.QtWidgets import QMainWindow, QWidget,QPushButton, QLabel
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QMouseEvent
 
 import os
 
 from assets.assets_loader import Assets
+from util.settings import settings
+from views.components.myQWidget import MyQWidget
 
-class TopBarWidget(QWidget):
+
+class TopBarWidget(MyQWidget):
     window: QMainWindow = None
     tbBtnClose: QPushButton = None
     tbBtnMinimize: QPushButton = None
@@ -18,13 +21,15 @@ class TopBarWidget(QWidget):
 
 
     def __init__(self, window):
-        super().__init__()
+        
         self.window = window
 
-        Assets.loadUi('topbar', self)
-        Assets.loadQss('topbar', self)
+        # Assets.loadUi('topbar', self)
+        # Assets.loadQss('topbar', self)
 
-        self.initComponents()
+        super().__init__(window=window, name="topbar")
+
+        # self.initComponents()
 
 
     def initComponents(self):
@@ -35,6 +40,8 @@ class TopBarWidget(QWidget):
         self.tbBtnClose.clicked.connect(self.window.close)
         self.tbBtnMinimize.clicked.connect(self.window.showMinimized)
         self.tbBtnMaximize.clicked.connect(self.toggleMaximize)
+
+        self.btnLogout.clicked.connect(self.doLogout)
 
 
     def toggleMaximize(self):
@@ -68,4 +75,14 @@ class TopBarWidget(QWidget):
     def mouseReleaseEvent(self, event: QMouseEvent):
         self.m_flag = False
 
-        
+
+    def refreshUserTag(self):
+        userName = settings.get("user")
+        if userName:
+            self.userInfoBox.setMaximumWidth(10000)
+            self.lbUserTag.setText(userName)
+        else:
+            self.userInfoBox.setMaximumWidth(0)
+
+    def doLogout(self):
+        self.window.doLogout()

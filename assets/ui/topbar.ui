@@ -33,7 +33,7 @@
     <number>9</number>
    </property>
    <property name="topMargin">
-    <number>0</number>
+    <number>4</number>
    </property>
    <property name="rightMargin">
     <number>9</number>
@@ -80,7 +80,7 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QLabel" name="lbUserName">
+       <widget class="QLabel" name="lbUserTag">
         <property name="text">
          <string>UserName</string>
         </property>
@@ -94,6 +94,12 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>35</height>
+         </size>
+        </property>
         <property name="text">
          <string>注销</string>
         </property>
@@ -105,6 +111,9 @@
    <item>
     <widget class="QFrame" name="topBar">
      <layout class="QHBoxLayout" name="topBarLayout">
+      <property name="topMargin">
+       <number>4</number>
+      </property>
       <item>
        <widget class="QPushButton" name="tbBtnMinimize">
         <property name="minimumSize">

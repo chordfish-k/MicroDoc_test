@@ -18,6 +18,10 @@ class Settings:
         self.config_dict[key] = value
 
 
+    def deleteItem(self, key:str):
+        self.config_dict.pop(key)
+
+
     def setItemIfNone(self, key:str, value):
         if not self.config_dict.get(key):
             self.config_dict[key] = value
@@ -26,7 +30,10 @@ class Settings:
     def get(self, key:str, value_type:type=str):
         if value_type is bool:
              return True if self.config_dict.get(key) == 'True' else False
-        return value_type(self.config_dict.get(key))
+        if self.config_dict.get(key):
+            return value_type(self.config_dict.get(key))
+        else:
+            return None
 
 
     def load(self):
@@ -38,7 +45,6 @@ class Settings:
 
     def save(self):
         logger.debug("output config")
-        print(self.config_dict)
         if self.file_path:
             for key in self.config_dict:
                 self.config.set('settings', key, self.config_dict[key])
@@ -46,3 +52,4 @@ class Settings:
         else:
             logger.warning("没有指定设置文件名")
 
+settings = Settings()

@@ -92,10 +92,12 @@ class SecondPageWidget(MyQWidget):
         self.splitter.addWidget(rightBoxWidget)
         # subVideoButtonWidget
         self.subToolsWidget = subVideoButtons.SubVideoButtonsWidget(self.window, self.videoPlayerWidget, self.modelManager)
+        self.subToolsWidget.connectChartsWidget(self.chartWidget)
         rightBox.addWidget(self.subToolsWidget)
         # captureAreaWiget
         self.captureAreaWidget = captureArea.CaptureAreaWidget(self.window)
         rightBox.addWidget(self.captureAreaWidget)
+        self.subToolsWidget.connectCaptureAreaWidget(self.captureAreaWidget)
 
         
         self.splitter.setStretchFactor(0, 5)

@@ -3,6 +3,7 @@ from PySide6.QtCharts import (QChart, QChartView, QLineSeries,
 from PySide6.QtGui import QColor, QPainter
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QSizePolicy, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QSpacerItem
+from assets.api.report import postReportAPI
 
 from assets.assets_loader import Assets
 from util.settings import Settings
@@ -12,13 +13,15 @@ class MyChartWidget(QWidget):
     btn: QPushButton = None
     settings: Settings = None
 
-    data1 = [[],[],[]]
+    data1 = [{'x':[], 'y':[]} for _ in range(3)]
+    duration = 1
 
     def __init__(self, parent, settings):
         super().__init__()
         self.settings = settings
         self.initComponents()
         Assets.loadQss("my_chart", self)
+        self.duration = self.settings.get("output_duration", int)
 
 
     def initComponents(self):
@@ -52,7 +55,7 @@ class MyChartWidget(QWidget):
         self.x_Aix.setGridLineVisible(False)
         self.x_Aix.setMinorGridLineVisible(False)  # 隐藏参考线
         self.x_Aix.setLabelFormat("%u")
-        self.x_Aix.setTickCount(11)  # 10+1
+        self.x_Aix.setTickCount(6)  # 5+1
         self.x_Aix.setMinorTickCount(1)
         self.x_Aix.setLabelsColor(fontColor)
         self.x_Aix.setLinePenColor(fontColor)
@@ -152,9 +155,11 @@ class MyChartWidget(QWidget):
 
         # 增加数据点
     def add_chartDatas(self, series, data):
-        if series.count() == self.x_data_length:
-            series.removePoints(0, int(self.x_data_length / 2))
+        # if series.count() >= self.x_data_length:
+        #     series.removePoints(0, self.x_data_length)
         series.append(self.data_index, data)
+        # if series==self.series_3:
+        #     print(self.data_index, data)
         
 
 
@@ -165,33 +170,71 @@ class MyChartWidget(QWidget):
         self.series_2.clear()
         self.series_3.clear()
         self.series_4.clear()
+        self.data1 = [{'x':[], 'y':[]} for _ in range(3)]
+        self.x_Aix.setRange(0.00, self.x_data_length)
+        self.x_Aix2.setRange(0.00, self.x_data_length)
+
 
     # 更新数据
     def update_series(self, result):
-        self.data_index += 1
+        self.data_index += self.duration
         # print(result)
         self.add_chartDatas(self.series_3, result[2])
         self.add_chartDatas(self.series_2, result[1])
         self.add_chartDatas(self.series_1, result[0])
 
-        self.data1[2].append(str.format("{:.0f}", result[2]*1000))
-        self.data1[1].append(str.format("{:.0f}", result[0]*1000))
-        self.data1[0].append(str.format("{:.0f}", result[0]*1000))
+        self.data1[0]['y'].append(str.format("{:.0f}", result[2]*1000))
+        self.data1[1]['y'].append(str.format("{:.0f}", result[0]*1000))
+        
+        # self.data1[0].append(str.format("{:.0f}", result[0]*1000))
 
         averge = 0.333
         for i in range(0,3):
             if result[i] > averge:
                 category = ((2 - i) / 2.0) + 0.25
                 self.add_chartDatas(self.series_4, category)
+                self.data1[2]['y'].append(str.format("{:.0f}", category))
                 break
 
         # 当时间轴大于现有时间轴，进行更新坐标轴，并删除之前数据
-        if self.data_index >= self.x_data_length and self.data_index % int(self.x_data_length / 2) == 0:
-            left = self.data_index - self.x_data_length / 2
-            right = self.data_index + self.x_data_length / 2
+        xp2 = self.x_data_length // 2
+        sub = self.data_index - self.x_data_length
+        # print(self.data_index, self.x_data_length)
+        if sub >= 0 and sub % xp2 <= self.duration:
+            left = self.data_index - xp2
+            right = self.data_index + xp2
             self.x_Aix.setRange(left, right)
             self.x_Aix2.setRange(left, right)
 
+
+
     def outputData(self):
-        print(self.data1)
+        total = len(self.data1[0]['y'])
+        print("total:", total)
+        print("data_index:", self.data_index)
+        
+        self.data1[0]['x'] = self.data1[1]['x'] = self.data1[2]['x'] = \
+            [str.format("{:.0f}", 1+x*self.duration) for x in range(0, total)]
+        data = {
+            'datas':[
+                {
+                    'type': 0,
+                    'x': ",".join(self.data1[0]['x']),
+                    'y': ",".join(self.data1[0]['y']),
+                },
+                {
+                    'type': 1,
+                    'x': ",".join(self.data1[1]['x']),
+                    'y': ",".join(self.data1[1]['y']),
+                },
+                {
+                    'type': 2,
+                    'x': ",".join(self.data1[2]['x']),
+                    'y': ",".join(self.data1[2]['y']),
+                },
+            ]
+        }
+        # print(data)
+        res = postReportAPI(data)
+        # print(res)
         pass

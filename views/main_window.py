@@ -5,7 +5,7 @@ from PySide6.QtGui import QIcon
 import os
 
 from views.components import (topbar, sidebar)
-from views import firstPage, secondPage, thirdPage, forthPage
+from views import firstPage, secondPage, thirdPage, forthPage, userPage
 
 from assets.assets_loader import Assets
 
@@ -14,6 +14,7 @@ from util.logger import logger
 from model.face_cut.face_cut import FaceCut
 
 import resources_rc
+from views.components.myQWidget import MyQWidget
 
 class MyApp(QMainWindow):
     settings: Settings = None
@@ -27,6 +28,8 @@ class MyApp(QMainWindow):
     firstPageWidget: firstPage.FirstPageWidget = None
     secondPageWidget: secondPage.SecondPageWidget = None
     thirdPageWidget: thirdPage.ThirdPageWidget = None
+    forthPageWidget: forthPage.ForthPageWidget = None
+    userPageWidget: userPage.UserPageWidget = None
 
 
     def __init__(self, settings):
@@ -70,10 +73,17 @@ class MyApp(QMainWindow):
         self.sideBar.addWidget(self.sideBarWidget)
         # stackWidget
         # 装载页面
-        self.main.addWidget(firstPage.FirstPageWidget(self))
-        self.main.addWidget(secondPage.SecondPageWidget(self))
-        self.main.addWidget(thirdPage.ThirdPageWidget(self))
-        self.main.addWidget(forthPage.ForthPageWidget(self))
+        self.firstPageWidget = firstPage.FirstPageWidget(self)
+        self.secondPageWidget = secondPage.SecondPageWidget(self)
+        self.thirdPageWidget = thirdPage.ThirdPageWidget(self)
+        self.forthPageWidget = forthPage.ForthPageWidget(self)
+        self.userPageWidget = userPage.UserPageWidget(self)
+
+        self.main.addWidget(self.firstPageWidget)
+        self.main.addWidget(self.secondPageWidget)
+        self.main.addWidget(self.thirdPageWidget)
+        self.main.addWidget(self.forthPageWidget)
+        self.main.addWidget(self.userPageWidget)
         
         self.changePage(1)
 
@@ -87,6 +97,18 @@ class MyApp(QMainWindow):
 
 
     def switchTheme(self):
-        Assets.loadQdef(self.settings.get('theme'))
-        pass
+        # Assets.loadQdef(self.settings.get('theme'))
+        theme = self.settings.get('theme')
+        theme = "dark" if theme=="light" else "light"
+        self.settings.setItem("theme", theme)
+        Assets.loadQdef(theme)
+        self.refesh()
 
+
+    def refesh(self):
+        Assets.loadQss('main', self)
+
+        for k in self.__dict__:
+            v = self.__dict__[k]
+            if isinstance(v, MyQWidget):
+                v.refresh()

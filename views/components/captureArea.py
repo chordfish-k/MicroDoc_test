@@ -13,20 +13,23 @@ from assets.assets_loader import Assets
 
 from util.settings import Settings
 from util.logger import logger
+from views.components.myQWidget import MyQWidget
 
 
-class CaptureAreaWidget(QWidget):
+class CaptureAreaWidget(MyQWidget):
     window: QMainWindow = None
     scrollAreaLayout: QVBoxLayout = None
 
     def __init__(self, window):
-        super().__init__()
+        
         self.window = window
 
-        Assets.loadUi("capture_area", self)
-        Assets.loadQss("capture_area", self)
+        # Assets.loadUi("capture_area", self)
+        # Assets.loadQss("capture_area", self)
 
-        self.initComponents()
+        super().__init__(window=window, name="capture_area")
+
+        # self.initComponents()
 
 
     def initComponents(self):

@@ -17,8 +17,9 @@ from util.settings import Settings
 from util.logger import logger
 from model.manager import Manager
 from views.components.captureItem import CaptureItemWidget
+from views.components.myQWidget import MyQWidget
 
-class SecondPageWidget(QWidget):
+class SecondPageWidget(MyQWidget):
     window: QMainWindow = None
     splitter: QSplitter = None
 
@@ -30,7 +31,7 @@ class SecondPageWidget(QWidget):
     modelTimer1 = None
 
     def __init__(self, window):
-        super().__init__()
+        
         self.window = window
 
         self.modelManager = Manager(self.window.settings)
@@ -39,9 +40,8 @@ class SecondPageWidget(QWidget):
         self.modelTimer1 = QTimer()
         self.modelTimer1.timeout.connect(self.onModelTimer)
         self.modelTimer1.start(1)
-       
-        # 加载组件
-        self.initComponents()
+
+        super().__init__()
 
         
 

@@ -18,6 +18,7 @@ class SideBarWidget(QWidget):
     btnSecondPage: QPushButton = None
     btnThirdPage: QPushButton = None
     btnForthPage: QPushButton = None
+    btnUser: QPushButton = None
 
     __pages = []
 
@@ -40,6 +41,7 @@ class SideBarWidget(QWidget):
             (self.btnSecondPage, 2),
             (self.btnThirdPage, 3),
             (self.btnForthPage, 4),
+            (self.btnUser, 5),
         ]
 
         for b, p in self.__pages:

@@ -9,9 +9,10 @@ from views.components import videoPlayer, subVideoButtons
 
 from util.settings import Settings
 from util.logger import logger
+from views.components.myQWidget import MyQWidget
 
 
-class VideoControllerWidget(QWidget):
+class VideoControllerWidget(MyQWidget):
     window: QMainWindow = None
 
     btnStart: QPushButton = None
@@ -26,13 +27,13 @@ class VideoControllerWidget(QWidget):
 
 
     def __init__(self, window):
-        super().__init__()
+        super().__init__(window=window, name="video_controller")
+
         self.window = window
-        Assets.loadUi('video_controller', self)
-        Assets.loadQss('video_controller', self)
+        # Assets.loadUi('video_controller', self)
+        # Assets.loadQss('video_controller', self)
 
-        self.initComponents()
-
+        # self.initComponents()
 
     def initComponents(self):
         self.btnStart = self.ui.btnStart
@@ -97,3 +98,8 @@ class VideoControllerWidget(QWidget):
             # logger.debug("slider move")
             self.player.setProgress(self.videoSlider.value())
             self.player.play()
+
+
+    def refresh(self):
+        Assets.loadQss('video_controller', self)
+        super().refresh()

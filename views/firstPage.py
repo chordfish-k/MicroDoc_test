@@ -9,7 +9,7 @@ import numpy as np
 
 from views.components import (myChart, videoPlayer, captureArea, 
                               videoController, subVideoButtons,
-                              subTools)
+                              subTools, myQWidget)
 
 from assets.assets_loader import Assets
 
@@ -18,7 +18,7 @@ from util.logger import logger
 from model.manager import Manager
 from views.components.captureItem import CaptureItemWidget
 
-class FirstPageWidget(QWidget):
+class FirstPageWidget(myQWidget.MyQWidget):
     window: QMainWindow = None
     splitter: QSplitter = None
 
@@ -30,11 +30,11 @@ class FirstPageWidget(QWidget):
 
 
     def __init__(self, window):
-        super().__init__()
+        super().__init__(window=window)
         self.window = window
        
         # 加载组件
-        self.initComponents()
+        # self.initComponents()
 
         
 
@@ -114,5 +114,3 @@ class FirstPageWidget(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.splitter)
         self.setLayout(layout)
-
-

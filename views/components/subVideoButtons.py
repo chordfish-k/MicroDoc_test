@@ -9,11 +9,12 @@ from views.components import videoPlayer
 
 from util.settings import Settings
 from util.logger import logger
+from views.components.myQWidget import MyQWidget
 
 
 
 
-class SubVideoButtonsWidget(QWidget):
+class SubVideoButtonsWidget(MyQWidget):
     window: QMainWindow = None
 
     svBtnCamera: QPushButton = None
@@ -26,13 +27,13 @@ class SubVideoButtonsWidget(QWidget):
 
 
     def __init__(self, window, videoWidget, manager):
-        super().__init__()
+        super().__init__(window=window, name="sub_video_buttons")
         self.window = window
         self.videoWidget = videoWidget
         self.manager = manager
 
-        Assets.loadUi('sub_video_buttons', self)
-        Assets.loadQss('sub_video_buttons', self)
+        # Assets.loadUi('sub_video_buttons', self)
+        # Assets.loadQss('sub_video_buttons', self)
 
         self.initComponents()
 

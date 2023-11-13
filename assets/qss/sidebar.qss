@@ -27,6 +27,9 @@
 #btnTheme {
 	background-image: url(:/icons/assets/images/icons/cil-lightbulb.png)
 }
+#btnUser {
+	background-image: url(:/icons/assets/images/icons/cil-user.png)
+}
 #btnSettings {
 	background-image: url(:/icons/assets/images/icons/cil-settings.png)
 }

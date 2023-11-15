@@ -5,11 +5,14 @@ from util.logger import logger
 from components.myQWidget import MyQWidget
 from PIL import Image
 from PIL import ImageQt
+import base64
 
 
 class CaptureAreaWidget(MyQWidget):
     window: QMainWindow = None
     scrollAreaLayout: QVBoxLayout = None
+
+    datas = []
 
     def __init__(self, window):
         self.window = window
@@ -20,15 +23,34 @@ class CaptureAreaWidget(MyQWidget):
         self.scrollAreaLayout.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
 
-    def addCaptureItem(self, img_path, time, state):
+    def addCaptureItem(self, img_path:str, time:str, state:str, old:int, new:int):
         item = CaptureItemWidget(self.scrollAreaLayout.widget())
         item.setStatus(img_path, time, state)
         self.scrollAreaLayout.addWidget(item)
 
+        with open(img_path, "rb") as image_file:
+            encoded_string = "data:image/png;base64," + base64.b64encode(image_file.read()).decode("utf-8")
+
+        # 保存到数据结构
+        self.datas.append({
+            'imgB64': encoded_string,
+            'before': str(old),
+            'after': str(new),
+            'time': time
+        })
+        # print(self.datas)
+
+    def getData(self):
+        return self.datas
+
 
     def cleanAll(self):
+        self.datas = []
         for i in range(self.scrollAreaLayout.count()):
 	        self.scrollAreaLayout.itemAt(i).widget().deleteLater()
+
+
+
 
 
 #侧边栏组件，显示捕获的微表情状态

@@ -1,5 +1,7 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QSplitter
 from PySide6.QtCore import Qt, QTimer
+
+from api.report import postReportAPI
 from .components import CaptureAreaWidget, MyChartWidget, SubVideoButtonsWidget
 from components import MyQWidget, VideoControllerWidget, VideoPlayerWidget
 from util.logger import logger
@@ -62,8 +64,9 @@ class AnalysePageWidget(MyQWidget):
         self.videoPlayerWidget.setFrameReadEvent(self.modelManager.onFrameRead)
         videoBox.addWidget(self.videoPlayerWidget)
         # chartWidget
-        self.chartWidget = MyChartWidget()
+        self.chartWidget = MyChartWidget(self.window)
         self.modelManager.setChartWidget(self.chartWidget)
+        self.chartWidget.output.connect(self.uploadData)
         leftSplitter.addWidget(self.chartWidget)
 
         leftSplitter.setStretchFactor(0, 2)
@@ -78,6 +81,8 @@ class AnalysePageWidget(MyQWidget):
         # subVideoButtonWidget
         self.subVideoButtons = SubVideoButtonsWidget(self.window, self.videoPlayerWidget, self.modelManager)
         self.subVideoButtons.connectChartsWidget(self.chartWidget)
+        self.subVideoButtons.upload.connect(self.uploadData)
+        self.subVideoButtons.clear.connect(self.clearData)
         rightBox.addWidget(self.subVideoButtons)
         # captureAreaWiget
         self.captureAreaWidget = CaptureAreaWidget(self.window)
@@ -100,9 +105,26 @@ class AnalysePageWidget(MyQWidget):
             self.modelManager.activate_network()
 
 
-    def showResult(self, img_path:str, time:str, state:str):
+    def showResult(self, img_path:str, time:str, state:str, old:int, new:int):
         # logger.debug("output: "+img_path)
         logger.debug(time + state)
-        self.captureAreaWidget.addCaptureItem(img_path, time, state)# scrollAreaLayout.addWidget(item)
-        self.captureAreaWidget.addCaptureItem(img_path, time, state)# scrollAreaLayout.addWidget(item)
-        print(len(self.captureAreaWidget.children()))
+        self.captureAreaWidget.addCaptureItem(img_path, time, state, old, new)# scrollAreaLayout.addWidget(item)
+
+        # print(len(self.captureAreaWidget.children()))
+
+    def uploadData(self):
+        li = self.chartWidget.getData()
+        tb = self.captureAreaWidget.getData()
+
+        data = {
+            'datas': li,
+            'captures': tb
+        }
+        # print(data)
+        res = postReportAPI(data)
+        print(res)
+
+
+    def clearData(self):
+        self.chartWidget.clean_datas()
+        self.captureAreaWidget.cleanAll()

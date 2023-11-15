@@ -46,7 +46,11 @@ class MyApp(QMainWindow):
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
         # 隐藏原有标题栏
-        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint 
+                        #    | Qt.WindowType.WindowMinMaxButtonsHint 
+                        #    | Qt.WindowType.WindowCloseButtonHint 
+                        #    | Qt.WindowType.WindowStaysOnTopHint
+                           )
         # 设置窗体为透明背景以显示圆角
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         # 加载组件

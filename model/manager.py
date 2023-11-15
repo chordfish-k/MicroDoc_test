@@ -18,6 +18,7 @@ class Manager:
     img_que = Queue(maxsize=100)
     min_prob = 0.3
     pre_result = "None"
+    pre_result_i = -1
     
     modelTimer: QTimer = None
     modelActive = False
@@ -99,6 +100,9 @@ class Manager:
 
 
     def onFrameRead(self, image, time):
+        if not self.modelActive:
+            return
+        
         if self.durationCnt == 0 and image.any:
             self.addImage(image, time)
 
@@ -164,10 +168,12 @@ class Manager:
                     result_change_txt = self.pre_result + "=>" + result_txt
                     self.pre_result = result_txt
                     
+                    
                     date = time
                     file = os.path.join(self.captures_path, str.replace(time, ':', '') + '.jpg')
                     cv2.imwrite(file, img_patch)
-                    self.outputFn(file, date, result_change_txt)
+                    self.outputFn(file, date, result_change_txt, self.pre_result_i, result_item)
 
+                    self.pre_result_i = result_item
             except:
                 pass

@@ -1,18 +1,22 @@
 from PySide6.QtCharts import QChart, QChartView, QLineSeries,QValueAxis, QCategoryAxis
 from PySide6.QtGui import QColor, QPainter
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton
-from assets.api.report import postReportAPI
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow
 from assets.assets_loader import Assets
+from components import MyQWidget
 from util.settings import settings
 
 class MyChartWidget(QWidget):
+    window:QMainWindow = None
     chart: QChart = None
     btn: QPushButton = None
     data1 = [{'x':[], 'y':[]} for _ in range(3)]
     duration = 1
 
-    def __init__(self):
+    output = Signal()
+
+    def __init__(self, window):
+        self.window = window
         super().__init__()
         self.initComponents()
         Assets.loadQss("my_chart", self)
@@ -137,25 +141,45 @@ class MyChartWidget(QWidget):
         layout.addWidget(self.chartview)
         layout.addWidget(self.chartview2)
 
-        self.btn = QPushButton()
-        self.btn.setText("导出")
-        self.btn.clicked.connect(self.outputData)
-        layout2 = QHBoxLayout()
-        layout2.addWidget(self.btn)
 
         layout3 = QVBoxLayout()
         layout3.addItem(layout)
-        layout3.addItem(layout2)
+        # layout3.addItem(layout2)
         self.setLayout(layout3)
 
         # 增加数据点
     def add_chartDatas(self, series, data):
-        # if series.count() >= self.x_data_length:
-        #     series.removePoints(0, self.x_data_length)
         series.append(self.data_index, data)
-        # if series==self.series_3:
-        #     print(self.data_index, data)
         
+
+    def refresh(self):
+        
+        fontColor: QColor = None
+        if settings.get("theme").startswith("light"):
+            fontColor = QColor(0, 0, 0)
+        else:
+            fontColor = QColor(255, 255, 255)
+        print(fontColor)
+        
+        self.chart.legend().setLabelColor(fontColor)
+
+        # self.x_Aix.setLabelsColor(fontColor)
+        # self.x_Aix.setLinePenColor(fontColor)
+        # self.x_Aix.setGridLineColor(fontColor)
+
+        # self.x_Aix2.setLinePenColor(fontColor)
+        # self.x_Aix2.setLabelsColor(fontColor)
+        # self.x_Aix2.setGridLineColor(fontColor)
+
+        # self.y_Aix.setLabelsColor(fontColor)
+        # self.y_Aix.setLinePenColor(fontColor)
+        # self.y_Aix.setGridLineColor(fontColor)
+
+        # self.y_Aix2.setLinePenColor(fontColor)
+        # self.y_Aix2.setLabelsColor(fontColor)
+        # self.y_Aix2.setGridLineColor(fontColor)
+
+        # super().refresh()
 
 
     #清除数据
@@ -202,34 +226,32 @@ class MyChartWidget(QWidget):
             self.x_Aix2.setRange(left, right)
 
 
-
-    def outputData(self):
+    def getData(self):
         total = len(self.data1[0]['y'])
-        print("total:", total)
-        print("data_index:", self.data_index)
+        # print("total:", total)
+        # print("data_index:", self.data_index)
         
         self.data1[0]['x'] = self.data1[1]['x'] = self.data1[2]['x'] = \
             [str.format("{:.0f}", 1+x*self.duration) for x in range(0, total)]
-        data = {
-            'datas':[
-                {
-                    'type': 0,
-                    'x': ",".join(self.data1[0]['x']),
-                    'y': ",".join(self.data1[0]['y']),
-                },
-                {
-                    'type': 1,
-                    'x': ",".join(self.data1[1]['x']),
-                    'y': ",".join(self.data1[1]['y']),
-                },
-                {
-                    'type': 2,
-                    'x': ",".join(self.data1[2]['x']),
-                    'y': ",".join(self.data1[2]['y']),
-                },
-            ]
-        }
-        # print(data)
-        res = postReportAPI(data)
-        # print(res)
-        pass
+        data = [
+            {
+                'type': 0,
+                'x': ",".join(self.data1[0]['x']),
+                'y': ",".join(self.data1[0]['y']),
+            },
+            {
+                'type': 1,
+                'x': ",".join(self.data1[1]['x']),
+                'y': ",".join(self.data1[1]['y']),
+            },
+            {
+                'type': 2,
+                'x': ",".join(self.data1[2]['x']),
+                'y': ",".join(self.data1[2]['y']),
+            },
+        ]
+        return data
+
+
+    def outputData(self):
+        self.output.emit()

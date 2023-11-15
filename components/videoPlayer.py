@@ -1,14 +1,13 @@
-from PySide6.QtWidgets import QMainWindow, QPushButton, QLabel, QSlider, QWidget
+from PySide6.QtWidgets import QMainWindow, QPushButton, QLabel, QSlider, QWidget,QApplication
 from PySide6.QtGui import QPixmap, QImage
 from PySide6.QtCore import QTimer, QThread, Signal
 import cv2
 import time
 import numpy as np
-from ffpyplayer.player import MediaPlayer
 from assets.assets_loader import Assets
 from components.myQWidget import MyQWidget
 from util.logger import logger
-from util.settings import Settings
+from util.settings import settings
 
 
 class VideoPlayerWidget(QWidget):
@@ -46,18 +45,19 @@ class VideoPlayerWidget(QWidget):
 
 
         path: str = ""
-        audio_player: MediaPlayer = None
         # 屏幕标签
         screen_label: QLabel = None
         # 播放视频timer
         timer: QTimer = None
         # 播放音频timer
-        audio_thread: QThread = None
+        # audio_thread: QThread = None
         # 是否为视频文件
         isFile = True
 
         # 帧获取事件
         frameReadEvent = None
+
+        flipX = False
         
         def __init__(self, widget, window, pathOrCamera, screen_label):
             """
@@ -76,6 +76,7 @@ class VideoPlayerWidget(QWidget):
             else:
                 self.isFile = False
 
+            self.flipX = settings.get('camera_flipX', bool)
 
             # 读取视频数据
             self.capture = cv2.VideoCapture(pathOrCamera)
@@ -110,10 +111,7 @@ class VideoPlayerWidget(QWidget):
 
             if (ret == True):
                 # 如果是摄像头 且 设置了水平翻转
-                if not self.isFile:
-                    settings:Settings = self.window.settings
-
-                    if settings.get('camera_flipX', bool):
+                if not self.isFile and self.flipX:
                         cv2.flip(readFrame, 1, readFrame)
 
                     
@@ -167,6 +165,7 @@ class VideoPlayerWidget(QWidget):
 
         # 计时器：获取下一帧并显示
         def nextFrame(self):
+
             try:
                 self.captureNextFrame()
                 tmp_frame = self.convertFrame()
@@ -174,6 +173,7 @@ class VideoPlayerWidget(QWidget):
                 self.showPic(tmp_frame)
 
                 if self.frame_count == self.frame_now:
+                    
                     # 播放到结尾，重新开始
                     if self.widget.playMode == self.widget.PlayMode.LOOP:
                         self.setVideoSecondPosition(0)
@@ -196,6 +196,7 @@ class VideoPlayerWidget(QWidget):
                 self.widget.controller.lbEndTime.setText(self.str_end_time)
                 self.widget.controller.videoSlider.setValue(self.frame_now)
 
+            # print(self.frame_now)
 
         def setFrameReadEvent(self, fn):
             self.frameReadEvent = fn
@@ -292,8 +293,6 @@ class VideoPlayerWidget(QWidget):
 
 
     def openCamera(self):
-        settings:Settings = self.window.settings
-
         self.video = self.Video(self, self.window, 0, self.video_zoom)
         if self.frameReadEvent:
             self.video.setFrameReadEvent(self.frameReadEvent)

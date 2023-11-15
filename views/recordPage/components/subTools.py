@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow, QLabel, QCheckBox, QPushButton, QFileDialog
+from PySide6.QtWidgets import QMainWindow, QLabel, QCheckBox, QPushButton, QFileDialog, QSizePolicy
 from PySide6.QtCore import QDir
 import os
 import cv2
@@ -40,6 +40,8 @@ class SubToolsWidget(MyQWidget):
         self.stBtnStartRecord.clicked.connect(self.toggleRecord)
         self.subVideoWidget.setFrameReadEvent(self.captureFrame)
         self.videoWidget.stopped.connect(self.toggleFile)
+
+        self.stLbCurrFile.setWordWrap(True)
         
 
     def toggleCamera(self):
@@ -63,6 +65,7 @@ class SubToolsWidget(MyQWidget):
         filt = "视频文件(*.wmv *avi *.mp4 *.mov);;所有文件(*.*)"
         file_path, filt = QFileDialog.getOpenFileName(self, title, current_path, filt)
         file_name = os.path.split(file_path)[-1]
+        
         if file_path:
             # 存储上次打开的文件夹路径
             path = os.path.dirname(file_path)
@@ -91,16 +94,6 @@ class SubToolsWidget(MyQWidget):
 
         self.stBtnChooseSubVideo.setText(
             "关闭本地文件" if self.videoWidget.isLoaded else "打开本地文件")
-        
-
-    # def toggleActive(self):
-    #     if not self.manager.modelActive:
-    #         self.manager.modelActive = True
-    #     else:
-    #         self.manager.modelActive = False
-
-    #     self.svBtnActive.setText(
-    #         "停止模型" if self.manager.modelActive else "启动模型")
 
 
     ## 开始录制
@@ -116,7 +109,7 @@ class SubToolsWidget(MyQWidget):
         video_path = os.path.join('videos', str(time_str) + '.avi')
         # print(video_path)
 
-        self.videoOut = cv2.VideoWriter(video_path, self.fourcc, self.window.settings.get("capture_video_fps", float), (640, 480))
+        self.videoOut = cv2.VideoWriter(video_path, self.fourcc, settings.get("capture_video_fps", float), (640, 480))
 
     ## 停止录制
     def stopRecord(self):
@@ -132,7 +125,7 @@ class SubToolsWidget(MyQWidget):
         # self.output_counter = 0
 
 
-    def captureFrame(self, img):
+    def captureFrame(self, _, __):
         # 将画面写入文件
         if not self.subVideoWidget.isOpenedCamera:
             return

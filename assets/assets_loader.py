@@ -58,6 +58,8 @@ class Assets:
 
     globalColors = {}
 
+    uiCache = {}
+
     @staticmethod
     def getAssetsPath(dirName = ""):
         return os.path.join(QDir.currentPath(),  'assets', dirName)
@@ -137,9 +139,15 @@ class Assets:
             return
         
         if qtinstance:
-            qtinstance.ui = loadUiType(path)[0]()
-            if qtinstance.ui:
+            ui = Assets.uiCache.get(name)
+            if not ui:
                 logger.debug("loaded uifile succeed: " + path)
+                ui = loadUiType(path)[0]
+                Assets.uiCache[name] = ui
+
+            qtinstance.ui = ui()
+            
+            if qtinstance.ui:
                 qtinstance.ui.setupUi(qtinstance)
                 for k in qtinstance.ui.__dict__:
                     qtinstance.__dict__[k] = qtinstance.ui.__dict__[k]

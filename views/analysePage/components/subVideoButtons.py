@@ -1,22 +1,27 @@
 from PySide6.QtWidgets import QMainWindow, QPushButton, QFileDialog
-from PySide6.QtCore import QDir
+from PySide6.QtCore import QDir, Signal
 import os
-from components import videoPlayer
+from components import VideoPlayerWidget
 from components.myQWidget import MyQWidget
-from util.settings import Settings
+from util.settings import settings
 from util.logger import logger
 
 
 class SubVideoButtonsWidget(MyQWidget):
     window: QMainWindow = None
 
-    svBtnCamera: QPushButton = None
+    # svBtnCamera: QPushButton = None
     svBtnFile: QPushButton = None
     svBtnActive: QPushButton = None
+    svBtnUpload: QPushButton = None
+    svBtnClear: QPushButton = None
 
-    videoWidget: videoPlayer.VideoPlayerWidget = None
+    videoWidget: VideoPlayerWidget = None
 
     manager = None
+
+    upload = Signal()
+    clear = Signal()
 
 
     def __init__(self, window, videoWidget, manager):
@@ -30,6 +35,8 @@ class SubVideoButtonsWidget(MyQWidget):
     def initComponents(self):
         self.svBtnFile.clicked.connect(self.toggleFile)
         self.svBtnActive.clicked.connect(self.toggleActive)
+        self.svBtnUpload.clicked.connect(self.doUpload)
+        self.svBtnClear.clicked.connect(self.doClear)
 
     
     def connectChartsWidget(self, charts):
@@ -51,19 +58,21 @@ class SubVideoButtonsWidget(MyQWidget):
         logger.debug('toggle file-----------------------')
 
         if not self.videoWidget.isLoaded:
-            
-            settings:Settings = self.window.settings
             # 默认打开存放录制视频的文件夹
-            last_path = "videos"#settings.get('last_dir_path')
+            last_path = settings.get('last_dir_path')
+            if not last_path:
+                last_path = "videos"
+
             logger.debug("last_path: " + last_path)
             current_path = QDir.currentPath() if not last_path else last_path
             title = '选择视频文件'
             filt = "视频文件(*.wmv *avi *.mp4 *.mov);;所有文件(*.*)"
             file_path, filt = QFileDialog.getOpenFileName(self, title, current_path, filt)
             if file_path:
-
+                
                 # 存储上次打开的文件夹路径
                 path = os.path.dirname(file_path)
+                print(path)
                 settings.setItem('last_dir_path', path)
                 settings.save()
 
@@ -87,3 +96,15 @@ class SubVideoButtonsWidget(MyQWidget):
 
         self.svBtnActive.setText(
             "停止模型" if self.manager.modelActive else "启动模型")
+
+
+    def doUpload(self):
+        # 判断是否登录
+        if not settings.get("token"):
+            return
+        # 发送信号
+        self.upload.emit()
+
+
+    def doClear(self):
+        self.clear.emit()

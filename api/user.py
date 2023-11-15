@@ -7,7 +7,6 @@ def postUserLoginAPI(data):
         phone:str
         pwd:str
     """
-    print(data)
     return requestAPI("user/login", "POST", data)
 
 

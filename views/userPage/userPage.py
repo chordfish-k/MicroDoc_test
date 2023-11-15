@@ -4,8 +4,8 @@ from components import MyQWidget
 from .components import ReportListItemWidget
 from util.logger import logger
 from util.settings import settings
-from assets.api.report import getReportListAPI
-from assets.api.user import getUserTestAPI, postUserLoginAPI
+from api.report import getReportListAPI
+from api.user import getUserTestAPI, postUserLoginAPI
 
 
 class UserPageWidget(MyQWidget):

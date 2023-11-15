@@ -15,7 +15,7 @@ class RecordPageWidget(MyQWidget):
     subToolsWidget: SubToolsWidget = None
 
     def __init__(self, window):
-        super().__init__(window=window)
+        super().__init__()
         self.window = window
 
         

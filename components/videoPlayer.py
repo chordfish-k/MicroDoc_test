@@ -366,7 +366,7 @@ class VideoControllerWidget(MyQWidget):
 
     def __init__(self, window):
         self.window = window
-        super().__init__(window=window, name="video_controller")
+        super().__init__(name="video_controller")
 
 
     def initComponents(self):

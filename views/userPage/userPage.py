@@ -19,7 +19,7 @@ class UserPageWidget(MyQWidget):
 
     def __init__(self, window):
         self.window = window
-        super().__init__(window=window, name="user_page")
+        super().__init__(name="user_page")
         
         # 测试token有效性
         self.testToken()

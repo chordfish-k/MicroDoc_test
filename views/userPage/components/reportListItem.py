@@ -11,7 +11,7 @@ class ReportListItemWidget(MyQWidget):
 
     def __init__(self, window):
         self.window = window
-        super().__init__(window=window, name="report_item")
+        super().__init__(name="report_item")
     
     def initComponents(self):
         pass

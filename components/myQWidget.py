@@ -5,7 +5,7 @@ from assets.assets_loader import Assets
 class MyQWidget(QWidget):
     name:str = None
 
-    def __init__(self,  window=None, name=None):
+    def __init__(self,  name=None):
         super().__init__()
         self.name = name
 

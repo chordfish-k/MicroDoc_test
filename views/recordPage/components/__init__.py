@@ -1,1 +1,1 @@
-from .subTools import SubToolsWidget
+from .subTools import *

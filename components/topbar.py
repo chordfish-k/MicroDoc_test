@@ -18,7 +18,7 @@ class TopBarWidget(MyQWidget):
 
     def __init__(self, window):
         self.window = window
-        super().__init__(window=window, name="topbar")
+        super().__init__(name="topbar")
 
 
     def initComponents(self):

@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow, QStackedWidget, QBoxLayout
+from PySide6.QtWidgets import QMainWindow, QStackedWidget, QBoxLayout, QMessageBox, QPushButton
 from PySide6.QtCore import QDir, Qt, Signal
 from PySide6.QtGui import QIcon
 import os
@@ -83,7 +83,7 @@ class MyApp(QMainWindow):
         self.main.addWidget(self.userPageWidget)
         
         self.changePage(1)
-
+        # self.setCentralWidget(self.bgApp)
 
     def changePage(self, index=1):
         self.main.setCurrentIndex(index)

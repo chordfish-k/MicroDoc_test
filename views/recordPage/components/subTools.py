@@ -31,7 +31,7 @@ class SubToolsWidget(MyQWidget):
         self.subVideoWidget = subVideoWidget
         self.videoBar = videoBar
 
-        super().__init__(window=window, name="sub_tools")
+        super().__init__(name="sub_tools")
 
 
     def initComponents(self):

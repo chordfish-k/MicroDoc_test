@@ -24,7 +24,7 @@ class SubVideoButtonsWidget(MyQWidget):
         self.videoWidget = videoWidget
         self.manager = manager
 
-        super().__init__(window=window, name="sub_video_buttons")
+        super().__init__(name="sub_video_buttons")
 
 
     def initComponents(self):

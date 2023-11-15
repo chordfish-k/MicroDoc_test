@@ -13,7 +13,7 @@ class CaptureAreaWidget(MyQWidget):
 
     def __init__(self, window):
         self.window = window
-        super().__init__(window=window, name="capture_area")
+        super().__init__(name="capture_area")
 
 
     def initComponents(self):

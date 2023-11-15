@@ -1,18 +1,16 @@
-from typing import Union
 from PySide6.QtGui import QMouseEvent
 from PySide6.QtCore import Signal
 
-from .imageWidget import ImageWidget
+from components import ImageWidget
 
 
 class GridImageButton(ImageWidget):
     _index = 0
     focusd: bool = False
     is_hovered: bool = False
-
     _fn = None
 
-    click = Signal(int)
+    clicked = Signal(int)
     
     def __init__(self, parent):
         super().__init__(parent)
@@ -48,5 +46,5 @@ class GridImageButton(ImageWidget):
 
 
     def mouseReleaseEvent(self, event: QMouseEvent) -> None:
-        self.click.emit(self._index)
+        self.clicked.emit(self._index)
         return super().mousePressEvent(event)

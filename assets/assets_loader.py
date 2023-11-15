@@ -66,6 +66,9 @@ class Assets:
     @staticmethod
     def loadQdef(name:str):
         path = os.path.join(Assets.getAssetsPath('qdef'), name + '.qdef')
+        if not os.path.isfile(path):
+            return
+        
         res = ""
         with open(path, 'r', encoding='utf8') as f:
             res = f.read()
@@ -100,6 +103,9 @@ class Assets:
     @staticmethod
     def loadQss(name:str, qtinstance=None):
         path = os.path.join(Assets.getAssetsPath('qss'), name + '.qss')
+        if not os.path.isfile(path):
+            return
+    
         res = ""
         with open(path, 'r', encoding='utf8') as f:
             res = f.read()
@@ -127,6 +133,8 @@ class Assets:
     @staticmethod
     def loadUi(name:str, qtinstance=None):
         path = os.path.join(Assets.getAssetsPath('ui'), name + '.ui')
+        if not os.path.isfile(path):
+            return
         
         if qtinstance:
             qtinstance.ui = loadUiType(path)[0]()

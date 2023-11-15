@@ -1,35 +1,30 @@
-from PySide6.QtWidgets import (QMainWindow, QWidget, QStackedWidget,
-                             QBoxLayout, QVBoxLayout, QSplitter)
+from PySide6.QtWidgets import QMainWindow, QStackedWidget, QBoxLayout
 from PySide6.QtCore import QDir, Qt, Signal
 from PySide6.QtGui import QIcon
 import os
-
-from views.components import (topbar, sidebar)
-from views import firstPage, secondPage, thirdPage, forthPage, userPage
-
+from components import TopBarWidget, SideBarWidget, MyQWidget
+from views import *
 from assets.assets_loader import Assets
-
-from util.settings import Settings
+from util.settings import settings
 from util.logger import logger
 from model.face_cut.face_cut import FaceCut
-
 import resources_rc
-from views.components.myQWidget import MyQWidget
+
 
 class MyApp(QMainWindow):
-    settings: Settings = None
-
+    # 布局
     topBar: QBoxLayout = None
     sideBar: QBoxLayout = None
     main: QStackedWidget = None
-
-    topBarWidget: topbar.TopBarWidget = None
-    sideBarWidget: sidebar.SideBarWidget = None
-    firstPageWidget: firstPage.FirstPageWidget = None
-    secondPageWidget: secondPage.SecondPageWidget = None
-    thirdPageWidget: thirdPage.ThirdPageWidget = None
-    forthPageWidget: forthPage.ForthPageWidget = None
-    userPageWidget: userPage.UserPageWidget = None
+    # 窗口组件
+    topBarWidget: TopBarWidget = None
+    sideBarWidget: SideBarWidget = None
+    # 页面
+    firstPageWidget: RecordPageWidget = None
+    secondPageWidget: AnalysePageWidget = None
+    thirdPageWidget: ThirdPageWidget = None
+    forthPageWidget: ForthPageWidget = None
+    userPageWidget: UserPageWidget = None
 
     logouted: Signal = Signal()
 
@@ -68,18 +63,18 @@ class MyApp(QMainWindow):
     def initComponents(self):
 
         # Topbar组件
-        self.topBarWidget = topbar.TopBarWidget(self)
+        self.topBarWidget = TopBarWidget(self)
         self.topBar.addWidget(self.topBarWidget)
         # Sidebar组件
-        self.sideBarWidget = sidebar.SideBarWidget(self)
+        self.sideBarWidget = SideBarWidget(self)
         self.sideBar.addWidget(self.sideBarWidget)
         # stackWidget
         # 装载页面
-        self.firstPageWidget = firstPage.FirstPageWidget(self)
-        self.secondPageWidget = secondPage.SecondPageWidget(self)
-        self.thirdPageWidget = thirdPage.ThirdPageWidget(self)
-        self.forthPageWidget = forthPage.ForthPageWidget(self)
-        self.userPageWidget = userPage.UserPageWidget(self)
+        self.firstPageWidget = RecordPageWidget(self)
+        self.secondPageWidget = AnalysePageWidget(self)
+        self.thirdPageWidget = ThirdPageWidget(self)
+        self.forthPageWidget = ForthPageWidget(self)
+        self.userPageWidget = UserPageWidget(self)
 
         self.main.addWidget(self.firstPageWidget)
         self.main.addWidget(self.secondPageWidget)
@@ -99,7 +94,6 @@ class MyApp(QMainWindow):
 
 
     def switchTheme(self):
-        # Assets.loadQdef(self.settings.get('theme'))
         theme = self.settings.get('theme')
         theme = "dark" if theme=="light" else "light"
         self.settings.setItem("theme", theme)

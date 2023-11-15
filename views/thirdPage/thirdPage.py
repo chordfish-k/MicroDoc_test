@@ -1,10 +1,9 @@
-from PySide6.QtWidgets import (QMainWindow, QWidget, QSplitter, QPushButton, 
-                               QLabel,QSizePolicy, QGridLayout, QHBoxLayout)
+from PySide6.QtWidgets import QMainWindow, QWidget, QLabel,QSizePolicy, QGridLayout, QHBoxLayout
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QMouseEvent, QIcon
+from PySide6.QtGui import QMouseEvent
 from assets.assets_loader import Assets
-from views.components.imageWidget import ImageWidget
-from views.components.gridImgBtn import GridImageButton
+from components import ImageWidget
+from .components import GridImageButton
 from PIL import Image
 from util.tools import *
 
@@ -55,7 +54,7 @@ class ThirdPageWidget(QWidget):
         icons = copyImage(icons, 0, head, icons.width, icons.height-head)
         iw = icons.width // self.gw
         ih = icons.height // self.gh
-        print(icons.width, icons.height, iw, ih)
+        # print(icons.width, icons.height, iw, ih)
 
         for i in range(self.gh):
             for j in range(self.gw):
@@ -65,7 +64,7 @@ class ThirdPageWidget(QWidget):
                 btn.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
                 btn.loadImage(ic)
                 btn.setIndex(i*5+j)
-                btn.click.connect(self.onGridBtnClick)
+                btn.clicked.connect(self.onGridBtnClick)
                 
 
                 self.rightGridLayout.addWidget(btn, i, j)

@@ -1,7 +1,7 @@
-from PySide6.QtWidgets import (QMainWindow, QWidget, QSplitter, QPushButton, QLabel)
+from PySide6.QtWidgets import QMainWindow, QWidget, QSplitter
 from PySide6.QtCore import Qt
 from assets.assets_loader import Assets
-from views.components.imageWidget import ImageWidget
+from components import ImageWidget
 
 
 class ForthPageWidget(QWidget):

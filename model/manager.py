@@ -1,23 +1,20 @@
-import datetime
 import os
-from PIL import Image, ImageQt
+from typing import ClassVar
+from PIL import ImageQt
 import cv2
 import numpy as np
 import torch
 from queue import Queue
 from torchvision import transforms
-from PySide6.QtCore import QTimer, Signal, QDir
+from PySide6.QtCore import QTimer, QDir
 from PySide6.QtGui import QImage
 
-from views.components.myChart import MyChartWidget
 from model.face_cut.face_cut import FaceCut
 from util.logger import logger
-from util.settings import Settings
+from util.settings import settings
 
 
 class Manager:
-    settings:Settings = None
-
     img_que = Queue(maxsize=100)
     min_prob = 0.3
     pre_result = "None"
@@ -33,17 +30,12 @@ class Manager:
     fc: FaceCut = FaceCut()
 
     outputFn = None
-
-    chart: MyChartWidget = None
-
-    # timer: QTimer = None
-    # timerRunning: False
+    chart = None
 
 
-    def __init__(self, settings):
-        self.settings = settings
-        self.min_prob = self.settings.get('min_accepted_probability', float)
-        self.duration = self.settings.get('output_duration', int)
+    def __init__(self):
+        self.min_prob = settings.get('min_accepted_probability', float)
+        self.duration = settings.get('output_duration', int)
 
         self.transform_test = transforms.Compose(
         [
@@ -59,7 +51,7 @@ class Manager:
         # 加载模型
         self.load_model()
         # 
-        self.min_prob = self.settings.get("min_accepted_probability", float)
+        self.min_prob = settings.get("min_accepted_probability", float)
 
         # 表情捕获文件夹
         self.captures_path = os.path.join(QDir.currentPath(),  "captures")
@@ -71,16 +63,15 @@ class Manager:
 
         if (not os.path.exists(self.videos_path)):
             os.mkdir(self.videos_path)
-
-
-        # self.timer = QTimer()
-        # self.timer.timeout.connect(self.activate_network)
+        
 
     def setOutputFn(self, fn):
         self.outputFn = fn
 
+
     def setChartWidget(self, chart):
         self.chart = chart
+
 
     def softmax(self, tensor):
         array = tensor.cpu().numpy()
@@ -94,7 +85,7 @@ class Manager:
     def load_model(self):
         model_path = "model/test/model.pth"
         device = torch.device('cpu')
-        if self.settings.get('use_gpu', bool):
+        if settings.get('use_gpu', bool):
             if torch.cuda.is_available():
                 device = torch.device('cuda:0')
             else:
@@ -122,15 +113,10 @@ class Manager:
     # 多线程激活网络
     def activate_network(self):
         if self.img_que.empty() or not self.modelActive:
-            #logger.debug("empty")
             return
-        #logger.debug(str(self.img_que.qsize()))
-        #logger.debug("ok")
         
         img, time = self.img_que.get()  # 顺序第一张
-
         rects = self.fc.face_cut(img)
-
 
         if type(rects) == None:
             return
@@ -156,19 +142,18 @@ class Manager:
                 img = torch.reshape(img, (1, 3, 224, 224))
 
                 output = self.swin_trans(img)
-                # print(output)
+
                 with torch.no_grad():
                     result = self.softmax(output[0])
+
+                    # 输出数据
                     if self.chart:
                         self.chart.update_series(result)
-                    # self.global_result = [random.random(), random.random(), random.random()]
-                    # print(self.global_result)
+
                     result_probability = np.max(result)
-                    # print("result_probability:{}".format(result_probability))
                     if result_probability <= self.min_prob:
                         break
                     
-
                     # 输出结果
                     result_item = result.argmax(0)
                     result_txt = self.test_dir[result_item]
@@ -178,22 +163,8 @@ class Manager:
                         break
                     result_change_txt = self.pre_result + "=>" + result_txt
                     self.pre_result = result_txt
-
-                    #path1 = os.path.join(self.frames_path, image_dirs[0])
-                    #path2 = os.path.join(self.captures_path, datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.jpg')
-                    #shutil.copyfile(path1, path2) # 将捕获到表情的帧移动到captures文件夹
-
                     
-                    # self.add_new_result(path2, self.get_date(), result_change_txt)
-
-                    # def get_date(mode = 0):
-                    #     if mode == 0:
-                            
-                    #         return time # datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
-                    #     else:
-                    #         return time # datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                    
-                    date = time # get_date()
+                    date = time
                     file = os.path.join(self.captures_path, str.replace(time, ':', '') + '.jpg')
                     cv2.imwrite(file, img_patch)
                     self.outputFn(file, date, result_change_txt)

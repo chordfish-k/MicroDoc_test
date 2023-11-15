@@ -1,33 +1,14 @@
-from PySide6.QtWidgets import (QMainWindow, QWidget, QPushButton, QLabel, QStackedWidget,
-                             QBoxLayout, QVBoxLayout, QSplitter, QCheckBox, QLineEdit)
-from PySide6.QtCore import QDir, Qt, QTimer
-from PySide6.QtGui import QIcon, QImage, QPixmap, QMouseEvent, QResizeEvent
-from PIL import Image, ImageQt
-import os, sys
-import cv2
-import numpy as np
+from PySide6.QtWidgets import QMainWindow, QPushButton, QStackedWidget, QVBoxLayout, QLineEdit
+from PySide6.QtCore import Qt
+from components import MyQWidget
+from .components import ReportListItemWidget
+from util.logger import logger
+from util.settings import settings
 from assets.api.report import getReportListAPI
 from assets.api.user import getUserTestAPI, postUserLoginAPI
 
-from views.components import (myChart, videoPlayer, captureArea, 
-                              videoController, subVideoButtons,
-                              subTools,reportListItem)
-
-from assets.assets_loader import Assets
-from util.http_request import requestAPI
-
-from util.settings import Settings
-from util.logger import logger
-from model.manager import Manager
-from views.components.captureItem import CaptureItemWidget
-from views.components.imageWidget import ImageWidget
-from views.components.myQWidget import MyQWidget
-
-from util.settings import settings
-
 
 class UserPageWidget(MyQWidget):
-
     window: QMainWindow = None
     btnLogin: QPushButton = None
     stackedWidget: QStackedWidget = None
@@ -37,14 +18,11 @@ class UserPageWidget(MyQWidget):
     list = None
 
     def __init__(self, window):
-       
         self.window = window
-       
         super().__init__(window=window, name="user_page")
         
         # 测试token有效性
         self.testToken()
-
 
 
     def initComponents(self):
@@ -111,6 +89,6 @@ class UserPageWidget(MyQWidget):
             ly.itemAt(i).widget().deleteLater()
 
         for item in self.list:
-            li = reportListItem.ReportListItemWidget(self.window)
+            li = ReportListItemWidget(self.window)
             li.setData(str(item['id']), item['uploadTime'])
             ly.addWidget(li)

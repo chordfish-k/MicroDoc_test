@@ -1,9 +1,8 @@
 from PySide6.QtWidgets import QWidget
-
 from assets.assets_loader import Assets
 
-class MyQWidget(QWidget):
 
+class MyQWidget(QWidget):
     name:str = None
 
     def __init__(self,  window=None, name=None):

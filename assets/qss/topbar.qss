@@ -37,7 +37,7 @@
 	padding: auto 5px;
 	margin-bottom: 8px;
 	border-radius: 5px; 
-	background-color: $primaryVariantColor;
+	background-color: transparent; 
 	/* margin-bottom: 4px; */
 }
 

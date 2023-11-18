@@ -5,8 +5,9 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QM
 from assets.assets_loader import Assets
 from components import MyQWidget
 from util.settings import settings
+from util.share import ObjectManager
 
-class MyChartWidget(QWidget):
+class MyChartWidget(MyQWidget):
     window:QMainWindow = None
     chart: QChart = None
     btn: QPushButton = None
@@ -15,15 +16,15 @@ class MyChartWidget(QWidget):
 
     output = Signal()
 
-    def __init__(self, window):
-        self.window = window
+    def __init__(self):
+        self.window = ObjectManager.get("window")
         super().__init__()
-        self.initComponents()
+        self.initCharts()
         Assets.loadQss("my_chart", self)
         self.duration = settings.get("output_duration", int)
 
 
-    def initComponents(self):
+    def initCharts(self):
         # 图表初始化
         fontColor: QColor = None
         if settings.get("theme").startswith("light"):
@@ -112,7 +113,7 @@ class MyChartWidget(QWidget):
         self.x_Aix2.setGridLineVisible(False)
         self.x_Aix2.setMinorGridLineVisible(False)  # 隐藏参考线
         self.x_Aix2.setLabelFormat("%u")
-        self.x_Aix2.setTickCount(11)  # 10+1
+        self.x_Aix2.setTickCount(6)  # 5+1
         self.x_Aix2.setMinorTickCount(1)
         self.x_Aix2.setLabelsColor(fontColor)
         self.x_Aix2.setGridLineColor(fontColor)
@@ -153,7 +154,7 @@ class MyChartWidget(QWidget):
         
 
     def refresh(self):
-        
+
         fontColor: QColor = None
         if settings.get("theme").startswith("light"):
             fontColor = QColor(0, 0, 0)
@@ -163,23 +164,21 @@ class MyChartWidget(QWidget):
         
         self.chart.legend().setLabelColor(fontColor)
 
-        # self.x_Aix.setLabelsColor(fontColor)
-        # self.x_Aix.setLinePenColor(fontColor)
-        # self.x_Aix.setGridLineColor(fontColor)
+        self.x_Aix.setLabelsColor(fontColor)
+        self.x_Aix.setLinePenColor(fontColor)
+        self.x_Aix.setGridLineColor(fontColor)
 
-        # self.x_Aix2.setLinePenColor(fontColor)
-        # self.x_Aix2.setLabelsColor(fontColor)
-        # self.x_Aix2.setGridLineColor(fontColor)
+        self.x_Aix2.setLinePenColor(fontColor)
+        self.x_Aix2.setLabelsColor(fontColor)
+        self.x_Aix2.setGridLineColor(fontColor)
 
-        # self.y_Aix.setLabelsColor(fontColor)
-        # self.y_Aix.setLinePenColor(fontColor)
-        # self.y_Aix.setGridLineColor(fontColor)
+        self.y_Aix.setLabelsColor(fontColor)
+        self.y_Aix.setLinePenColor(fontColor)
+        self.y_Aix.setGridLineColor(fontColor)
 
-        # self.y_Aix2.setLinePenColor(fontColor)
-        # self.y_Aix2.setLabelsColor(fontColor)
-        # self.y_Aix2.setGridLineColor(fontColor)
-
-        # super().refresh()
+        self.y_Aix2.setLinePenColor(fontColor)
+        self.y_Aix2.setLabelsColor(fontColor)
+        self.y_Aix2.setGridLineColor(fontColor)
 
 
     #清除数据

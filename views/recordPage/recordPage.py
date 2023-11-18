@@ -1,11 +1,13 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QSplitter
 from PySide6.QtCore import Qt
-from components import VideoPlayerWidget, VideoControllerWidget, MyQWidget
-from .components import SubToolsWidget
+from components import VideoPlayerWidget, VideoControllerWidget, StackPage
+from util.share import ObjectManager
 from util.logger import logger
+from .components import SubToolsWidget
 
 
-class RecordPageWidget(MyQWidget):
+
+class RecordPageWidget(StackPage):
     window: QMainWindow = None
     splitter: QSplitter = None
 
@@ -14,10 +16,10 @@ class RecordPageWidget(MyQWidget):
     videoControllerWidget: VideoControllerWidget = None
     subToolsWidget: SubToolsWidget = None
 
-    def __init__(self, window):
+    def __init__(self):
+        self.window = ObjectManager.get("window")
         super().__init__()
-        self.window = window
-
+        
         
     def initComponents(self):
         """
@@ -49,7 +51,7 @@ class RecordPageWidget(MyQWidget):
         videoBox = QVBoxLayout(videoBoxWidget)
         videoBox.setContentsMargins(0, 0, 0, 0)
         # VideoContent组件
-        self.videoPlayerWidget = VideoPlayerWidget(self.window)
+        self.videoPlayerWidget = VideoPlayerWidget()
         self.videoPlayerWidget.setHintText("请选择情绪诱发视频")
         videoBox.addWidget(self.videoPlayerWidget)
         self.videoControllerWidget = VideoControllerWidget(self.window)
@@ -67,7 +69,7 @@ class RecordPageWidget(MyQWidget):
         rightSplitter = QSplitter(self)
         rightSplitter.setOrientation(Qt.Orientation.Vertical)
         # right UP
-        self.subVideoPlayerWidget = VideoPlayerWidget(self.window)
+        self.subVideoPlayerWidget = VideoPlayerWidget()
         self.subVideoPlayerWidget.setHintText("摄像头未连接")
         rightSplitter.addWidget(self.subVideoPlayerWidget)
         # right DOWN
@@ -94,3 +96,4 @@ class RecordPageWidget(MyQWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.splitter)
         self.setLayout(layout)
+

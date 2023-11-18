@@ -2,13 +2,16 @@ from PySide6.QtWidgets import QMainWindow, QStackedWidget, QBoxLayout, QMessageB
 from PySide6.QtCore import QDir, Qt, Signal
 from PySide6.QtGui import QIcon
 import os
-from components import TopBarWidget, SideBarWidget, MyQWidget
+from api.user import getUserTestAPI
+from components import TopBarWidget, SideBarWidget, MyQWidget,StackPage
 from views import *
 from assets.assets_loader import Assets
 from util.settings import settings
 from util.logger import logger
+from util.share import ObjectManager
 from model.face_cut.face_cut import FaceCut
 import resources_rc
+
 
 
 class MyApp(QMainWindow):
@@ -20,16 +23,18 @@ class MyApp(QMainWindow):
     topBarWidget: TopBarWidget = None
     sideBarWidget: SideBarWidget = None
     # 页面
-    firstPageWidget: RecordPageWidget = None
-    secondPageWidget: AnalysePageWidget = None
+    pages: list[StackPage] = []
+    recordPageWidget: RecordPageWidget = None
+    analysePageWidget: AnalysePageWidget = None
     thirdPageWidget: ThirdPageWidget = None
     forthPageWidget: ForthPageWidget = None
     userPageWidget: UserPageWidget = None
 
-    logouted: Signal = Signal()
+    logouted = Signal()
+    loginned = Signal()
 
 
-    def __init__(self, settings):
+    def __init__(self):
         super().__init__()
         # 导入设置
         self.settings = settings
@@ -53,6 +58,9 @@ class MyApp(QMainWindow):
                            )
         # 设置窗体为透明背景以显示圆角
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+
+        ObjectManager.set("window",self)
+
         # 加载组件
         self.initComponents()
         # 重设窗体大小
@@ -67,30 +75,37 @@ class MyApp(QMainWindow):
     def initComponents(self):
 
         # Topbar组件
-        self.topBarWidget = TopBarWidget(self)
+        self.topBarWidget = TopBarWidget()
         self.topBar.addWidget(self.topBarWidget)
         # Sidebar组件
-        self.sideBarWidget = SideBarWidget(self)
+        self.sideBarWidget = SideBarWidget()
         self.sideBar.addWidget(self.sideBarWidget)
+        self.sideBarWidget.change.connect(self.changePage)
         # stackWidget
         # 装载页面
-        self.firstPageWidget = RecordPageWidget(self)
-        self.secondPageWidget = AnalysePageWidget(self)
+        self.recordPageWidget = RecordPageWidget()
+        self.analysePageWidget = AnalysePageWidget()
         self.thirdPageWidget = ThirdPageWidget(self)
         self.forthPageWidget = ForthPageWidget(self)
-        self.userPageWidget = UserPageWidget(self)
+        self.userPageWidget = UserPageWidget()
+        self.pages.append(self.recordPageWidget)
+        self.pages.append(self.analysePageWidget)
+        self.pages.append(self.thirdPageWidget)
+        self.pages.append(self.forthPageWidget)
+        self.pages.append(self.userPageWidget)
 
-        self.main.addWidget(self.firstPageWidget)
-        self.main.addWidget(self.secondPageWidget)
-        self.main.addWidget(self.thirdPageWidget)
-        self.main.addWidget(self.forthPageWidget)
-        self.main.addWidget(self.userPageWidget)
-        
+        for page in self.pages:
+            self.main.addWidget(page)
+
         self.changePage(1)
-        # self.setCentralWidget(self.bgApp)
+        # 测试token有效性
+        self.testToken()
+
 
     def changePage(self, index=1):
-        self.main.setCurrentIndex(index)
+        if index <= len(self.pages):
+            self.main.setCurrentIndex(index)
+            self.pages[index-1].onPageChanged()
         
 
     def getCurrentPageIndex(self):
@@ -113,6 +128,10 @@ class MyApp(QMainWindow):
             if isinstance(v, MyQWidget):
                 v.refresh()
 
+        for page in self.pages:
+            if isinstance(page, MyQWidget):
+                page.refresh()
+
 
     def loginSuccess(self, data=None):
         if (data):
@@ -122,6 +141,7 @@ class MyApp(QMainWindow):
             self.settings.save()
 
         self.topBarWidget.refreshUserTag()
+        self.loginned.emit()
 
     
     def doLogout(self):
@@ -131,3 +151,14 @@ class MyApp(QMainWindow):
 
         self.topBarWidget.refreshUserTag()
         self.logouted.emit()
+
+
+    def testToken(self):
+        res = getUserTestAPI()
+        # print("test:",res)
+        if (res['code']==1):
+            self.loginSuccess()
+        else:
+            settings.setItem("user", "")
+            settings.setItem("token", "")
+            self.doLogout()

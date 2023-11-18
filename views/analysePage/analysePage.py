@@ -1,14 +1,14 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QSplitter
 from PySide6.QtCore import Qt, QTimer
-
 from api.report import postReportAPI
 from .components import CaptureAreaWidget, MyChartWidget, SubVideoButtonsWidget
-from components import MyQWidget, VideoControllerWidget, VideoPlayerWidget
+from components import StackPage, VideoControllerWidget, VideoPlayerWidget
 from util.logger import logger
 from model.manager import Manager
+from util.share import ObjectManager
 
 
-class AnalysePageWidget(MyQWidget):
+class AnalysePageWidget(StackPage):
     window: QMainWindow = None
     splitter: QSplitter = None
 
@@ -19,9 +19,9 @@ class AnalysePageWidget(MyQWidget):
 
     modelTimer1 = None
 
-    def __init__(self, window):
+    def __init__(self):
         
-        self.window = window
+        self.window = ObjectManager.get("window")
 
         self.modelManager = Manager()
         self.modelManager.setOutputFn(self.showResult)
@@ -59,12 +59,12 @@ class AnalysePageWidget(MyQWidget):
         videoBox = QVBoxLayout(videoBoxWidget)
         videoBox.setContentsMargins(0, 0, 0, 0)
         # videoBoxWidget
-        self.videoPlayerWidget = VideoPlayerWidget(self.window)
+        self.videoPlayerWidget = VideoPlayerWidget()
         self.videoPlayerWidget.setHintText("未加载视频")
         self.videoPlayerWidget.setFrameReadEvent(self.modelManager.onFrameRead)
         videoBox.addWidget(self.videoPlayerWidget)
         # chartWidget
-        self.chartWidget = MyChartWidget(self.window)
+        self.chartWidget = MyChartWidget()
         self.modelManager.setChartWidget(self.chartWidget)
         self.chartWidget.output.connect(self.uploadData)
         leftSplitter.addWidget(self.chartWidget)
@@ -79,13 +79,13 @@ class AnalysePageWidget(MyQWidget):
         rightBox.setContentsMargins(0, 0, 0, 0)
         self.splitter.addWidget(rightBoxWidget)
         # subVideoButtonWidget
-        self.subVideoButtons = SubVideoButtonsWidget(self.window, self.videoPlayerWidget, self.modelManager)
+        self.subVideoButtons = SubVideoButtonsWidget(self.videoPlayerWidget, self.modelManager)
         self.subVideoButtons.connectChartsWidget(self.chartWidget)
         self.subVideoButtons.upload.connect(self.uploadData)
         self.subVideoButtons.clear.connect(self.clearData)
         rightBox.addWidget(self.subVideoButtons)
         # captureAreaWiget
-        self.captureAreaWidget = CaptureAreaWidget(self.window)
+        self.captureAreaWidget = CaptureAreaWidget()
         rightBox.addWidget(self.captureAreaWidget)
         self.subVideoButtons.connectCaptureAreaWidget(self.captureAreaWidget)
 

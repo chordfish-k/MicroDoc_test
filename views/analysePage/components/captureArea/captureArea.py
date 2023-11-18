@@ -7,6 +7,8 @@ from PIL import Image
 from PIL import ImageQt
 import base64
 
+from util.share import ObjectManager
+
 
 class CaptureAreaWidget(MyQWidget):
     window: QMainWindow = None
@@ -14,8 +16,8 @@ class CaptureAreaWidget(MyQWidget):
 
     datas = []
 
-    def __init__(self, window):
-        self.window = window
+    def __init__(self):
+        self.window = ObjectManager.get("window")
         super().__init__(name="capture_area")
 
 

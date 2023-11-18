@@ -63,6 +63,10 @@ QPushButton:pressed {
 	background-color: $secondaryVariantColor;
 }
 
+QPushButton:disabled {
+	color: $disableFontColor;
+	background-color: $secondaryVariantColor;
+}
 
 QCheckBox {
 	background-color: $primaryVariantColor;

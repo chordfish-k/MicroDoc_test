@@ -8,6 +8,7 @@ from assets.assets_loader import Assets
 from components.myQWidget import MyQWidget
 from util.logger import logger
 from util.settings import settings
+from util.share import ObjectManager
 
 
 class VideoPlayerWidget(QWidget):
@@ -208,9 +209,9 @@ class VideoPlayerWidget(QWidget):
     # 帧获取事件
     frameReadEvent = None
 
-    def __init__(self, window):
+    def __init__(self):
         super().__init__()
-        self.window = window
+        self.window = ObjectManager.get("window")
 
         Assets.loadUi('video_player', self)
         Assets.loadQss('video_player', self)

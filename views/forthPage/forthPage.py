@@ -1,21 +1,16 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QSplitter
 from PySide6.QtCore import Qt
 from assets.assets_loader import Assets
-from components import ImageWidget
+from components import ImageWidget, StackPage
 
 
-class ForthPageWidget(QWidget):
+class ForthPageWidget(StackPage):
     window: QMainWindow = None
     outside: QWidget = None
 
     def __init__(self, window):
-        super().__init__()
         self.window = window
-        
-        Assets.loadUi("forth_page", self)
-        Assets.loadQss("forth_page", self)
-        # 加载组件
-        self.initComponents()
+        super().__init__(name="forth_page")
 
 
     def initComponents(self):

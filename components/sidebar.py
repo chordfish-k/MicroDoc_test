@@ -1,13 +1,15 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QPushButton, QFileDialog
-from PySide6.QtCore import QDir
+from PySide6.QtCore import QDir, Signal
 import os
 from assets.assets_loader import Assets
+from components.myQWidget import MyQWidget
 from util.logger import logger
 from util.settings import Settings
+from util.share import ObjectManager
 
 
 
-class SideBarWidget(QWidget):
+class SideBarWidget(MyQWidget):
     window: QMainWindow = None
     
     btnTheme: QPushButton = None
@@ -19,20 +21,16 @@ class SideBarWidget(QWidget):
 
     __pages = []
 
-    def __init__(self, window):
-        super().__init__()
-        self.window = window
+    change = Signal(int)
 
-        Assets.loadUi('sidebar', self)
-        Assets.loadQss('sidebar', self)
+    def __init__(self):
+        self.window = ObjectManager.get("window")
+        super().__init__(name="sidebar")
 
-        self.initComponents()
-    
     
     def initComponents(self):
         self.btnTheme.clicked.connect(self.window.switchTheme)
 
-        # self.btnFile.clicked.connect(self.openVideoFile)
         self.__pages = [
             (self.btnFirstPage, 1),
             (self.btnSecondPage, 2),
@@ -57,7 +55,7 @@ class SideBarWidget(QWidget):
             btn.setProperty("selected", True)
             btn.setStyle(btn.style())
 
-            self.window.changePage(index)
+            self.change.emit(index)
             
         return __changePage
 

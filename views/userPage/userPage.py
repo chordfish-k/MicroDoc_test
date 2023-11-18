@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QMainWindow, QPushButton, QStackedWidget, QVBoxLayout, QLineEdit
 from PySide6.QtCore import Qt
-from components import MyQWidget
+from components import MyQWidget, StackPage
+from util.share import ObjectManager
 from .components import ReportListItemWidget
 from util.logger import logger
 from util.settings import settings
@@ -8,7 +9,7 @@ from api.report import getReportListAPI
 from api.user import getUserTestAPI, postUserLoginAPI
 
 
-class UserPageWidget(MyQWidget):
+class UserPageWidget(StackPage):
     window: QMainWindow = None
     btnLogin: QPushButton = None
     stackedWidget: QStackedWidget = None
@@ -17,12 +18,15 @@ class UserPageWidget(MyQWidget):
 
     list = None
 
-    def __init__(self, window):
-        self.window = window
+    def __init__(self):
+        self.window = ObjectManager.get("window")
         super().__init__(name="user_page")
         
-        # 测试token有效性
-        self.testToken()
+
+        # 未登录
+        self.loginSucceedFlag = False
+        self.window.loginned.connect(self.loginSuccess)
+        self.window.logouted.connect(self.logoutSuccess)
 
 
     def initComponents(self):
@@ -37,16 +41,7 @@ class UserPageWidget(MyQWidget):
         self.lyScroll.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
 
-    def testToken(self):
-        res = getUserTestAPI()
-        print("test:",res)
-        if (res['code']==1):
-            self.window.loginSuccess()
-            self.loginSuccess()
-        else:
-            settings.setItem("user", "")
-            settings.setItem("token", "")
-            self.logoutSuccess()
+
 
 
     def doLogin(self):
@@ -68,11 +63,13 @@ class UserPageWidget(MyQWidget):
 
     def loginSuccess(self):
         self.stackedWidget.setCurrentIndex(1)
+        self.loginSucceedFlag = True
         self.getReportList()
 
 
     def logoutSuccess(self):
         self.stackedWidget.setCurrentIndex(0)
+        self.loginSucceedFlag = False
 
 
     def getReportList(self):
@@ -80,7 +77,7 @@ class UserPageWidget(MyQWidget):
         if not res['code']:
             return
         
-        print("report:", res['data'])
+        # print("report:", res['data'])
         self.list = res['data']
 
         # 准备容器
@@ -92,3 +89,7 @@ class UserPageWidget(MyQWidget):
             li = ReportListItemWidget(self.window)
             li.setData(str(item['id']), item['uploadTime'])
             ly.addWidget(li)
+
+    def onPageChanged(self):
+        if self.loginSucceedFlag:
+            self.getReportList()

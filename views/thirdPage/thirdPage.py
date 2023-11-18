@@ -2,13 +2,13 @@ from PySide6.QtWidgets import QMainWindow, QWidget, QLabel,QSizePolicy, QGridLay
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QMouseEvent
 from assets.assets_loader import Assets
-from components import ImageWidget
+from components import ImageWidget, StackPage
 from .components import GridImageButton
 from PIL import Image
 from util.tools import *
 
 
-class ThirdPageWidget(QWidget):
+class ThirdPageWidget(StackPage):
     window: QMainWindow = None
     outside: QWidget = None
 
@@ -18,13 +18,8 @@ class ThirdPageWidget(QWidget):
     gh = 6
 
     def __init__(self, window):
-        super().__init__()
         self.window = window
-        
-        Assets.loadUi("third_page", self)
-        Assets.loadQss("third_page", self)
-        # 加载组件
-        self.initComponents()
+        super().__init__(name="third_page")
 
 
     def initComponents(self):

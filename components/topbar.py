@@ -3,6 +3,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QMouseEvent
 from util.settings import settings
 from components.myQWidget import MyQWidget
+from util.share import ObjectManager
 
 
 class TopBarWidget(MyQWidget):
@@ -10,22 +11,19 @@ class TopBarWidget(MyQWidget):
     tbBtnClose: QPushButton = None
     tbBtnMinimize: QPushButton = None
     tbBtnMaximize: QPushButton = None
+    btnLogout: QPushButton = None
 
     isMaximized = False
     m_flag = False
     m_position = None
 
 
-    def __init__(self, window):
-        self.window = window
+    def __init__(self):
+        self.window = ObjectManager.get("window")
         super().__init__(name="topbar")
 
 
     def initComponents(self):
-        self.tbBtnClose = self.ui.tbBtnClose
-        self.tbBtnMinimize = self.ui.tbBtnMinimize
-        self.tbBtnMaximize = self.ui.tbBtnMaximize
-
         self.tbBtnClose.clicked.connect(self.window.close)
         self.tbBtnMinimize.clicked.connect(self.window.showMinimized)
         self.tbBtnMaximize.clicked.connect(self.toggleMaximize)

@@ -3,3 +3,4 @@ from .sidebar import *
 from .topbar import *
 from .imageWidget import *
 from .myQWidget import *
+from .page import *

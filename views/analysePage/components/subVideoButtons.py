@@ -5,12 +5,12 @@ from components import VideoPlayerWidget
 from components.myQWidget import MyQWidget
 from util.settings import settings
 from util.logger import logger
+from util.share import ObjectManager
 
 
 class SubVideoButtonsWidget(MyQWidget):
     window: QMainWindow = None
 
-    # svBtnCamera: QPushButton = None
     svBtnFile: QPushButton = None
     svBtnActive: QPushButton = None
     svBtnUpload: QPushButton = None
@@ -18,14 +18,18 @@ class SubVideoButtonsWidget(MyQWidget):
 
     videoWidget: VideoPlayerWidget = None
 
+    # model manager
     manager = None
 
     upload = Signal()
     clear = Signal()
 
 
-    def __init__(self, window, videoWidget, manager):
-        self.window = window
+    def __init__(self, videoWidget, manager):
+        self.window = ObjectManager.get("window")
+        self.window.loginned.connect(self.onLoginned)
+        self.window.logouted.connect(self.onLogouted)
+
         self.videoWidget = videoWidget
         self.manager = manager
 
@@ -108,3 +112,11 @@ class SubVideoButtonsWidget(MyQWidget):
 
     def doClear(self):
         self.clear.emit()
+
+    
+    def onLoginned(self):
+        self.svBtnUpload.setDisabled(False)
+
+
+    def onLogouted(self):
+        self.svBtnUpload.setDisabled(True)

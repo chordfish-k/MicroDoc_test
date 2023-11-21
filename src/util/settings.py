@@ -1,12 +1,16 @@
+from PySide6.QtCore import QDir
 from configparser import ConfigParser
 from util.logger import logger
+import os 
+
+setting_path = os.path.join(QDir.currentPath(), "settings.ini")
 
 class Settings:
     config = ConfigParser()
     config_dict:dict = {}
-    file_path:str = "./settings.ini"
+    file_path:str = setting_path
 
-    def __init__(self, file_path:str = "./settings.ini"):
+    def __init__(self, file_path:str=setting_path):
         self.file_path = file_path
         self.load()
         

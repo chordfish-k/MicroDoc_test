@@ -9,7 +9,7 @@ class FaceCut:
     detector = None
 
     def __init__(self):
-        path = QDir.currentPath()+ "/src/model/face_cut/haarcascade_frontalface_default.xml"
+        path = os.path.join(QDir.currentPath(), "src", "model", "face_cut", "haarcascade_frontalface_default.xml")
         self.detector = cv2.CascadeClassifier(path)
 
     def face_cut(self, image: np.ndarray, **kwargs)->np.ndarray|None:

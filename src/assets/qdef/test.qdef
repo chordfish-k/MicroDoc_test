@@ -1,0 +1,11 @@
+$primaryColor: rgb(255,0,0);     
+$primaryVariantColor: rgb(255, 70, 70);
+
+$fontColor: white;
+$secondaryFontColor: white;
+
+$backgroundColor: rgb(0, 0, 255);
+$backgroundVariantColor: rgb(70, 70, 255);
+
+$secondaryColor: rgb(0, 255, 0);     
+$secondaryVariantColor: rgb(70, 255, 70);

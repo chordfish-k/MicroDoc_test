@@ -1,0 +1,47 @@
+/* Left Menu */
+#logo {
+	border-image: url(:/images/assets/images/images/logo.png);	
+}
+#leftMenu .QPushButton {	
+	background-position: center center;
+    background-repeat: no-repeat;
+	background-color: transparent;
+	border-left: 4px solid transparent;
+	text-align: left;
+	padding-left: 44px;
+}
+#leftMenu QPushButton[selected=true] {
+	border-left: 4px solid $secondaryColor;
+}
+#leftMenu .QPushButton:hover {
+	background-color: $secondaryVariantColor;
+}
+#leftMenu .QPushButton:pressed {	
+	background-color: $secondaryVariantColor;
+}
+
+#leftMenuBg {	
+	background-color: $backgroundVariantColor;
+}
+
+#btnTheme {
+	background-image: url(:/icons/assets/images/icons/cil-lightbulb.png)
+}
+#btnUser {
+	background-image: url(:/icons/assets/images/icons/cil-user.png)
+}
+#btnSettings {
+	background-image: url(:/icons/assets/images/icons/cil-settings.png)
+}
+#btnFirstPage {
+	background-image:  url(:/icons/assets/images/icons/cil-chart.png)
+}
+#btnSecondPage {
+	background-image:  url(:/icons/assets/images/icons/cil-chart-line.png)
+}
+#btnThirdPage {
+	background-image: url(:/icons/assets/images/icons/cil-featured-playlist.png)
+}
+#btnForthPage {
+	background-image: url(:/icons/assets/images/icons/cil-satelite.png)
+}

@@ -5,6 +5,9 @@ todolist.**
 frames/
 captures/
 videos/*
+test/
+**.build/
+o/
 
 # model
 model.pth
@@ -146,3 +149,4 @@ dmypy.json
 
 # vscode
 .vscode
+test.json

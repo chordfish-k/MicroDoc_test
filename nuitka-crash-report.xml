@@ -1,0 +1,60 @@
+<nuitka-compilation-report nuitka_version="1.8.6" nuitka_commercial_version="not installed" completion="error exit message (1)" exit_message="">
+  <module name="__main__" kind="PythonMainModule" usage="root_module" reason="Root module" source_path="${cwd}\main.py">
+    <optimization-time pass="1" time="0.06" />
+    <optimization-time pass="2" time="0.01" />
+    <module_usages>
+      <module_usage name="site" finding="absolute" line="1" />
+      <module_usage name="PySide6.QtWidgets" finding="absolute" line="1" />
+      <module_usage name="views" finding="absolute" line="2" />
+      <module_usage name="views.MyApp" finding="not-found" line="2" />
+      <module_usage name="util.settings" finding="absolute" line="3" />
+      <module_usage name="sys" finding="built-in" line="4" />
+      <module_usage name="os" finding="absolute" line="4" />
+    </module_usages>
+  </module>
+  <performance>
+    <memory_usage name="after_launch" value="49582080" />
+    <memory_usage name="optimization/1/__main__" value="50225152" />
+    <memory_usage name="optimization/2/__main__" value="50536448" />
+    <memory_usage name="before_c_code_generation" value="50614272" />
+    <memory_usage name="before_running_scons" value="55308288" />
+  </performance>
+  <data_composer blob_size="1259" total="121">
+    <module_data filename="__bytecode.const" input_size="0" blob_name=".bytecode" blob_size="3" />
+    <module_data filename="__constants.const" input_size="1983" blob_name="" blob_size="844" />
+    <module_data filename="module.__main__.const" input_size="676" blob_name="__main__" blob_size="372" />
+  </data_composer>
+  <command_line>
+    <option value="--mingw64" />
+    <option value="--plugin-enable=pyside6" />
+    <option value="--nofollow-import-to=packaing,zstandard,PyYAML,aiohttp,ffpyplayer" />
+    <option value="--show-memory" />
+    <option value="--show-progress" />
+    <option value="--follow-import-to=need" />
+    <option value="--windows-icon-from-ico=logo-fill.ico" />
+    <option value="--output-dir=o" />
+    <option value="main.py" />
+  </command_line>
+  <plugins>
+    <plugin name="anti-bloat" user_enabled="no" />
+    <plugin name="eventlet" user_enabled="no" />
+    <plugin name="gi" user_enabled="no" />
+    <plugin name="implicit-imports" user_enabled="no" />
+    <plugin name="multiprocessing" user_enabled="no" />
+    <plugin name="options-nanny" user_enabled="no" />
+    <plugin name="pkg-resources" user_enabled="no" />
+    <plugin name="pyside6" user_enabled="yes" />
+    <plugin name="transformers" user_enabled="no" />
+  </plugins>
+  <distributions />
+  <python python_exe="${sys.prefix}\Scripts\python.exe" python_flavor="Anaconda Python" python_version="3.10.9" os_name="Windows" arch_name="x86_64">
+    <search_path>
+      <path value="${cwd}" />
+      <path value="${sys.real_prefix}\DLLs" />
+      <path value="${sys.real_prefix}\lib" />
+      <path value="${sys.real_prefix}" />
+      <path value="${sys.prefix}" />
+      <path value="${sys.prefix}\lib\site-packages" />
+    </search_path>
+  </python>
+</nuitka-compilation-report>

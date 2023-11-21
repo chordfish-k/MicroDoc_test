@@ -1,0 +1,46 @@
+#outside {
+    background-color: $primaryVariantColor;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+QSlider::groove:horizontal {
+    border: none;
+    height: 4px;
+    background-color: $backgroundColor;
+}
+QSlider::handle:horizontal {
+    background-color: $secondaryVariantColor;
+    width: 20px;
+    margin: -8px 0px -8px 0px;
+    border-radius: 10px;
+}
+QSlider::sub-page:horizontal {
+    background-color: $secondaryVariantColor;
+}
+QSlider::handle:horizontal:hover {
+    background-color: $secondaryVariantColor;
+}
+
+
+/* #btnStop {
+    background-image: url(:/icons/assets/images/icons/cil-media-stop.png)
+} */
+QLabel {
+    color: $secondaryFontColor;
+}
+#btnStart { 
+    background-color: $backgroundVariantColor;
+    background-image: url(:/icons/assets/images/icons/cil-media-play.png)
+}
+#btnStart[state=pause] {
+    background-image: url(:/icons/assets/images/icons/cil-media-pause.png)
+}
+#btnStart[state=play] {
+    background-image: url(:/icons/assets/images/icons/cil-media-play.png)
+}
+#btnStart:hover { 
+	background-color: $primaryColor;  
+}
+#btnStart:pressed { 
+	background-color: $primaryColor; 
+}

@@ -1,0 +1,7 @@
+#outside{
+	background-color: $backgroundLightColor;
+}
+
+QLabel{
+	border-color:red
+}

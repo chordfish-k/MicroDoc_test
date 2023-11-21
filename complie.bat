@@ -1,0 +1,1 @@
+nuitka --mingw64 --standalone --windows-disable-console --show-memory --show-progress --plugin-enable=pyside6 --nofollow-import-to=tkinter,mpl_toolkits --plugin-enable=tk-inter --windows-icon-from-ico=logo-fill.ico --output-dir=o main.py

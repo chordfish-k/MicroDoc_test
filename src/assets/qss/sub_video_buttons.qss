@@ -1,0 +1,20 @@
+#subVideoBtnBg {
+	background-color: $backgroundVariantColor;
+}
+QPushButton {
+    background-color: $primaryVariantColor;
+    color: $secondaryFontColor;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+QPushButton:hover {
+	background-color: $secondaryVariantColor;
+}
+QPushButton:pressed {	
+	background-color: $secondaryVariantColor;
+}
+
+QPushButton:disabled {
+	color: $disableFontColor;
+	background-color: $backgroundColor;
+}

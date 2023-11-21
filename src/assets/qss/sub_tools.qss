@@ -1,0 +1,25 @@
+QPushButton {
+    background-color: $primaryVariantColor;
+    color: $secondaryFontColor;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+QPushButton:hover {
+	background-color: $secondaryVariantColor;
+}
+QPushButton:pressed {	
+	background-color: $secondaryVariantColor;
+}
+
+QCheckBox {
+	background-color: $primaryVariantColor;
+	color: $secondaryFontColor;
+	font-size: 16px;
+	padding:4px;
+}
+
+#gridWidget.QWidget {
+    background: $primaryVariantColor;
+}
+
+# 

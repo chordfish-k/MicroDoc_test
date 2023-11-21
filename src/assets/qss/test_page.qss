@@ -1,0 +1,4 @@
+QLabel {
+    color: $fontColor;
+    background-color: $primaryColor;
+}

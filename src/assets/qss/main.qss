@@ -1,0 +1,76 @@
+QLabel{
+	color: $secondaryFontColor;
+}
+/* Bg App */
+#bgApp {	
+	background-color: $primaryColor;
+	/* border: 1px solid $backgroundColor; */
+	/* border-radius: 16px; */
+}
+
+
+QLineEdit{
+	background-color: transparent;
+	border:none;
+	border-bottom:2px solid $backgroundColor;
+}
+
+/* Main */
+#mainContent{
+	color: #ffffff;
+	font-size: 18px;
+	background-color: $backgroundColor;
+}
+/* #leftSide {
+	padding-right: 4px;
+}
+#rightPart {
+	padding-left: 4px;
+} */
+
+QSplitter::handle {
+	/*height:2px;
+	background-color: #aaa;*/
+	height:4px;
+	width: 4px;
+	background: $primaryVariantColor;
+}
+QSplitter::handle:hover {
+	background-color: $secondaryVariantColor;
+}
+QSplitter::handle:pressed {
+	background-color: $secondaryVariantColor;
+}
+
+
+/* Button */
+QPushButton {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center;
+	color: $fontColor;
+	font-size: 14px;
+	padding: 5px;
+	border: none;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+QPushButton:hover {
+	background-color: $secondaryVariantColor;
+}
+QPushButton:pressed {	
+	background-color: $secondaryVariantColor;
+}
+
+QPushButton:disabled {
+	color: $disableFontColor;
+	background-color: $secondaryVariantColor;
+}
+
+QCheckBox {
+	background-color: $primaryVariantColor;
+	color: $secondaryFontColor;
+	font-size: 16px;
+	padding:4px;
+}

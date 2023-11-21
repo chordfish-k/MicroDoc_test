@@ -1,0 +1,13 @@
+$primaryColor: #75619e;     
+$primaryVariantColor: #e4d6ff;
+
+$fontColor: white;
+$secondaryFontColor: black;
+$disableFontColor: gray;
+
+$backgroundColor: rgb(241,241,241);
+$backgroundLightColor: rgb(241,241,241);
+$backgroundVariantColor: #c18ff0;
+
+$secondaryColor: #e4d6ff;     
+$secondaryVariantColor: #c18ff0;

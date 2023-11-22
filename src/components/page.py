@@ -1,4 +1,4 @@
-from components.myQWidget import MyQWidget
+from src.components.myQWidget import MyQWidget
 
 class StackPage(MyQWidget):
     

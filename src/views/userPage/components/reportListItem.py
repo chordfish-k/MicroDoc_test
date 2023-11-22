@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QMainWindow, QLabel, QPushButton
-from util.logger import logger
-from components.myQWidget import MyQWidget
+from src.util.logger import logger
+from src.components.myQWidget import MyQWidget
 
 
 class ReportListItemWidget(MyQWidget):

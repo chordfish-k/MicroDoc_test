@@ -8,9 +8,9 @@ from torchvision import transforms
 from PySide6.QtCore import QTimer, QDir
 from PySide6.QtGui import QImage
 
-from model.face_cut.face_cut import FaceCut
-from util.logger import logger
-from util.settings import settings
+from src.model.face_cut.face_cut import FaceCut
+from src.util.logger import logger
+from src.util.settings import settings
 
 
 class ModelManager:

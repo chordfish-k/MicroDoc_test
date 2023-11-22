@@ -1,7 +1,7 @@
 import cv2
 import os
 import numpy as np
-from util.logger import logger
+from src.util.logger import logger
 from PySide6.QtCore import QDir
 
 class FaceCut:

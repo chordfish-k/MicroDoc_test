@@ -1,6 +1,6 @@
 from PySide6.QtCore import QDir
 from configparser import ConfigParser
-from util.logger import logger
+from src.util.logger import logger
 import os 
 
 setting_path = os.path.join(QDir.currentPath(), "settings.ini")

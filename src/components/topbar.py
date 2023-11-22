@@ -1,9 +1,9 @@
 from PySide6.QtWidgets import QMainWindow, QPushButton, QWidget, QLabel
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QMouseEvent
-from util.settings import settings
-from components.myQWidget import MyQWidget
-from util.share import ObjectManager
+from src.util.settings import settings
+from src.components.myQWidget import MyQWidget
+from src.util.share import ObjectManager
 
 
 class TopBarWidget(MyQWidget):

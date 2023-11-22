@@ -1,7 +1,7 @@
 from PySide6.QtGui import QMouseEvent
 from PySide6.QtCore import Signal
 
-from components import ImageWidget
+from src.components import ImageWidget
 
 
 class GridImageButton(ImageWidget):

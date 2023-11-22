@@ -2,9 +2,9 @@ from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QSplitter, QSiz
 from PySide6.QtCore import Qt
 from PySide6.QtMultimedia import QMediaPlayer
 from PySide6.QtMultimediaWidgets import *
-from components import VideoPlayerWidget, VideoControllerWidget, StackPage, MediaPlayer
-from util.share import ObjectManager
-from util.logger import logger
+from src.components import VideoPlayerWidget, VideoControllerWidget, StackPage, MediaPlayer
+from src.util.share import ObjectManager
+from src.util.logger import logger
 from .components import SubToolsWidget
 
 

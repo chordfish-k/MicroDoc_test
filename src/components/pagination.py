@@ -2,8 +2,8 @@ from PySide6.QtWidgets import QLineEdit, QHBoxLayout, QPushButton, QSizePolicy
 from PySide6.QtCore import QRegularExpression, Signal, Qt
 from PySide6.QtGui import QRegularExpressionValidator
 import math
-from components import MyQWidget
-from util.share import ObjectManager
+from src.components import MyQWidget
+from src.util.share import ObjectManager
 
 
 class PaginationWidget(MyQWidget):

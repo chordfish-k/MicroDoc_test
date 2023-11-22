@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget
-from assets.assets_loader import Assets
-from util.share import ObjectManager
+from src.assets.assets_loader import Assets
+from src.util.share import ObjectManager
 import datetime
 
 

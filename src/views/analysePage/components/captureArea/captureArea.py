@@ -1,13 +1,12 @@
 import os
 from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel, QHBoxLayout, QSizePolicy
 from PySide6.QtGui import Qt, QMouseEvent
-from util.logger import logger
-from components.myQWidget import MyQWidget
+from src.util.logger import logger
+from src.components.myQWidget import MyQWidget
+from src.util.share import ObjectManager
 from PIL import Image
 from PIL import ImageQt
 import base64
-
-from util.share import ObjectManager
 
 
 class CaptureAreaWidget(MyQWidget):

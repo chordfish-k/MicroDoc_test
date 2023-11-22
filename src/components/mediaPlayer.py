@@ -5,7 +5,7 @@ from PySide6.QtMultimediaWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
 import sys, os, urllib.parse
-from components.myQWidget import MyQWidget
+from src.components.myQWidget import MyQWidget
  
 # 加这个可以防止路径中文乱码
 # os.environ["QT_MEDIA_BACKEND"] = "windows"

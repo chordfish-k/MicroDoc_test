@@ -1,12 +1,13 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QLabel,QSizePolicy, QGridLayout, QHBoxLayout
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QMouseEvent
-from assets.assets_loader import Assets
-from components import ImageWidget, StackPage
-from util.share import ObjectManager
+from src.assets.assets_loader import Assets
+from src.util.share import ObjectManager
+from src.util.tools import *
+from src.components import ImageWidget, StackPage
 from .components import GridImageButton
 from PIL import Image
-from util.tools import *
+
 
 
 class ThirdPageWidget(StackPage):

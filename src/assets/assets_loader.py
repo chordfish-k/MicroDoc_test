@@ -51,8 +51,7 @@ from PySide6.QtUiTools import loadUiType, QUiLoader
 
 import os
 
-from util.logger import logger
-
+from src.util.logger import logger
 
 class Assets:
 

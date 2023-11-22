@@ -3,15 +3,13 @@ from PySide6.QtWidgets import QMainWindow, QStackedWidget, QBoxLayout
 from PySide6.QtCore import QDir, Qt, Signal
 from PySide6.QtGui import QIcon
 import os
-from api.user import getUserTestAPI
-from components import TopBarWidget, SideBarWidget, MyQWidget,StackPage
-from views import *
-from assets.assets_loader import Assets
-from util.settings import settings
-from util.logger import logger
-from util.share import ObjectManager
-import resources_rc
-
+from src.api.user import getUserTestAPI
+from src.components import TopBarWidget, SideBarWidget, MyQWidget,StackPage
+from src.views import *
+from src.assets.assets_loader import Assets
+from src.util.settings import settings
+from src.util.logger import logger
+from src.util.share import ObjectManager
 
 
 class MyApp(QMainWindow):

@@ -2,11 +2,11 @@ from PySide6.QtWidgets import QMainWindow, QPushButton, QFileDialog
 from PySide6.QtCore import QDir, Signal
 from .myChart import MyChartWidget
 from .captureArea import CaptureAreaWidget
-from components import VideoPlayerWidget, MyQWidget
-from util.settings import settings
-from util.logger import logger
-from util.share import ObjectManager
-from model.manager import ModelManager
+from src.components import VideoPlayerWidget, MyQWidget
+from src.util.settings import settings
+from src.util.logger import logger
+from src.util.share import ObjectManager
+from src.model.manager import ModelManager
 import os
 
 

@@ -4,12 +4,12 @@ from PySide6.QtCore import QTimer, QThread, Signal
 import cv2
 import time
 import numpy as np
-from assets.assets_loader import Assets
-from util.tools import intToTimeStamp
+from src.assets.assets_loader import Assets
+from src.util.tools import intToTimeStamp
 from .myQWidget import MyQWidget
-from util.logger import logger
-from util.settings import settings
-from util.share import ObjectManager
+from src.util.logger import logger
+from src.util.settings import settings
+from src.util.share import ObjectManager
 
 
 class VideoPlayerWidget(QWidget):

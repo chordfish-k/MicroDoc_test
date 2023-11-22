@@ -1,11 +1,11 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QSplitter
 from PySide6.QtCore import Qt, QTimer
-from api.report import postReportAPI
+from src.api.report import postReportAPI
 from .components import CaptureAreaWidget, MyChartWidget, SubVideoButtonsWidget
-from components import StackPage, VideoControllerWidget, VideoPlayerWidget
-from util.logger import logger
-from model.manager import ModelManager
-from util.share import ObjectManager
+from src.components import StackPage, VideoControllerWidget, VideoPlayerWidget
+from src.util.logger import logger
+from src.model.manager import ModelManager
+from src.util.share import ObjectManager
 
 
 class AnalysePageWidget(StackPage):

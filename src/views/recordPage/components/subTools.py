@@ -3,11 +3,11 @@ from PySide6.QtCore import QDir, QTimer, Signal
 import os
 import cv2
 import datetime
-from model.manager import ModelManager
-from components import VideoControllerWidget, VideoPlayerWidget, MyQWidget
-from util.settings import settings
-from util.logger import logger
-from util.share import ObjectManager
+from src.model.manager import ModelManager
+from src.components import VideoControllerWidget, VideoPlayerWidget, MyQWidget
+from src.util.settings import settings
+from src.util.logger import logger
+from src.util.share import ObjectManager
 from .statusChart import *
 
 

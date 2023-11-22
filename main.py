@@ -1,6 +1,7 @@
+import resources_rc
 from PySide6.QtWidgets import QApplication
-from views import MyApp
-from util.settings import settings
+from src.views import MyApp
+from src.util.settings import settings
 import sys, os
 
 os.environ["QT_FONT_DPI"] = settings.get("qt_font_dpi") 

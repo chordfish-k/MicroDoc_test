@@ -2,11 +2,11 @@ import enum
 from PySide6.QtWidgets import QMainWindow, QWidget, QPushButton, QVBoxLayout, QSizePolicy
 from PySide6.QtCore import QDir, Signal
 import os
-from assets.assets_loader import Assets
-from components.myQWidget import MyQWidget
-from util.logger import logger
-from util.settings import Settings
-from util.share import ObjectManager
+from src.assets.assets_loader import Assets
+from src.components.myQWidget import MyQWidget
+from src.util.logger import logger
+from src.util.settings import Settings
+from src.util.share import ObjectManager
 
 
 

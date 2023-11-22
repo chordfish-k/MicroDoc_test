@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QSplitter
 from PySide6.QtCore import Qt
-from assets.assets_loader import Assets
-from components import ImageWidget, StackPage
-from util.share import ObjectManager
+from src.assets.assets_loader import Assets
+from src.components import ImageWidget, StackPage
+from src.util.share import ObjectManager
 
 
 class ForthPageWidget(StackPage):

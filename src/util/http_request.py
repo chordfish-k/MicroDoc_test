@@ -2,8 +2,8 @@ import requests
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PySide6.QtCore import QUrl, QByteArray, QJsonDocument
 import json
-from util.settings import settings
-from util.logger import logger
+from src.util.settings import settings
+from src.util.logger import logger
 
 url = "http://{}:{}/".format(settings.get("server"), settings.get("port"))
 

@@ -1,4 +1,4 @@
-from util.http_request import requestAPI
+from src.util.http_request import requestAPI
 
 def getReportListAPI():
     return requestAPI("report", "GET")

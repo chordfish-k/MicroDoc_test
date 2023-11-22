@@ -2,10 +2,10 @@ from PySide6.QtCharts import QChart, QChartView, QLineSeries,QValueAxis, QCatego
 from PySide6.QtGui import QColor, QPainter
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow, QSizePolicy
-from assets.assets_loader import Assets
-from components import MyQWidget
-from util.settings import settings
-from util.share import ObjectManager
+from src.assets.assets_loader import Assets
+from src.components import MyQWidget
+from src.util.settings import settings
+from src.util.share import ObjectManager
 
 class MyChartWidget(MyQWidget):
     window:QMainWindow = None

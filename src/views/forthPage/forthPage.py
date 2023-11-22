@@ -1,6 +1,5 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QSplitter
 from PySide6.QtCore import Qt
-from src.assets.assets_loader import Assets
 from src.components import ImageWidget, StackPage
 from src.util.share import ObjectManager
 
@@ -13,23 +12,21 @@ class ForthPageWidget(StackPage):
         self.window = ObjectManager.get("window")
         super().__init__(name="forth_page")
 
-
     def initComponents(self):
-
         splitter = QSplitter(self)
         splitter.setOrientation(Qt.Orientation.Vertical)
 
-        leftimg = ImageWidget(self)
-        splitter.addWidget(leftimg)
+        leftImg = ImageWidget(self)
+        splitter.addWidget(leftImg)
 
-        rightimg = ImageWidget(self)
-        splitter.addWidget(rightimg)
-        
-        leftimg.loadImage('src/assets/res/PSD/psd.jpg')
-        rightimg.loadImage('src/assets/res/PSD/psd_topomap.jpg')
+        rightImg = ImageWidget(self)
+        splitter.addWidget(rightImg)
+
+        leftImg.loadImage('src/assets/res/PSD/psd.jpg')
+        rightImg.loadImage('src/assets/res/PSD/psd_topomap.jpg')
         splitter.setStretchFactor(0, 5)
         splitter.setStretchFactor(1, 5)
 
-        splitter.handle(1).setDisabled(True) # 不可拖动分割器
+        splitter.handle(1).setDisabled(True)  # 不可拖动分割器
 
         self.outside.layout().addWidget(splitter)

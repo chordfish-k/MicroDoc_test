@@ -17,7 +17,7 @@ class ObjectManager:
         """
         取得对象
         """
-        obj = ObjectManager.__objDict__[name]
+        obj = ObjectManager.__objDict__.get(name)
         return obj if obj else None
     
         

@@ -4,12 +4,12 @@ from PySide6.QtCore import QDir, Qt, Signal
 from PySide6.QtGui import QIcon
 import os
 from src.api.user import getUserTestAPI
-from src.components import TopBarWidget, SideBarWidget, MyQWidget,StackPage
+from src.components import TopBarWidget, SideBarWidget, MyQWidget, StackPage
 from src.views import *
 from src.assets.assets_loader import Assets
 from src.util.settings import settings
-from src.util.logger import logger
 from src.util.share import ObjectManager
+import resources_rc
 
 
 class MyApp(QMainWindow):
@@ -31,7 +31,6 @@ class MyApp(QMainWindow):
     logouted = Signal()
     loginned = Signal()
 
-
     def __init__(self):
         super().__init__()
         # 导入设置
@@ -42,17 +41,17 @@ class MyApp(QMainWindow):
         Assets.loadQdef(self.settings.get('theme'))
         Assets.loadQss('main', self)
 
-        # 窗体图标
         self.setWindowIcon(QIcon(":/icons/assets/images/icons/logo_fill.png"))
+        # 窗体图标
         import ctypes
-        myappid = 'MicroDoc' # arbitrary string
-        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('MicroDoc')
+        
 
         # 隐藏原有标题栏
-        self.setWindowFlag(Qt.WindowType.FramelessWindowHint )
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
 
         # 放到公共区
-        ObjectManager.set("window",self)
+        ObjectManager.set("window", self)
 
         # 加载组件
         self.initComponents()
@@ -64,11 +63,7 @@ class MyApp(QMainWindow):
         if not os.path.exists(self.frame_dir):
             os.mkdir(self.frame_dir)
 
-        # self.setMouseTracking(True)
-
-        
     def initComponents(self):
-
         # Topbar组件
         self.topBarWidget = TopBarWidget()
         self.topBar.addWidget(self.topBarWidget)
@@ -85,42 +80,40 @@ class MyApp(QMainWindow):
         self.addPage(ForthPageWidget, icon="cil-satelite")
         self.addPage(UserPageWidget, icon="cil-user", btnGroup=SideBarWidget.ButtonGroup.DOWN)
 
-        self.sideBarWidget.addToolBtn(self.switchTheme, tooltip="切换主题", icon="cil-lightbulb")            
+        self.sideBarWidget.addToolBtn(self.switchTheme, tooltip="切换主题", icon="cil-lightbulb")
 
         self.changePage(1)
 
         # 测试token有效性
         self.testToken()
 
-
     def addPage(self, pageWidgetClass, **kwargs):
         pageWidget = pageWidgetClass()
         self.pages.append(pageWidget)
-        def func(page:int):
-            def wapper():
+
+        def func(page: int):
+            def wrapper():
                 self.changePage(page)
-            return wapper
+
+            return wrapper
+
         self.sideBarWidget.addPageBtn(func(len(self.pages)), **kwargs)
         self.main.addWidget(pageWidget)
-
 
     def changePage(self, index=1):
         if index <= len(self.pages):
             self.main.setCurrentIndex(index)
-            self.pages[index-1].onPageChanged()
-        
+            self.pages[index - 1].onPageChanged()
 
     def getCurrentPageIndex(self):
         return self.main.currentIndex()
 
-
     def switchTheme(self):
         theme = self.settings.get('theme')
-        theme = "dark" if theme=="light" else "light"
+        theme = "dark" if theme == "light" else "light"
         self.settings.setItem("theme", theme)
         Assets.loadQdef(theme)
         self.refesh()
-
 
     def refesh(self):
         ObjectManager.set("refreshFlag", datetime.datetime.now())
@@ -136,7 +129,6 @@ class MyApp(QMainWindow):
             if isinstance(page, MyQWidget):
                 page.refresh()
 
-
     def loginSuccess(self, data=None):
         if (data):
             self.settings.setItem("token", data['token'])
@@ -147,7 +139,6 @@ class MyApp(QMainWindow):
         self.topBarWidget.refreshUserTag()
         self.loginned.emit()
 
-    
     def doLogout(self):
         self.settings.setItem("token", "")
         self.settings.setItem("user", "")
@@ -156,11 +147,10 @@ class MyApp(QMainWindow):
         self.topBarWidget.refreshUserTag()
         self.logouted.emit()
 
-
     def testToken(self):
         res = getUserTestAPI()
         # print("test:",res)
-        if (res['code']==1):
+        if res['code'] == 1:
             self.loginSuccess()
         else:
             settings.setItem("user", "")

@@ -1,11 +1,9 @@
 from PySide6.QtWidgets import QWidget
 from src.assets.assets_loader import Assets
-from src.util.share import ObjectManager
-import datetime
 
 
 class MyQWidget(QWidget):
-    name:str = None
+    name: str = None
     noUi = False
     noQss = False
 
@@ -26,7 +24,7 @@ class MyQWidget(QWidget):
         # self.refresh()
 
     def initComponents(self):
-       pass
+        pass
 
     def refresh(self):
         # refreshFlag = ObjectManager.get("refreshFlag")
@@ -40,7 +38,7 @@ class MyQWidget(QWidget):
         if self.name:
             if not self.noQss:
                 Assets.loadQss(self.name, self)
-            
+
         for k in self.__dict__:
             v = self.__dict__[k]
             if isinstance(v, MyQWidget) and v != self:

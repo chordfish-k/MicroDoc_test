@@ -7,7 +7,6 @@ from src.util.share import ObjectManager
 
 
 class PaginationWidget(MyQWidget):
-
     window = None
     edCurrentPage: QLineEdit = None
     lyBeforePages: QHBoxLayout = None
@@ -15,12 +14,12 @@ class PaginationWidget(MyQWidget):
     btnPrevPage: QPushButton = None
     btnNextPage: QPushButton = None
 
-    listSize: int = 4 # 左右两侧最多的页码按钮数
-    
-    pageSize:int = 10
-    pageCount:int = 1
-    total:int = 0
-    currentPage:int = 1
+    listSize: int = 4  # 左右两侧最多的页码按钮数
+
+    pageSize: int = 10
+    pageCount: int = 1
+    total: int = 0
+    currentPage: int = 1
 
     changed = Signal(int)
 
@@ -28,20 +27,18 @@ class PaginationWidget(MyQWidget):
         self.window = ObjectManager.get("window")
         super().__init__(name="pagination")
 
-
     def initComponents(self):
         self.edCurrentPage.editingFinished.connect(self.__textEdited)
-        
+
         rx = QRegularExpression("[0-9]+$")
         validator = QRegularExpressionValidator(rx, self)
         self.edCurrentPage.setValidator(validator)
-        
+
         self.lyBeforePages.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.lyAfterPages.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.btnNextPage.clicked.connect(self.toNext)
         self.btnPrevPage.clicked.connect(self.toPrev)
-
 
     def setPageParms(self, **kwargs):
         """
@@ -63,13 +60,11 @@ class PaginationWidget(MyQWidget):
 
         self.__refreshBtns()
 
-
     def toPrev(self):
         if self.currentPage > 1:
             self.currentPage -= 1
         self.__refreshBtns()
         self.changed.emit(self.currentPage)
-
 
     def toNext(self):
         if self.currentPage < self.pageCount:
@@ -77,13 +72,11 @@ class PaginationWidget(MyQWidget):
         self.__refreshBtns()
         self.changed.emit(self.currentPage)
 
-
-    def to(self, page:int):
-        if page >= 1 and page <= self.pageCount:
+    def to(self, page: int):
+        if 1 <= page <= self.pageCount:
             self.currentPage = page
         self.__refreshBtns()
         self.changed.emit(self.currentPage)
-
 
     def __refreshBtns(self):
         # 清除原有的按钮
@@ -102,30 +95,28 @@ class PaginationWidget(MyQWidget):
                 self.__addPageBtn(k, True)
 
         if page < self.pageCount:
-            ed = self.pageCount+1 if self.pageCount+1 <= self.listSize + page else  page + self.listSize+1
-            for k in range(page+1, ed):
+            ed = self.pageCount + 1 if self.pageCount + 1 <= self.listSize + page else page + self.listSize + 1
+            for k in range(page + 1, ed):
                 self.__addPageBtn(k, False)
 
         self.edCurrentPage.setText(str(page))
-        
 
-
-    def __addPageBtn(self, page:int, isPrev:bool=True):
+    def __addPageBtn(self, page: int, isPrev: bool = True):
         ly = self.lyBeforePages if isPrev else self.lyAfterPages
         btn = QPushButton(self)
         btn.setMaximumWidth(50)
         btn.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Ignored)
         btn.setText("{}".format(page))
 
+        def func(pageNo: int):
+            def wrapper():
+                self.to(pageNo)
 
-        def func(page:int):
-            def wapper():
-                self.to(page)
-            return wapper
+            return wrapper
+
         btn.clicked.connect(func(page))
 
         ly.addWidget(btn)
-
 
     def __textEdited(self):
         page = self.edCurrentPage.text()
@@ -133,8 +124,8 @@ class PaginationWidget(MyQWidget):
             self.edCurrentPage.setText(str(self.currentPage))
             return
         page = int(page)
-        if page < 1 and page > self.pageCount:
+        if 1 > page > self.pageCount:
             self.edCurrentPage.setText(str(self.currentPage))
             return
-        
+
         self.to(page)

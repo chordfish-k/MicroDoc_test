@@ -3,7 +3,6 @@ from PySide6.QtCore import Qt, QTimer
 from src.api.report import postReportAPI
 from .components import CaptureAreaWidget, MyChartWidget, SubVideoButtonsWidget
 from src.components import StackPage, VideoControllerWidget, VideoPlayerWidget
-from src.util.logger import logger
 from src.model.manager import ModelManager
 from src.util.share import ObjectManager
 
@@ -16,11 +15,11 @@ class AnalysePageWidget(StackPage):
     videoControllerWidget: VideoControllerWidget = None
     subVideoButtons: SubVideoButtonsWidget = None
     captureAreaWidget: CaptureAreaWidget = None
+    chartWidget: MyChartWidget = None
 
-    modelTimer1 = None
+    modelTimer1: QTimer = None
 
     def __init__(self):
-        
         self.window = ObjectManager.get("window")
 
         self.modelManager = ModelManager()
@@ -31,7 +30,6 @@ class AnalysePageWidget(StackPage):
         self.modelTimer1.start(1)
 
         super().__init__()
-
 
     def initComponents(self):
         """
@@ -44,7 +42,7 @@ class AnalysePageWidget(StackPage):
                 |_rightBoxWidget
                     |_subVideoButtonWidget
                     |_captureAreaWiget
-        """      
+        """
         # splitter(hor)
         self.splitter = QSplitter(self)
         self.splitter.setObjectName(u'mainContent')
@@ -62,7 +60,7 @@ class AnalysePageWidget(StackPage):
         self.videoPlayerWidget = VideoPlayerWidget()
         self.videoPlayerWidget.setHintText("未加载视频")
         self.videoPlayerWidget.setFrameReadEvent(self.modelManager.onFrameRead)
-        
+
         # chartWidget
         self.chartWidget = MyChartWidget()
         self.modelManager.setChartWidget(self.chartWidget)
@@ -87,12 +85,11 @@ class AnalysePageWidget(StackPage):
         self.subVideoButtons.upload.connect(self.uploadData)
         self.subVideoButtons.clear.connect(self.clearData)
         rightBox.addWidget(self.subVideoButtons)
-        # captureAreaWiget
+        # captureAreaWidget
         self.captureAreaWidget = CaptureAreaWidget()
         rightBox.addWidget(self.captureAreaWidget)
         self.subVideoButtons.connectCaptureAreaWidget(self.captureAreaWidget)
 
-        
         self.splitter.setStretchFactor(0, 5)
         self.splitter.setStretchFactor(1, 2)
         self.splitter.handle(1).setAttribute(Qt.WidgetAttribute.WA_Hover, True)
@@ -101,31 +98,23 @@ class AnalysePageWidget(StackPage):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.splitter)
         self.setLayout(layout)
-        
 
     def onModelTimer(self):
         self.modelManager.activate_network()
 
-
-    def showResult(self, img_path:str, time:str, state:str, old:int, new:int):
-        # logger.debug("output: "+img_path)
-        # logger.debug(time + state)
-        self.captureAreaWidget.addCaptureItem(img_path, time, state, old, new)# scrollAreaLayout.addWidget(item)
-
-        # print(len(self.captureAreaWidget.children()))
+    def showResult(self, img_path: str, time: str, state: str, old: int, new: int):
+        self.captureAreaWidget.addCaptureItem(img_path, time, state, old, new)
 
     def uploadData(self):
         li = self.chartWidget.getData()
         tb = self.captureAreaWidget.getData()
-    
+
         data = {
             'datas': li,
             'captures': tb
         }
-        # print(data)
-        res = postReportAPI(data)
-        # print(res)
 
+        res = postReportAPI(data)
 
     def clearData(self):
         self.chartWidget.clean_datas()

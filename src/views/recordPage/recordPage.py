@@ -62,7 +62,7 @@ class RecordPageWidget(StackPage):
         self.videoControllerWidget.setShowStopBtn(False)
 
         self.videoPlayerWidget.positionChanged.connect(self.positionChanged)
-        self.videoPlayerWidget.loadded.connect(self.videoLoadded)
+        self.videoPlayerWidget.loaded.connect(self.videoLoaded)
         videoBox.addWidget(self.videoControllerWidget)
 
 
@@ -106,6 +106,6 @@ class RecordPageWidget(StackPage):
         self.videoControllerWidget.setSliderPosition(position)
 
 
-    def videoLoadded(self, duration):
+    def videoLoaded(self, duration):
         self.videoControllerWidget.setSliderDuration(duration)
         self.videoControllerWidget.onPlayBtnPress()

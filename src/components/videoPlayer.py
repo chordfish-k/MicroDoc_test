@@ -13,11 +13,10 @@ from src.util.share import ObjectManager
 
 
 class VideoPlayerWidget(QWidget):
-
     window: QMainWindow = None
     video = None
     video_zoom: QLabel = None
-    hint_text: str = 'no rescource'
+    hint_text: str = 'no resource'
 
     controller: None
     hasController = False
@@ -30,21 +29,21 @@ class VideoPlayerWidget(QWidget):
     isOpenedCamera: bool = False
 
     stopped: Signal = Signal()
-    
+
     class PlayMode:
-            ONCE = 0
-            LOOP = 1
-            
+        ONCE = 0
+        LOOP = 1
+
     playMode: PlayMode = PlayMode.ONCE
-####[class Video start]###########################################################
-    
+
+    ####[class Video start]###########################################################
+
     class Video:
 
         VIDEO_WIDTH = 640
 
         widget = None
         window: QMainWindow = None
-
 
         path: str = ""
         # 屏幕标签
@@ -60,7 +59,7 @@ class VideoPlayerWidget(QWidget):
         frameReadEvent = None
 
         flipX = False
-        
+
         def __init__(self, widget, window, pathOrCamera, screen_label):
             """
             window: 主窗口
@@ -78,35 +77,35 @@ class VideoPlayerWidget(QWidget):
             else:
                 self.isFile = False
 
-            self.flipX = settings.get('camera_flipX', bool)
+            self.flipX = settings.get('camera_flip_x', bool)
 
             # 读取视频数据
             self.capture = cv2.VideoCapture(pathOrCamera)
             self.currentFrame = np.array([])
-            self.width = self.capture.get(cv2.CAP_PROP_FRAME_WIDTH) #获取视频的信息（宽，高，帧速率）
+            self.width = self.capture.get(cv2.CAP_PROP_FRAME_WIDTH)  # 获取视频的信息（宽，高，帧速率）
             self.height = self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
             self.fps = int(self.capture.get(cv2.CAP_PROP_FPS))
             self.fps = 24 if self.fps == 0 else self.fps
-            self.frame_count = int(self.capture.get(cv2.CAP_PROP_FRAME_COUNT)) #帧数
+            self.frame_count = int(self.capture.get(cv2.CAP_PROP_FRAME_COUNT))  # 帧数
             self.frame_now = 0
             self.current_time = 0
             self.total_time = int(self.frame_count / self.fps)
             self.str_current_time = "00:00"
 
             t = time.gmtime(self.total_time)
-            self.str_end_time = '{:02d}' .format(int(time.strftime("%H", t))*60 + int(time.strftime("%M", t))) + time.strftime(":%S", t)
+            self.str_end_time = '{:02d}'.format(
+                int(time.strftime("%H", t)) * 60 + int(time.strftime("%M", t))) + time.strftime(":%S", t)
 
-            #else:
+            # else:
             #    self.capture = cv2.VideoCapture(path)
 
             # 初始化计时器
             self.timer = QTimer()
             self.timer.timeout.connect(self.nextFrame)  # timeout时，执行show_pic
-            
+
             # 设置进度条最大值
             if self.widget.hasController:
                 self.widget.controller.videoSlider.setMaximum(self.frame_count)
-
 
         def captureNextFrame(self):
             ret, readFrame = self.capture.read()
@@ -114,42 +113,37 @@ class VideoPlayerWidget(QWidget):
             if (ret == True):
                 # 如果是摄像头 且 设置了水平翻转
                 if not self.isFile and self.flipX:
-                        cv2.flip(readFrame, 1, readFrame)
+                    cv2.flip(readFrame, 1, readFrame)
 
-                    
-
-                h = int(self.height * self.VIDEO_WIDTH / self.width) #调整画面大小以适应控件
+                h = int(self.height * self.VIDEO_WIDTH / self.width)  # 调整画面大小以适应控件
                 # 将当前帧复制到currentFrame
-                self.currentFrame = readFrame #cv2.resize(readFrame, (VIDEO_WIDTH, h))
+                self.currentFrame = readFrame  # cv2.resize(readFrame, (VIDEO_WIDTH, h))
                 self.frame_now = int(self.capture.get(cv2.CAP_PROP_POS_FRAMES))
-                self.current_time = int(self.capture.get(cv2.CAP_PROP_POS_MSEC)/1000)
+                self.current_time = int(self.capture.get(cv2.CAP_PROP_POS_MSEC) / 1000)
                 t = time.gmtime(self.current_time)
-                self.str_current_time = '{:02d}' .format(int(time.strftime("%H", t))*60 + int(time.strftime("%M", t))) + time.strftime(":%S", t)
+                self.str_current_time = '{:02d}'.format(
+                    int(time.strftime("%H", t)) * 60 + int(time.strftime("%M", t))) + time.strftime(":%S", t)
 
-                #print(self.str_current_time, " ", self.str_end_time)
-                
+                # print(self.str_current_time, " ", self.str_end_time)
 
         def convertFrame(self):
             try:
                 height, width, channel = self.currentFrame.shape
                 bytesPerLine = 3 * width
 
-                qImg = QImage(self.currentFrame.data, width, height, 
-                                QImage.Format.Format_RGB888).rgbSwapped()
+                qImg = QImage(self.currentFrame.data, width, height,
+                              QImage.Format.Format_RGB888).rgbSwapped()
                 qImg = QPixmap.fromImage(qImg)
 
                 return qImg
             except:
                 return None
-            
 
         def setVideoSecondPosition(self, s):
             self.capture.set(cv2.CAP_PROP_POS_MSEC, s * 1000)
 
-
         def setVideoFramePosition(self, s):
             self.capture.set(cv2.CAP_PROP_POS_FRAMES, s)
-
 
         def showPic(self, pic: QPixmap):
             if self.screen_label:
@@ -163,7 +157,6 @@ class VideoPlayerWidget(QWidget):
                     else:
                         tmp = pic.scaledToWidth(view.width())
                     view.setPixmap(tmp)
-            
 
         # 计时器：获取下一帧并显示
         def nextFrame(self):
@@ -175,22 +168,21 @@ class VideoPlayerWidget(QWidget):
                 self.showPic(tmp_frame)
 
                 if self.frame_count == self.frame_now:
-                    
+
                     # 播放到结尾，重新开始
                     if self.widget.playMode == self.widget.PlayMode.LOOP:
                         self.setVideoSecondPosition(0)
                     elif self.widget.playMode == self.widget.PlayMode.ONCE:
                         self.widget.stopped.emit()
-                        
+
 
             except TypeError:
                 logger.warning('No Frame')
 
             # 传递给事件
             if self.frameReadEvent:
-                #logger.debug(self.str_current_time)
+                # logger.debug(self.str_current_time)
                 self.frameReadEvent(self.currentFrame.copy(), self.str_current_time)
-
 
             # 设置进度条
             if self.widget.hasController:
@@ -203,9 +195,7 @@ class VideoPlayerWidget(QWidget):
         def setFrameReadEvent(self, fn):
             self.frameReadEvent = fn
 
-
-
-########[class Video end]######################################################################
+    ########[class Video end]######################################################################
 
     # 帧获取事件
     frameReadEvent = None
@@ -220,7 +210,6 @@ class VideoPlayerWidget(QWidget):
         self.initComponents()
 
         self.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
-
 
     def initComponents(self):
         pass
@@ -239,17 +228,14 @@ class VideoPlayerWidget(QWidget):
         self.isPlaying = False
         self.isLoaded = True
 
-
     def play(self):
         if self.isLoaded:
-            logger.debug("fps: "+ str(self.video.fps))
-            self.video.timer.start(1000//self.video.fps)
+            logger.debug("fps: " + str(self.video.fps))
+            self.video.timer.start(1000 // self.video.fps)
             self.isPlaying = True
 
             # if self.video.audio_player:
             #     self.video.audio_player.set_pause(False)
-
-
 
     def stop(self):
         if self.isLoaded:
@@ -264,7 +250,6 @@ class VideoPlayerWidget(QWidget):
             # if self.video.audio_player:
             #     self.video.audio_player.close_player()
 
-
     def pause(self):
         if self.isLoaded and self.isPlaying:
             self.video.timer.stop()
@@ -273,24 +258,20 @@ class VideoPlayerWidget(QWidget):
             # if self.video.audio_player:
             #     self.video.audio_player.set_pause(True)
 
-
     def clearScreen(self):
         self.video_zoom.setPixmap(QPixmap())
         self.setHintText()
-
 
     def setProgress(self, value):
         if self.video:
             # logger.debug("value: " + str(value))
             self.video.capture.set(cv2.CAP_PROP_POS_FRAMES, value)
 
-
     def toggleCamera(self):
         if not self.isOpenedCamera:
             self.openCamera()
         else:
             self.closeCamera()
-
 
     def openCamera(self):
         self.video = self.Video(self, self.window, 0, self.video_zoom)
@@ -299,7 +280,6 @@ class VideoPlayerWidget(QWidget):
         self.video.timer.start()
         self.isOpenedCamera = True
 
-
     def closeCamera(self):
         self.video.timer.stop()
         del self.video
@@ -307,12 +287,10 @@ class VideoPlayerWidget(QWidget):
         self.clearScreen()
         self.isOpenedCamera = False
 
-
     def setController(self, controller):
         self.controller = controller
         self.hasController = True
 
-    
     def setFrameReadEvent(self, fn):
         """
         fn: 方法名 (frame:numpy.ndarray)
@@ -322,20 +300,16 @@ class VideoPlayerWidget(QWidget):
         if self.video:
             self.video.setFrameReadEvent(self.frameReadEvent)
 
-
-    def setHintText(self, text:str=None):
+    def setHintText(self, text: str = None):
         if text:
             self.hintText = text
         self.video_zoom.setText(self.hintText)
 
-
     def setPlayMode(self, mode: PlayMode):
         self.playMode = mode
-        
+
     def getCurrentTime(self):
         return self.video.current_time if self.video else 0
-
-
 
 
 class VideoControllerWidget(MyQWidget):
@@ -351,12 +325,10 @@ class VideoControllerWidget(MyQWidget):
 
     showStopBtn: bool = True
 
-
     def __init__(self):
         self.window = ObjectManager.get("window")
         super().__init__(name="video_controller")
 
-    
     def attachVideoPlayer(self, videoPlayer):
         self.player = videoPlayer
         # self.player.setController(self)
@@ -365,30 +337,27 @@ class VideoControllerWidget(MyQWidget):
         self.videoSlider.sliderPressed.connect(self.onSliderPressed)
         self.videoSlider.sliderReleased.connect(self.onSliderRelease)
 
-
     def setSliderPosition(self, position):
         self.videoSlider.setValue(position)
         self.lbCurrTime.setText(intToTimeStamp(position // 1000))
-
 
     def setSliderDuration(self, duration):
         self.videoSlider.setMaximum(duration)
         self.lbEndTime.setText(intToTimeStamp(duration // 1000))
 
-    
     def onPlayBtnPress(self):
         if self.player:
             if self.player.isLoaded:
                 if not self.player.isPlaying:
                     logger.debug("video started")
                     self.player.play()
-                    self.btnStart.setProperty("state", "pause") 
+                    self.btnStart.setProperty("state", "pause")
                     # setStyleSheet(
                     #     "background-image: url(:/icons/assets/images/icons/cil-media-pause.png)")
                 else:
                     logger.debug("video paused")
                     self.player.pause()
-                    self.btnStart.setProperty("state", "play") 
+                    self.btnStart.setProperty("state", "play")
                     # self.btnStart.setStyleSheet(
                     #     "background-image: url(:/icons/assets/images/icons/cil-media-play.png)")
                 self.refresh()
@@ -398,19 +367,17 @@ class VideoControllerWidget(MyQWidget):
             logger.warning("videoPlayer is not found!")
         self.videoSlider.setDisabled(False)
 
-
     def setShowStopBtn(self, isShow):
         self.showStopBtn = isShow
         self.btnStop.setVisible(isShow)
         self.videoSlider.setDisabled(True)
-
 
     def onStopBtnPress(self):
         if self.player:
             if self.player.isLoaded:
                 logger.debug("video stoped")
                 self.player.stop()
-                self.btnStart.setProperty("state", "play") 
+                self.btnStart.setProperty("state", "play")
                 self.refresh()
                 # self.btnStart.setStyleSheet(
                 #         "background-image: url(:/icons/assets/images/icons/cil-media-play.png)")
@@ -419,11 +386,9 @@ class VideoControllerWidget(MyQWidget):
         else:
             logger.warning("videoPlayer is not found!")
 
-
     def onSliderPressed(self):
         if self.player:
             self.player.pause()
-
 
     def onSliderRelease(self):
         if self.player:

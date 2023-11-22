@@ -11,6 +11,7 @@ from PySide6.QtGui import QImage
 from src.model.face_cut.face_cut import FaceCut
 from src.util.logger import logger
 from src.util.settings import settings
+from src.util.share import ObjectManager
 
 
 class ModelManager:
@@ -18,7 +19,7 @@ class ModelManager:
     min_prob = 0.3
     pre_result = "None"
     pre_result_i = -1
-    
+
     modelTimer: QTimer = None
     modelActive = False
     modelManager = None
@@ -32,17 +33,16 @@ class ModelManager:
     outputFn = None
     chart = None
 
-
     def __init__(self):
         self.min_prob = settings.get('min_accepted_probability', float)
         self.duration = settings.get('output_duration', int)
 
         self.transform_test = transforms.Compose(
-        [
-            transforms.Resize([224, 224]),
-            transforms.ToTensor(),
-            transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
-        ])
+            [
+                transforms.Resize([224, 224]),
+                transforms.ToTensor(),
+                transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+            ])
 
         self.test_dir = {0: "negative", 1: "neutral", 2: "positive"}
 
@@ -54,24 +54,21 @@ class ModelManager:
         self.min_prob = settings.get("min_accepted_probability", float)
 
         # 表情捕获文件夹
-        self.captures_path = os.path.join(QDir.currentPath(),  "captures")
+        self.captures_path = os.path.join(QDir.currentPath(), "captures")
         # 视频录制文件夹
-        self.videos_path = os.path.join(QDir.currentPath(),  "videos")
+        self.videos_path = os.path.join(QDir.currentPath(), "videos")
 
-        if (not os.path.exists(self.captures_path)):
+        if not os.path.exists(self.captures_path):
             os.mkdir(self.captures_path)
 
-        if (not os.path.exists(self.videos_path)):
+        if not os.path.exists(self.videos_path):
             os.mkdir(self.videos_path)
-        
 
     def setOutputFn(self, fn):
         self.outputFn = fn
 
-
     def setChartWidget(self, chart):
         self.chart = chart
-
 
     def softmax(self, tensor):
         array = tensor.cpu().numpy()
@@ -79,8 +76,7 @@ class ModelManager:
         sum_exp_a = np.sum(exp_a)
         result = exp_a / sum_exp_a
         return result
-    
-    
+
     # 加载3分类模型
     def load_model(self):
         model_path = settings.get("model_path")
@@ -91,20 +87,20 @@ class ModelManager:
             else:
                 logger.warning('CUDA gpu is not available, switch to cpu')
                 device = torch.device('cpu')
-        
-        self.swin_trans = torch.load(model_path, map_location=device)
-        logger.debug(f'model is running on {device}')
 
+        self.swin_trans = ObjectManager.get("swin_trans")
+        if not self.swin_trans:
+            self.swin_trans = torch.load(model_path, map_location=device)
+            ObjectManager.set("swin_trans", self.swin_trans)
+            logger.debug(f'model is running on {device}')
 
     def addImage(self, img, time):
         self.img_que.put((img, time))
 
-
     def onFrameRead(self, image, time):
         if not self.modelActive:
             return
-        
-        
+
         if self.durationCnt == 0 and image.any:
             self.addImage(image, time)
 
@@ -112,35 +108,29 @@ class ModelManager:
         if self.durationCnt == self.duration:
             self.durationCnt = 0
 
-
-    
-
-
     # 多线程激活网络
     def activate_network(self):
         if not self.modelActive:
             return
-        
+
         if self.img_que.empty():
-            # if self.chart:
-            #     self.chart.repeat_last()
             return
 
         img, time = self.img_que.get()  # 顺序第一张
         rects = self.fc.face_cut(img)
 
-        if type(rects) == None or len(rects) == 0:
+        if type(rects) is None or len(rects) == 0:
             # 输出数据
             if self.chart:
                 self.chart.repeat_last()
             return
-        
+
         for _, (x, y, w, h) in enumerate(rects):
             try:
                 img_patch = img[y - h // 4:y + h + h // 4,
                             x - w // 4:x + w + w // 4, :]
                 img_patch = cv2.resize(img_patch, (128, 128))
-            except:
+            except Exception as e:
                 try:
                     img_patch = img[y:y + h, x:x + w, :]
                     img_patch = cv2.resize(img_patch, (128, 128))
@@ -152,8 +142,8 @@ class ModelManager:
 
             height, width, channel = img_patch.shape
             qImg = QImage(img_patch.data, height, width,
-                            QImage.Format.Format_RGB888).rgbSwapped()
-            
+                          QImage.Format.Format_RGB888).rgbSwapped()
+
             img = ImageQt.fromqimage(qImg)
             img = self.transform_test(img)
 
@@ -174,7 +164,7 @@ class ModelManager:
 
                 if self.chart:
                     self.chart.update_series(result)
-                
+
                 # 输出结果
                 result_item = result.argmax(0)
                 result_txt = self.test_dir[result_item]
@@ -184,8 +174,7 @@ class ModelManager:
                     break
                 result_change_txt = self.pre_result + "=>" + result_txt
                 self.pre_result = result_txt
-                
-                
+
                 if self.outputFn:
                     date = time
                     file = os.path.join(self.captures_path, str.replace(time, ':', '') + '.jpg')

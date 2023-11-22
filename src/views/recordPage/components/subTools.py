@@ -1,13 +1,11 @@
-from PySide6.QtWidgets import QMainWindow, QLabel, QCheckBox, QPushButton, QFileDialog, QVBoxLayout, QSizePolicy
-from PySide6.QtCore import QDir, QTimer, Signal
 import os
 import cv2
 import datetime
+from PySide6.QtWidgets import QLabel, QCheckBox, QFileDialog
+from PySide6.QtCore import QDir, QTimer
 from src.model.manager import ModelManager
-from src.components import VideoControllerWidget, VideoPlayerWidget, MyQWidget
-from src.util.settings import settings
+from src.components import VideoPlayerWidget
 from src.util.logger import logger
-from src.util.share import ObjectManager
 from .statusChart import *
 
 
@@ -28,7 +26,7 @@ class SubToolsWidget(MyQWidget):
     svLyChart: QVBoxLayout = None
 
     isRecording: bool = False
-    recordWithcheck: bool = False
+    recordWithCheck: bool = False
     videoOut: cv2.VideoWriter = None
 
     modelManager: ModelManager = None
@@ -37,17 +35,17 @@ class SubToolsWidget(MyQWidget):
     closeFile = Signal()
 
     def __init__(self, videoWidget: VideoPlayerWidget, subVideoWidget: VideoPlayerWidget):
+        self.fourcc = None
         self.window = ObjectManager.get("window")
         self.videoWidget = videoWidget
         self.subVideoWidget = subVideoWidget
 
         self.modelManager = ModelManager()
-        
+
         self.modelTimer1 = QTimer()
         self.modelTimer1.timeout.connect(self.modelManager.activate_network)
         self.modelTimer1.start(1)
         super().__init__(name="sub_tools")
-
 
     def initComponents(self):
         self.statusChartWidget = StatusChartWidget()
@@ -59,24 +57,21 @@ class SubToolsWidget(MyQWidget):
         self.stBtnStartRecord.clicked.connect(self.toggleRecord)
         self.subVideoWidget.setFrameReadEvent(self.captureFrame)
         self.videoWidget.stopped.connect(self.toggleFile)
-        
+
         self.stBtnClear.clicked.connect(self.statusChartWidget.clean_datas)
 
         self.stLbCurrFile.setWordWrap(True)
 
         self.modelManager.setChartWidget(self.statusChartWidget)
-        
 
-    def toggleCheck(self, checked:bool):
-        self.recordWithcheck = checked
+    def toggleCheck(self, checked: bool):
+        self.recordWithCheck = checked
         if self.isRecording:
             self.modelManager.modelActive = checked
-
 
     def toggleCamera(self):
         logger.debug('toggle camera')
         self.subVideoWidget.toggleCamera()
-
 
     def toggleRecord(self):
         if self.isRecording:
@@ -86,11 +81,10 @@ class SubToolsWidget(MyQWidget):
             self.startRecord()
             self.stBtnStartRecord.setText("停止录制")
 
-        if not self.recordWithcheck and not self.isRecording and self.modelManager.modelActive:
+        if not self.recordWithCheck and not self.isRecording and self.modelManager.modelActive:
             self.modelManager.modelActive = False
-        elif self.recordWithcheck:
+        elif self.recordWithCheck:
             self.modelManager.modelActive = self.isRecording
-
 
     def openVideoFile(self):
         last_path = settings.get('last_dir_path')
@@ -100,7 +94,7 @@ class SubToolsWidget(MyQWidget):
         filt = "视频文件(*.wmv *avi *.mp4 *.mov);;所有文件(*.*)"
         file_path, filt = QFileDialog.getOpenFileName(self, title, current_path, filt)
         file_name = os.path.split(file_path)[-1]
-        
+
         if file_path:
             # 存储上次打开的文件夹路径
             path = os.path.dirname(file_path)
@@ -111,7 +105,6 @@ class SubToolsWidget(MyQWidget):
         else:
             return None, None
 
-
     def toggleFile(self):
         logger.debug('toggle file')
 
@@ -120,7 +113,7 @@ class SubToolsWidget(MyQWidget):
             if path:
                 print("load")
                 self.videoWidget.load(path)
-                #self.videoWidget.setPlayMode(
+                # self.videoWidget.setPlayMode(
                 # videoPlayer.VideoPlayerWidget.PlayMode.LOOP)
                 self.stLbCurrFile.setText(f"当前文件：{name}")
 
@@ -132,7 +125,6 @@ class SubToolsWidget(MyQWidget):
 
         self.stBtnChooseSubVideo.setText(
             "关闭本地文件" if self.videoWidget.isLoaded else "打开本地文件")
-
 
     ## 开始录制
     def startRecord(self):
@@ -162,13 +154,12 @@ class SubToolsWidget(MyQWidget):
         # 重置计数器
         # self.output_counter = 0
 
-
     def captureFrame(self, _, __):
         # 将画面写入文件
         if not self.subVideoWidget.isOpenedCamera:
             return
         if self.isRecording and self.videoOut:
-                ret, readFrame = self.subVideoWidget.video.capture.read()
-                self.videoOut.write(readFrame)
+            ret, readFrame = self.subVideoWidget.video.capture.read()
+            self.videoOut.write(readFrame)
 
         self.modelManager.onFrameRead(_, __)

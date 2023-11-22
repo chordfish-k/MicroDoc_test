@@ -1,14 +1,15 @@
-from PySide6.QtCharts import QChart, QChartView, QLineSeries,QValueAxis, QCategoryAxis
+from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis
 from PySide6.QtGui import QColor, QPainter
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow, QSizePolicy
+from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow
 from src.assets.assets_loader import Assets
 from src.components import MyQWidget
 from src.util.settings import settings
 from src.util.share import ObjectManager
 
+
 class StatusChartWidget(MyQWidget):
-    window:QMainWindow = None
+    window: QMainWindow = None
     chart: QChart = None
     btn: QPushButton = None
     duration = 1
@@ -16,6 +17,14 @@ class StatusChartWidget(MyQWidget):
     output = Signal()
 
     def __init__(self):
+        self.chartView = None
+        self.y_Aix = None
+        self.x_Aix = None
+        self.series_3 = None
+        self.series_2 = None
+        self.series_1 = None
+        self.x_data_length = None
+        self.data_index = None
         self.window = ObjectManager.get("window")
         super().__init__()
         self.initCharts()
@@ -24,10 +33,9 @@ class StatusChartWidget(MyQWidget):
         Assets.loadQss("my_chart", self)
         self.duration = settings.get("output_duration", int)
 
-
     def initCharts(self):
         # 图表初始化
-        fontColor: QColor = None
+        fontColor: QColor
         if settings.get("theme").startswith("light"):
             fontColor = QColor(0, 0, 0)
         else:
@@ -39,7 +47,7 @@ class StatusChartWidget(MyQWidget):
 
         self.chart = QChart()
         # self.chart.setAnimationOptions(QChart.AnimationOption.NoAnimation)
-        
+
         self.chart.setBackgroundVisible(False)
 
         # 曲线
@@ -62,7 +70,7 @@ class StatusChartWidget(MyQWidget):
         self.x_Aix.setLinePenColor(fontColor)
         self.x_Aix.setGridLineColor(fontColor)
 
-        self.y_Aix = QValueAxis() 
+        self.y_Aix = QValueAxis()
         self.y_Aix.setRange(0.00, 1.00)
         self.y_Aix.setGridLineVisible(False)  # 隐藏参考线
         self.y_Aix.setMinorGridLineVisible(False)
@@ -87,19 +95,19 @@ class StatusChartWidget(MyQWidget):
         self.series_3.attachAxis(self.y_Aix)
 
         # 创建折线视图 窗口
-        self.chartview = QChartView(self.chart)
+        self.chartView = QChartView(self.chart)
         # self.chart.setTitle("简单折线图")
         self.chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
         self.chart.legend().setLabelColor(fontColor)
-        self.chart.setContentsMargins(0,0,0,0)
-        self.chartview.setRenderHint(QPainter.RenderHint.Antialiasing)  # 抗锯齿
-        self.chartview.setGeometry(0, 0, 600, 600)
+        self.chart.setContentsMargins(0, 0, 0, 0)
+        self.chartView.setRenderHint(QPainter.RenderHint.Antialiasing)  # 抗锯齿
+        self.chartView.setGeometry(0, 0, 600, 600)
 
         # 添加到窗体中
         # self.__ui.lineGraphFrame.layout().addWidget(self.chartview)
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(self.chartview)
+        layout.addWidget(self.chartView)
 
         layout3 = QVBoxLayout()
         layout3.setContentsMargins(0, 0, 0, 0)
@@ -108,22 +116,21 @@ class StatusChartWidget(MyQWidget):
         self.setLayout(layout3)
 
         # 增加数据点
+
     def add_chartDatas(self, series, data):
         series.append(self.data_index, data)
-        
 
     def refresh(self):
         # if ObjectManager.get("refreshFlag") == self.lastRefreshTime:
         #     return
         # self.lastRefreshTime = ObjectManager.get("refreshFlag")
 
-        fontColor: QColor = None
+        fontColor: QColor
         if settings.get("theme").startswith("light"):
             fontColor = QColor(0, 0, 0)
         else:
             fontColor = QColor(255, 255, 255)
-        # print(fontColor)
-        
+
         self.chart.legend().setLabelColor(fontColor)
 
         self.x_Aix.setLabelsColor(fontColor)
@@ -134,15 +141,13 @@ class StatusChartWidget(MyQWidget):
         self.y_Aix.setLinePenColor(fontColor)
         self.y_Aix.setGridLineColor(fontColor)
 
-
-    #清除数据
+    # 清除数据
     def clean_datas(self):
         self.data_index = 0
         self.series_1.clear()
         self.series_2.clear()
         self.series_3.clear()
         self.x_Aix.setRange(0.00, self.x_data_length)
-
 
     # 更新数据
     def update_series(self, result):
@@ -152,7 +157,6 @@ class StatusChartWidget(MyQWidget):
         self.add_chartDatas(self.series_2, result[1])
         self.add_chartDatas(self.series_1, result[0])
 
-        
         # 当时间轴大于现有时间轴，进行更新坐标轴，并删除之前数据
         xp2 = self.x_data_length // 2
         sub = self.data_index - self.x_data_length
@@ -164,13 +168,11 @@ class StatusChartWidget(MyQWidget):
 
         self.last = [x for x in result]
 
-
     def repeat_last(self):
         if len(self.last) > 0:
             self.update_series(self.last)
         else:
-            self.update_series([0,1,0])
-
+            self.update_series([0, 1, 0])
 
     def repeat_zero(self):
-        self.update_series([0,0,0])
+        self.update_series([0, 0, 0])

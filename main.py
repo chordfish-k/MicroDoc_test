@@ -1,12 +1,11 @@
-import resources_rc
+import os
+import sys
 from PySide6.QtWidgets import QApplication
-from src.views import MyApp
 from src.util.settings import settings
-import sys, os
+from src.views import MyApp
 
-os.environ["QT_FONT_DPI"] = settings.get("qt_font_dpi") 
-os.environ["CUDA_VISIBLE_DEVICES"] = settings.get("cuda_visble_devices")
-
+os.environ["QT_FONT_DPI"] = settings.get("qt_font_dpi")
+os.environ["CUDA_VISIBLE_DEVICES"] = settings.get("cuda_visible_devices")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -22,11 +22,12 @@ class MyApp(QMainWindow):
     sideBarWidget: SideBarWidget = None
     # 页面
     pages: list[StackPage] = []
-    recordPageWidget: RecordPageWidget = None
-    analysePageWidget: AnalysePageWidget = None
-    thirdPageWidget: ThirdPageWidget = None
-    forthPageWidget: ForthPageWidget = None
-    userPageWidget: UserPageWidget = None
+    # recordPageWidget: RecordPageWidget = None
+    # analysePageWidget: AnalysePageWidget = None
+    # eegPageWidget: EEGPageWidget = None
+    # thirdPageWidget: ThirdPageWidget = None
+    # forthPageWidget: ForthPageWidget = None
+    # userPageWidget: UserPageWidget = None
 
     logouted = Signal()
     loginned = Signal()
@@ -74,8 +75,9 @@ class MyApp(QMainWindow):
         self.sideBarWidget.change.connect(self.changePage)
         # stackWidget
         # 装载页面
-        self.addPage(RecordPageWidget, tooltip="录制", icon="cil-chart", default=True)
-        self.addPage(AnalysePageWidget, tooltip="检测", icon="cil-chart-line")
+        self.addPage(RecordPageWidget, tooltip="录制", icon="cil-mood-very-good", default=True)
+        self.addPage(AnalysePageWidget, tooltip="分析", icon="cil-chart")
+        self.addPage(EEGPageWidget, tooltip="脑电", icon="cil-chart-line")
         self.addPage(ThirdPageWidget, icon="cil-featured-playlist")
         self.addPage(ForthPageWidget, icon="cil-satelite")
         self.addPage(UserPageWidget, icon="cil-user", btnGroup=SideBarWidget.ButtonGroup.DOWN)
@@ -94,7 +96,6 @@ class MyApp(QMainWindow):
         def func(page: int):
             def wrapper():
                 self.changePage(page)
-
             return wrapper
 
         self.sideBarWidget.addPageBtn(func(len(self.pages)), **kwargs)
@@ -130,7 +131,7 @@ class MyApp(QMainWindow):
                 page.refresh()
 
     def loginSuccess(self, data=None):
-        if (data):
+        if data:
             self.settings.setItem("token", data['token'])
             self.settings.setItem("account", data['phone'])
             self.settings.setItem("user", data['name'])

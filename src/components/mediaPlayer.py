@@ -2,6 +2,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtMultimedia import *
 from PySide6.QtMultimediaWidgets import *
 from PySide6.QtCore import *
+from PySide6.QtGui import *
 from src.components.myQWidget import MyQWidget
 
 
@@ -36,9 +37,11 @@ class MediaPlayer(MyQWidget):
         super().__init__()
 
     def initComponents(self):
+        # TODO 使用QVideoSink提取视频帧
         self.audio_output = QAudioOutput(self)
         self.player = QMediaPlayer(self)
         self.wgt_video = QVideoWidget(self)
+        self.wgt_video.videoSink().videoFrameChanged.connect(self.videoFrameChanged)
         self.player.setVideoOutput(self.wgt_video)
         self.player.setAudioOutput(self.audio_output)
         self.player.positionChanged.connect(self.changePosition)
@@ -90,6 +93,9 @@ class MediaPlayer(MyQWidget):
 
     def getDuration(self):
         return self.player.duration()
+
+    def videoFrameChanged(self, videoFrame:QVideoFrame):
+        pass
 
     ########## 重载 #############
     def load(self, path):

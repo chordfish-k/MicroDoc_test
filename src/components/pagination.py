@@ -40,7 +40,7 @@ class PaginationWidget(MyQWidget):
         self.btnNextPage.clicked.connect(self.toNext)
         self.btnPrevPage.clicked.connect(self.toPrev)
 
-    def setPageParms(self, **kwargs):
+    def setPageParams(self, **kwargs):
         """
         kwargs:
             pageSize    :int 每页的数据条数

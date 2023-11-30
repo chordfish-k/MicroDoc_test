@@ -57,7 +57,7 @@ class UserPageWidget(StackPage):
             'pwd': password
         })
 
-        print(res)
+        # print(res)
         if res['code'] == 1:
             # 登录成功
             self.window.loginSuccess(res['data'])
@@ -84,7 +84,7 @@ class UserPageWidget(StackPage):
         self.list = data['records']
 
         # 设置分页信息
-        self.pagination.setPageParms(pageSize=self.pageSize, total=data['total'])
+        self.pagination.setPageParams(pageSize=self.pageSize, total=data['total'])
 
         # 准备容器
         ly: QVBoxLayout = self.lyScroll

@@ -37,6 +37,8 @@ class ImageWidget(QWidget):
 
     def refreshImage(self):
         pixmap = self.__img
+        if not pixmap:
+            return
         pixmap = pixmap.scaled(self.imglb.size() - QSize(10, 10), Qt.AspectRatioMode.KeepAspectRatio,
                                Qt.TransformationMode.SmoothTransformation)
         self.imglb.setPixmap(pixmap)

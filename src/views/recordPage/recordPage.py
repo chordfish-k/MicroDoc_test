@@ -77,8 +77,8 @@ class RecordPageWidget(StackPage):
         self.subToolsWidget.closeFile.connect(self.stopVideo)
         rightSplitter.addWidget(self.subToolsWidget)
 
-        rightSplitter.setStretchFactor(0, 1)
-        rightSplitter.setStretchFactor(1, 1)
+        rightSplitter.setStretchFactor(0, 3)
+        rightSplitter.setStretchFactor(1, 4)
         rightSplitter.handle(1).setAttribute(Qt.WidgetAttribute.WA_Hover, True)
         
         # 使用分离器装载

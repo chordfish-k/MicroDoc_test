@@ -32,6 +32,7 @@ class ModelManager:
 
     outputFn = None
     chart = None
+    eegChartGroup = None
 
     def __init__(self):
         self.min_prob = settings.get('min_accepted_probability', float)
@@ -69,6 +70,9 @@ class ModelManager:
 
     def setChartWidget(self, chart):
         self.chart = chart
+
+    def setEEGChartGroup(self, chartgroup):
+        self.eegChartGroup = chartgroup
 
     def softmax(self, tensor):
         array = tensor.cpu().numpy()
@@ -122,7 +126,8 @@ class ModelManager:
         if type(rects) is None or len(rects) == 0:
             # 输出数据
             if self.chart:
-                self.chart.repeat_last()
+                self.chart.repeatLast()
+                self.eegChartGroup.updateData()
             return
 
         for _, (x, y, w, h) in enumerate(rects):
@@ -137,7 +142,7 @@ class ModelManager:
                 except Exception as e:
                     logger.warn(str(e).split("\n")[0])
                     if self.chart:
-                        self.chart.repeat_last()
+                        self.chart.repeatLast()
                     break
 
             height, width, channel = img_patch.shape
@@ -159,11 +164,13 @@ class ModelManager:
                 result_probability = np.max(result)
                 if result_probability <= self.min_prob:
                     if self.chart:
-                        self.chart.repeat_last()
+                        self.chart.repeatLast()
+                        self.eegChartGroup.updateData()
                     break
 
                 if self.chart:
-                    self.chart.update_series(result)
+                    self.chart.updateSeries(result)
+                    self.eegChartGroup.updateData()
 
                 # 输出结果
                 result_item = result.argmax(0)

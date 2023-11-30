@@ -1,6 +1,9 @@
+import os
+
 from PySide6.QtWidgets import QMainWindow, QWidget, QSplitter
 from PySide6.QtCore import Qt
 from src.components import ImageWidget, StackPage
+from src.util.settings import settings
 from src.util.share import ObjectManager
 
 
@@ -22,8 +25,8 @@ class ForthPageWidget(StackPage):
         rightImg = ImageWidget(self)
         splitter.addWidget(rightImg)
 
-        leftImg.loadImage('src/assets/res/PSD/psd.jpg')
-        rightImg.loadImage('src/assets/res/PSD/psd_topomap.jpg')
+        leftImg.loadImage(os.path.join(settings.get("eeg_folder"), 'output/PSD/psd.jpg'))
+        rightImg.loadImage(os.path.join(settings.get("eeg_folder"), 'output/PSD/psd_topomap.jpg'))
         splitter.setStretchFactor(0, 5)
         splitter.setStretchFactor(1, 5)
 

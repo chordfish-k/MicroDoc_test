@@ -1,0 +1,27 @@
+#EEGPage {
+    background-color:$primaryVariantColor;
+}
+
+#header {
+    background-color: $primaryVariantColor;
+}
+
+QTextEdit {
+    background-color: $backgroundColor;
+    color: $secondaryFontColor;
+    border: none;
+    font-size: 18px;
+}
+
+QPushButton {
+    background-color: $primaryVariantColor;
+    color: $secondaryFontColor;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+QPushButton:hover {
+	background-color: $secondaryVariantColor;
+}
+QPushButton:pressed {
+	background-color: $secondaryVariantColor;
+}

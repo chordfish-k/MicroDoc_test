@@ -8,6 +8,8 @@ from src.components import ImageWidget, StackPage
 from .components import GridImageButton
 from PIL import Image
 
+from ...util.settings import settings
+
 
 class ThirdPageWidget(StackPage):
     window: QMainWindow = None
@@ -38,36 +40,29 @@ class ThirdPageWidget(StackPage):
         self.rightGridLayout.setContentsMargins(0, 0, 0, 0)
         self.rightGridLayout.setSpacing(0)
 
-        icons = Image.open("src/assets/res/ICA/plot_components.jpg")
-        head = 151
-        icons = copyImage(icons, 0, head, icons.width, icons.height - head)
-        iw = icons.width // self.gw
-        ih = icons.height // self.gh
-        # print(icons.width, icons.height, iw, ih)
 
         for i in range(self.gh):
             for j in range(self.gw):
-                ic = copyImage(icons, j * iw, i * ih, iw, ih)
-
                 btn = GridImageButton(self)
                 btn.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
-                btn.loadImage(ic)
                 btn.setIndex(i * 5 + j)
                 btn.clicked.connect(self.onGridBtnClick)
 
                 self.rightGridLayout.addWidget(btn, i, j)
         # 默认选中第一个
-        self.rightGridLayout.itemAtPosition(0, 0).widget().setItemFocus(True)
+        # self.rightGridLayout.itemAtPosition(0, 0).widget().setItemFocus(True)
         self.lastChosen = (0, 0)
 
         splitterLayout.addWidget(rightGrid)
 
         self.outside.layout().addWidget(splitter)
 
-        self.leftImg.loadImage('src/assets/res/ICA/ICA_0.jpg')
+        # self.leftImg.loadImage(os.path.join(settings.get("eeg_folder"), 'output/ICA/ICA_0.jpg'))
 
         splitterLayout.setStretch(0, 5)
         splitterLayout.setStretch(1, 3)
+
+        self.refresh()
 
     def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.MouseButton.LeftButton and not self.window.isMaximized():
@@ -77,8 +72,28 @@ class ThirdPageWidget(StackPage):
             event.accept()
 
     def onGridBtnClick(self, index: int):
-        self.rightGridLayout.itemAtPosition(*self.lastChosen).widget().setItemFocus(False)
-        self.lastChosen = (index // self.gw, index % self.gw)
-        self.rightGridLayout.itemAtPosition(*self.lastChosen).widget().setItemFocus(True)
+        path = os.path.join(settings.get("eeg_folder"), f'output/ICA/ICA_{index}.jpg')
+        if os.path.exists(path):
+            self.rightGridLayout.itemAtPosition(*self.lastChosen).widget().setItemFocus(False)
+            self.lastChosen = (index // self.gw, index % self.gw)
+            self.rightGridLayout.itemAtPosition(*self.lastChosen).widget().setItemFocus(True)
+            self.leftImg.loadImage(path)
 
-        self.leftImg.loadImage(f'src/assets/res/ICA/ICA_{index}.jpg')
+    def refresh(self):
+        path = os.path.join(settings.get("eeg_folder"), "output/ICA/plot_components.jpg")
+        if not os.path.exists(path):
+            return
+        icons = Image.open(path)
+        head = 30
+        icons = copyImage(icons, 0, head, icons.width, icons.height - head)
+        iw = icons.width // self.gw
+        ih = icons.height // self.gh
+
+        for i in range(self.gh):
+            for j in range(self.gw):
+                btn = self.rightGridLayout.itemAtPosition(i, j).widget()
+                ic = copyImage(icons, j * iw, i * ih, iw, ih)
+                btn.loadImage(ic)
+
+    def onPageChanged(self):
+        self.refresh()

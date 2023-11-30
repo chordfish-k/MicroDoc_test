@@ -73,6 +73,7 @@ class Assets:
             k = re.sub('(?:([^\s;]*)(?:\s*)?)(:(?:[0-9A-Za-z ]*\s*))(\$(?:\s*[^";<>\s]*)*)(?=;|$)', convert, res, 0)
             # print(k)
             if qtinstance:
+                logger.debug("正在加载QSS文件: " + os.path.basename(path))
                 qtinstance.setStyleSheet(k)
             else:
                 return res
@@ -88,6 +89,7 @@ class Assets:
             if not ui:
                 ui = loadUiType(path)[0]
                 Assets.uiCache[name] = ui
+                logger.info("正在加载UI文件: " + os.path.basename(path))
 
             qtInstance.ui = ui()
 
@@ -95,7 +97,7 @@ class Assets:
                 qtInstance.ui.setupUi(qtInstance)
                 for k in qtInstance.ui.__dict__:
                     qtInstance.__dict__[k] = qtInstance.ui.__dict__[k]
-                logger.info("正在加载UI文件: " + os.path.basename(path))
+
             else:
                 logger.error("加载UI文件失败: " + os.path.basename(path))
         else:

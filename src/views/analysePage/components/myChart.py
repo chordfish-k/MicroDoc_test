@@ -155,7 +155,7 @@ class MyChartWidget(MyQWidget):
         self.setLayout(layout3)
 
         # 增加数据点
-    def add_chartDatas(self, series, data):
+    def addChartDatas(self, series, data):
         series.append(self.data_index, data)
         
 
@@ -191,7 +191,7 @@ class MyChartWidget(MyQWidget):
 
 
     #清除数据
-    def clean_datas(self):
+    def cleanDatas(self):
         self.data_index = 0
         self.series_1.clear()
         self.series_2.clear()
@@ -203,12 +203,12 @@ class MyChartWidget(MyQWidget):
 
 
     # 更新数据
-    def update_series(self, result):
+    def updateSeries(self, result):
         self.data_index += self.duration
         # print(result)
-        self.add_chartDatas(self.series_3, result[2])
-        self.add_chartDatas(self.series_2, result[1])
-        self.add_chartDatas(self.series_1, result[0])
+        self.addChartDatas(self.series_3, result[2])
+        self.addChartDatas(self.series_2, result[1])
+        self.addChartDatas(self.series_1, result[0])
 
         self.data1[0]['y'].append(str.format("{:.0f}", result[2]*1000))
         self.data1[1]['y'].append(str.format("{:.0f}", result[0]*1000))
@@ -219,7 +219,7 @@ class MyChartWidget(MyQWidget):
         for i in range(0,3):
             if result[i] > averge:
                 category = ((2 - i) / 2.0) + 0.25
-                self.add_chartDatas(self.series_4, category)
+                self.addChartDatas(self.series_4, category)
                 self.data1[2]['y'].append(str.format("{:.0f}", category))
                 break
 
@@ -267,8 +267,8 @@ class MyChartWidget(MyQWidget):
         self.output.emit()
 
 
-    def repeat_last(self):
+    def repeatLast(self):
         if len(self.last) > 0:
-            self.update_series(self.last)
+            self.updateSeries(self.last)
         else:
-            self.update_series([0,1,0])
+            self.updateSeries([0, 1, 0])

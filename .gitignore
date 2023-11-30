@@ -1,4 +1,7 @@
 todolist.**
+*.exe
+*.cmd
+nuitka-crash-report.xml
 
 # some dirs
 .vscode/

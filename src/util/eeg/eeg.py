@@ -44,10 +44,18 @@ class AnalyseThread(QThread):
         save_path = os.path.join(settings.get("eeg_folder"),
                                  f"output/cleaned_raw/{os.path.basename(self.matPath)}.npy")
         # 建文件夹
-        os.makedirs(os.path.join(settings.get("eeg_folder"), "output", "cleaned_raw"))
-        os.makedirs(os.path.join(settings.get("eeg_folder"), "output", "EEG"))
-        os.makedirs(os.path.join(settings.get("eeg_folder"), "output", "ICA"))
-        os.makedirs(os.path.join(settings.get("eeg_folder"), "output", "PSD"))
+        path = os.path.join(settings.get("eeg_folder"), "output", "cleaned_raw")
+        if not os.path.exists(path):
+            os.makedirs(path)
+        path = os.path.join(settings.get("eeg_folder"), "output", "EEG")
+        if not os.path.exists(path):
+            os.makedirs(path)
+        path = os.path.join(settings.get("eeg_folder"), "output", "ICA")
+        if not os.path.exists(path):
+            os.makedirs(path)
+        path = os.path.join(settings.get("eeg_folder"), "output", "PSD")
+        if not os.path.exists(path):
+            os.makedirs(path)
 
         self.analyse(data_path, save_path)
 
@@ -55,10 +63,13 @@ class AnalyseThread(QThread):
         self.sendLog.emit(f"Loading...")
         raw = load_data(data_path)
 
+
+        # ICA
         self.sendLog.emit(f"Begin EEG cleaning...")
         cleaned_raw = clean_EEG(raw)
         self.sendLog.emit(f"Finish EEG cleaning...")
 
+        # EEG
         show_img(raw, 100, "orign")
         show_img(cleaned_raw, 100, "cleaned")
 

@@ -26,7 +26,7 @@ class ForthPageWidget(StackPage):
         splitter.addWidget(self.rightImg)
 
         splitter.setStretchFactor(0, 5)
-        splitter.setStretchFactor(1, 5)
+        splitter.setStretchFactor(1, 3)
 
         splitter.handle(1).setDisabled(True)  # 不可拖动分割器
 

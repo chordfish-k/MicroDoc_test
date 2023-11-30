@@ -1,6 +1,6 @@
 import os
 import html
-from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QSplitter, QPushButton, QLabel, QTextEdit
+from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QSplitter, QPushButton, QLabel, QTextEdit, QFileDialog
 from src.components import StackPage
 from src.util.settings import settings
 from src.util.share import ObjectManager
@@ -26,9 +26,14 @@ class EEGPageWidget(StackPage):
         self.btnAnalyse.clicked.connect(self.startAnalyse)
 
     def openMatFile(self):
-        self.matPath = os.path.join(settings.get("eeg_folder"), "20220118_zjyy_dxmei_01_musicRspSeg1_BL.mat")
-        self.lbPath.setText(os.path.basename(self.matPath))
-        self.btnAnalyse.setEnabled(True)
+        # 选择脑电数据文件
+        current_path = os.path.join(settings.get("eeg_folder"))
+        title = '选择MAT文件'
+        filt = "MAT文件(*.mat);"
+        self.matPath, filt = QFileDialog.getOpenFileName(self, title, current_path, filt)
+        if self.matPath:
+            self.lbPath.setText(os.path.basename(self.matPath))
+            self.btnAnalyse.setEnabled(True)
 
     def startAnalyse(self):
         self.teLog.clear()

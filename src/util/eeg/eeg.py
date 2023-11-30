@@ -4,8 +4,12 @@
 
 import os
 from PySide6.QtCore import QThread, Signal
+from matplotlib import pyplot as plt
+
+from .bad_seg_clean import bad_seg_clean
 from .clean_EEG import clean_EEG
 from .load_data import load_data
+from .make_epochs import make_epochs
 from .save_as_numpy import save_as_numpy
 from .show_img import show_img
 from ..settings import settings
@@ -38,21 +42,44 @@ class AnalyseThread(QThread):
     def run(self):
         data_path = self.matPath
         save_path = os.path.join(settings.get("eeg_folder"),
-                                 f"output/cleaned_raw/{os.path.basename(self.matPath)}.cleaned_raw")
+                                 f"output/cleaned_raw/{os.path.basename(self.matPath)}.npy")
         self.analyse(data_path, save_path)
 
     def analyse(self, data_path, save_path):
+        self.sendLog.emit(f"Loading...")
         raw = load_data(data_path)
+
+        self.sendLog.emit(f"Begin EEG cleaning...")
         cleaned_raw = clean_EEG(raw)
+        self.sendLog.emit(f"Finish EEG cleaning...")
 
         show_img(raw, 100, "orign")
         show_img(cleaned_raw, 100, "cleaned")
 
-        save_as_numpy(raw, save_path)
         save_path = save_path.replace("\\", "/")
-        self.sendLog.emit(f"Finished. output to: {save_path}")
+        save_as_numpy(raw, save_path)
 
 
+        # PSD
+        orign_raw = load_data(data_path)
+        raw = orign_raw.copy()
+
+        self.sendLog.emit(f"Making epochs...")
+        epochs = make_epochs(raw)
+
+        # raw = bad_seg_clean(raw, thresh=70)
+        orign_raw.compute_psd(fmin=0, fmax=130).plot()
+        save_path = os.path.join(settings.get("eeg_folder"), "output/PSD/psd.png").replace("\\", "/")
+        plt.savefig(save_path,
+                    facecolor=(242 / 255, 242 / 255, 242 / 255))
+        self.sendLog.emit(f"Output {save_path}")
+
+        epochs.compute_psd().plot_topomap(normalize=True)
+        save_path = os.path.join(settings.get("eeg_folder"), "output/PSD/psd_topomap.png").replace("\\", "/")
+        plt.savefig(save_path,
+                    facecolor=(242 / 255, 242 / 255, 242 / 255))
+        self.sendLog.emit(f"Output {save_path}")
+        self.sendLog.emit(f"Done.")
 
 
 def eegAnalyse(matPath:str, logFunc=None):

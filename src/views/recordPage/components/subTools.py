@@ -42,9 +42,9 @@ class SubToolsWidget(MyQWidget):
 
         self.modelManager = ModelManager()
 
-        self.modelTimer1 = QTimer()
-        self.modelTimer1.timeout.connect(self.modelManager.activate_network)
-        self.modelTimer1.start(1)
+        self.modelTimer = QTimer()
+        self.modelTimer.timeout.connect(self.modelManager.activate_network)
+        self.modelTimer.start(1)
         super().__init__(name="sub_tools")
 
     def initComponents(self):
@@ -134,12 +134,18 @@ class SubToolsWidget(MyQWidget):
             return
 
         # 新建一个视频文件
-        self.fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+        cap = cv2.VideoCapture(settings.get("camera_device", int))
+        self.fourcc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
         time_str = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        video_path = os.path.join('videos', str(time_str) + '.avi')
+        self.video_path = os.path.join('videos', str(time_str) + '.avi')
         # print(video_path)
+        logger.debug(f"录制视频中，fps={cap.get(cv2.CAP_PROP_FPS)}")
+        # cap.set(cv2.CAP_PROP_FPS, fps)
+        img_size = (settings.get("camera_capture_width", int), settings.get("camera_capture_height", int))
 
-        self.videoOut = cv2.VideoWriter(video_path, self.fourcc, settings.get("capture_video_fps", float), (640, 480))
+        self.videoOut = cv2.VideoWriter(self.video_path, self.fourcc,
+                                        settings.get("capture_video_fps", float) // 2,
+                                        img_size)
 
     ## 停止录制
     def stopRecord(self):
@@ -150,6 +156,7 @@ class SubToolsWidget(MyQWidget):
             # 释放画面缓存
         self.videoOut.release()
         self.videoOut = None
+        logger.debug(f"已停止录制，保存路径：{self.video_path}")
 
         # 重置计数器
         # self.output_counter = 0

@@ -26,12 +26,20 @@ def ica_clean(raw):
     analyseThread.sendLog.emit(str(raw_for_ica.info))
     # print(raw_for_ica.info)
 
+    analyseThread = ObjectManager.get("analyseThread")
+
+
     ica.plot_components(nrows=6, ncols=5, show=False)
-    plt.savefig(os.path.join(settings.get("eeg_folder"), "output/ICA/plot_components.jpg"))
+    savePath = os.path.join(settings.get("eeg_folder"), "output/ICA/plot_components.jpg").replace("\\", "/")
+    plt.savefig(savePath)
+    analyseThread.sendLog.emit(f"Output : {savePath}")
 
     for i in range(n_components):
         ica.plot_properties(raw, picks=[i], show=False)
-        plt.savefig(os.path.join(settings.get("eeg_folder"), f"output/ICA/ICA_{i}.jpg"))
+        savePath = os.path.join(settings.get("eeg_folder"), f"output/ICA/ICA_{i}.jpg").replace("\\", "/")
+        plt.savefig(savePath)
+        analyseThread.sendLog.emit(f"Output : {savePath}")
+
 
     # 自动排除伪迹成分
     ecg_indices, ecg_scores = ica.find_bads_ecg(raw_for_ica, ch_name=raw_for_ica.info['ch_names'][0]

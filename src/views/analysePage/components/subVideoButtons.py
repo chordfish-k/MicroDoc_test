@@ -81,13 +81,13 @@ class SubVideoButtonsWidget(MyQWidget):
 
                 self.videoWidget.load(file_path)
 
-            # 选择mat文件
+            # 选择脑电数据文件
             current_path = os.path.join(settings.get("eeg_folder"), "output", "cleaned_raw")
             title = '选择脑电数据文件'
             filt = "NPY文件(*.npy);"
             file_path, filt = QFileDialog.getOpenFileName(self, title, current_path, filt)
             if file_path:
-                # TODO 启动图表
+                # 设置图表数据源
                 self.eegChartGroup.setNpyDataSource(file_path)
 
             # 播放视频

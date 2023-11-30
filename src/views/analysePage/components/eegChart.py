@@ -1,3 +1,5 @@
+import math
+
 from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis
 from PySide6.QtGui import QColor, QPainter, QPen
 from PySide6.QtCore import Qt, Signal
@@ -15,6 +17,7 @@ class EEGChartWidget(MyQWidget):
     duration = 1
     last = []
     output = Signal()
+    maxAbsY = 1
 
     def __init__(self):
         self.chartView = None
@@ -66,7 +69,7 @@ class EEGChartWidget(MyQWidget):
 
         self.y_Aix = QValueAxis()
         # self.y_Aix.hide()
-        self.y_Aix.setRange(-1.00, 1.00)
+        self.y_Aix.setRange(-self.maxAbsY, self.maxAbsY)
         self.y_Aix.setGridLineVisible(False)  # 隐藏参考线
         self.y_Aix.setMinorGridLineVisible(False)
         self.y_Aix.setTickCount(3)
@@ -159,3 +162,6 @@ class EEGChartWidget(MyQWidget):
             self.x_data_length <<= 1
             self.x_Aix.setRange(0, self.x_data_length)
 
+        if math.fabs(result) > self.maxAbsY:
+            self.maxAbsY = math.fabs(result)
+            self.y_Aix.setRange(-self.maxAbsY, self.maxAbsY)

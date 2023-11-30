@@ -19,17 +19,29 @@ class ForthPageWidget(StackPage):
         splitter = QSplitter(self)
         splitter.setOrientation(Qt.Orientation.Vertical)
 
-        leftImg = ImageWidget(self)
-        splitter.addWidget(leftImg)
+        self.leftImg = ImageWidget(self)
+        splitter.addWidget(self.leftImg)
 
-        rightImg = ImageWidget(self)
-        splitter.addWidget(rightImg)
+        self.rightImg = ImageWidget(self)
+        splitter.addWidget(self.rightImg)
 
-        leftImg.loadImage(os.path.join(settings.get("eeg_folder"), 'output/PSD/psd.jpg'))
-        rightImg.loadImage(os.path.join(settings.get("eeg_folder"), 'output/PSD/psd_topomap.jpg'))
         splitter.setStretchFactor(0, 5)
         splitter.setStretchFactor(1, 5)
 
         splitter.handle(1).setDisabled(True)  # 不可拖动分割器
 
         self.outside.layout().addWidget(splitter)
+
+        self.refresh()
+
+    def refresh(self):
+        path = os.path.join(settings.get("eeg_folder"), 'output/PSD/psd.png')
+        if os.path.exists(path):
+            self.leftImg.loadImage(path)
+
+        path = os.path.join(settings.get("eeg_folder"), 'output/PSD/psd_topomap.png')
+        if os.path.exists(path):
+            self.rightImg.loadImage(path)
+
+    def onPageChanged(self):
+        self.refresh()

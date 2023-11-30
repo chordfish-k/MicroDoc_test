@@ -274,10 +274,14 @@ class VideoPlayerWidget(QWidget):
             self.closeCamera()
 
     def openCamera(self):
-        self.video = self.Video(self, self.window, 0, self.video_zoom)
+        self.video = self.Video(self, self.window, settings.get("camera_device", int), self.video_zoom)
+        cap = self.video.capture
+        img_size = (settings.get("camera_capture_width", int), settings.get("camera_capture_height", int))
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, img_size[1])
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, img_size[0])
         if self.frameReadEvent:
             self.video.setFrameReadEvent(self.frameReadEvent)
-        self.video.timer.start()
+        self.video.timer.start(1000 // settings.get("capture_video_fps", int))
         self.isOpenedCamera = True
 
     def closeCamera(self):

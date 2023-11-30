@@ -43,6 +43,12 @@ class AnalyseThread(QThread):
         data_path = self.matPath
         save_path = os.path.join(settings.get("eeg_folder"),
                                  f"output/cleaned_raw/{os.path.basename(self.matPath)}.npy")
+        # 建文件夹
+        os.makedirs(os.path.join(settings.get("eeg_folder"), "output", "cleaned_raw"))
+        os.makedirs(os.path.join(settings.get("eeg_folder"), "output", "EEG"))
+        os.makedirs(os.path.join(settings.get("eeg_folder"), "output", "ICA"))
+        os.makedirs(os.path.join(settings.get("eeg_folder"), "output", "PSD"))
+
         self.analyse(data_path, save_path)
 
     def analyse(self, data_path, save_path):

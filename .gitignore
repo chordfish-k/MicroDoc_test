@@ -1,6 +1,8 @@
 todolist.**
 *.exe
 *.cmd
+*.mat
+*.npy
 nuitka-crash-report.xml
 
 # some dirs

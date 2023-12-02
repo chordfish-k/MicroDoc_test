@@ -117,7 +117,7 @@ class StatusChartWidget(MyQWidget):
 
         # 增加数据点
 
-    def add_chartDatas(self, series, data):
+    def addChartDatas(self, series, data):
         series.append(self.data_index, data)
 
     def refresh(self):
@@ -142,7 +142,7 @@ class StatusChartWidget(MyQWidget):
         self.y_Aix.setGridLineColor(fontColor)
 
     # 清除数据
-    def clean_datas(self):
+    def cleanDatas(self):
         self.data_index = 0
         self.series_1.clear()
         self.series_2.clear()
@@ -150,12 +150,12 @@ class StatusChartWidget(MyQWidget):
         self.x_Aix.setRange(0.00, self.x_data_length)
 
     # 更新数据
-    def update_series(self, result):
+    def updateSeries(self, result):
         self.data_index += self.duration
         # print(result)
-        self.add_chartDatas(self.series_3, result[2])
-        self.add_chartDatas(self.series_2, result[1])
-        self.add_chartDatas(self.series_1, result[0])
+        self.addChartDatas(self.series_3, result[2])
+        self.addChartDatas(self.series_2, result[1])
+        self.addChartDatas(self.series_1, result[0])
 
         # 当时间轴大于现有时间轴，进行更新坐标轴，并删除之前数据
         xp2 = self.x_data_length // 2
@@ -168,11 +168,11 @@ class StatusChartWidget(MyQWidget):
 
         self.last = [x for x in result]
 
-    def repeat_last(self):
+    def repeatLast(self):
         if len(self.last) > 0:
-            self.update_series(self.last)
+            self.updateSeries(self.last)
         else:
-            self.update_series([0, 1, 0])
+            self.updateSeries([0, 1, 0])
 
-    def repeat_zero(self):
-        self.update_series([0, 0, 0])
+    def repeatZero(self):
+        self.updateSeries([0, 0, 0])

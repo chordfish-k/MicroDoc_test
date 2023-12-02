@@ -127,6 +127,7 @@ class ModelManager:
             # 输出数据
             if self.chart:
                 self.chart.repeatLast()
+            if self.eegChartGroup:
                 self.eegChartGroup.updateData()
             return
 
@@ -143,6 +144,8 @@ class ModelManager:
                     logger.warn(str(e).split("\n")[0])
                     if self.chart:
                         self.chart.repeatLast()
+                    if self.eegChartGroup:
+                        self.eegChartGroup.updateData()
                     break
 
             height, width, channel = img_patch.shape
@@ -165,11 +168,13 @@ class ModelManager:
                 if result_probability <= self.min_prob:
                     if self.chart:
                         self.chart.repeatLast()
+                    if self.eegChartGroup:
                         self.eegChartGroup.updateData()
                     break
 
                 if self.chart:
                     self.chart.updateSeries(result)
+                if self.eegChartGroup:
                     self.eegChartGroup.updateData()
 
                 # 输出结果

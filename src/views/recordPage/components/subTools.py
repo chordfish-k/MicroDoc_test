@@ -58,7 +58,7 @@ class SubToolsWidget(MyQWidget):
         self.subVideoWidget.setFrameReadEvent(self.captureFrame)
         self.videoWidget.stopped.connect(self.toggleFile)
 
-        self.stBtnClear.clicked.connect(self.statusChartWidget.clean_datas)
+        self.stBtnClear.clicked.connect(self.statusChartWidget.cleanDatas)
 
         self.stLbCurrFile.setWordWrap(True)
 

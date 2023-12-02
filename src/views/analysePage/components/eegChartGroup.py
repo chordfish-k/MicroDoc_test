@@ -5,7 +5,6 @@ import numpy as np
 
 
 class EEGChartGroup(MyQWidget):
-
     layout: QVBoxLayout = None
     npyPath = ""
     npyData = None
@@ -13,9 +12,13 @@ class EEGChartGroup(MyQWidget):
     eegCharts = []
     channels = []
     pointer = 0
+    duration = 4
+
+    dataBuf = []
 
     def __init__(self):
         super().__init__()
+        self.duration = settings.get("output_duration", int)
 
     def initComponents(self):
         self.layout = QVBoxLayout(self)
@@ -34,6 +37,7 @@ class EEGChartGroup(MyQWidget):
         logger.info(self.npyData.shape)
 
     def addChart(self, channel: int, color: QColor):
+
         eegChart = EEGChartWidget()
         eegChart.setSeriesColor(color)
         self.layout.addWidget(eegChart)
@@ -41,12 +45,37 @@ class EEGChartGroup(MyQWidget):
         self.eegCharts.append(eegChart)
 
     def cleanAll(self):
+        self.pointer = 0
+        self.dataBuf = []
         for i in range(0, len(self.channels)):
             self.eegCharts[i].cleanDatas()
+            self.dataBuf.append({'x': [], 'y': []})
 
     def updateData(self):
-        for n in range(0, settings.get("output_duration", int)):
+        for n in range(0, self.duration):
             for i in range(0, len(self.channels)):
-                self.eegCharts[i].updateSeries(self.npyData[i][self.pointer])
+                y = self.npyData[self.channels[i]][self.pointer]
+                self.eegCharts[i].updateSeries(y)
+                self.dataBuf[i]["y"].append(str.format("{:.0f}", y*1000))
             self.pointer += 1
 
+    def refresh(self):
+        for chart in self.eegCharts:
+            chart.refresh()
+
+    def getData(self):
+        total = self.pointer
+        # print("total:", total)
+        # print("data_index:", self.data_index)
+        data = []
+        for d in self.dataBuf:
+            d['x'] = [str.format("{:.0f}", 1 + x * self.duration) for x in range(0, total)]
+
+            dataPiece = {
+                    'type': 3,
+                    'x': ",".join(d['x']),
+                    'y': ",".join(d['y']),
+                }
+
+            data.append(dataPiece)
+        return data

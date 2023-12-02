@@ -5,6 +5,7 @@ from .components import CaptureAreaWidget, MyChartWidget, SubVideoButtonsWidget,
 from src.components import StackPage, VideoControllerWidget, VideoPlayerWidget
 from src.model.manager import ModelManager
 from src.util.share import ObjectManager
+from src.util.logger import logger
 
 
 class AnalysePageWidget(StackPage):
@@ -124,14 +125,21 @@ class AnalysePageWidget(StackPage):
 
     def uploadData(self):
         li = self.chartWidget.getData()
+        eeg = self.eegChartGroup.getData()
         tb = self.captureAreaWidget.getData()
 
         data = {
-            'datas': li,
+            'datas': li+eeg,
             'captures': tb
         }
+        # print(li)
+        # print(eeg)
+        # print(data)
 
         res = postReportAPI(data)
+        # print(res)
+        if res['code'] == 1:
+            logger.info(f"数据上传成功，报告id为{res['data']}")
 
     def clearData(self):
         self.chartWidget.cleanDatas()

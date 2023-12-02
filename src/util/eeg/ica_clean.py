@@ -24,10 +24,6 @@ def ica_clean(raw):
 
     analyseThread = ObjectManager.get("analyseThread")
     analyseThread.sendLog.emit(str(raw_for_ica.info))
-    # print(raw_for_ica.info)
-
-    analyseThread = ObjectManager.get("analyseThread")
-
 
     ica.plot_components(nrows=6, ncols=5, show=False)
     savePath = os.path.join(settings.get("eeg_folder"), "output/ICA/plot_components.jpg").replace("\\", "/")

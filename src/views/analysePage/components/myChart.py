@@ -219,8 +219,9 @@ class MyChartWidget(MyQWidget):
         for i in range(0,3):
             if result[i] > averge:
                 category = ((2 - i) / 2.0) + 0.25
+                # print(category)
                 self.addChartDatas(self.series_4, category)
-                self.data1[2]['y'].append(str.format("{:.0f}", category))
+                self.data1[2]['y'].append(str.format("{:.0f}", 2 - i))
                 break
 
         # 当时间轴大于现有时间轴，进行更新坐标轴，并删除之前数据

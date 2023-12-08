@@ -1,7 +1,7 @@
 import math
 
 from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis
-from PySide6.QtGui import QColor, QPainter, QPen
+from PySide6.QtGui import QColor, QPainter
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow
 from src.assets.assets_loader import Assets
@@ -43,6 +43,7 @@ class EEGChartWidget(MyQWidget):
         # 创建折线视图
         self.data_index = 0
         self.x_data_length = 500
+        self.maxLen = 1000
 
         self.chart = QChart()
         # self.chart.setAnimationOptions(QChart.AnimationOption.NoAnimation)
@@ -140,6 +141,10 @@ class EEGChartWidget(MyQWidget):
         self.y_Aix.setLinePenColor(fontColor)
         self.y_Aix.setGridLineColor(fontColor)
 
+    def setXLength(self, startLength, maxLength):
+        self.x_data_length = startLength
+        self.maxLen = maxLength
+
     # 清除数据
     def cleanDatas(self):
         self.data_index = 0
@@ -149,18 +154,20 @@ class EEGChartWidget(MyQWidget):
     # 更新数据
     def updateSeries(self, result):
         self.data_index += 1
-        # print(result)
-
         self.addChartDatas(self.series_1, result)
 
         # 当时间轴大于现有时间轴，进行更新坐标轴，并删除之前数据
-        xp2 = self.x_data_length // 2
         sub = self.data_index - self.x_data_length
         if sub >= 0 :
-            # left = self.data_index - xp2
-            # right = self.data_index + xp2
-            self.x_data_length <<= 1
-            self.x_Aix.setRange(0, self.x_data_length)
+            if self.x_data_length < self.maxLen:
+                self.x_data_length <<= 1
+                self.x_Aix.setRange(0, self.x_data_length)
+            else:
+                half = self.maxLen//2
+                self.x_Aix.setRange(self.data_index - half,
+                                        self.data_index+ half)
+                self.x_data_length += half
+
 
         if math.fabs(result) > self.maxAbsY:
             self.maxAbsY = math.fabs(result)

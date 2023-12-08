@@ -1,4 +1,4 @@
-from PySide6.QtCharts import QChart, QChartView, QLineSeries,QValueAxis, QCategoryAxis
+from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis, QCategoryAxis
 from PySide6.QtGui import QColor, QPainter
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow, QSizePolicy
@@ -7,11 +7,12 @@ from src.components import MyQWidget
 from src.util.settings import settings
 from src.util.share import ObjectManager
 
+
 class MyChartWidget(MyQWidget):
-    window:QMainWindow = None
+    window: QMainWindow = None
     chart: QChart = None
     btn: QPushButton = None
-    data1 = [{'x':[], 'y':[]} for _ in range(3)]
+    data1 = [{'x': [], 'y': []} for _ in range(3)]
     duration = 1
     last = []
 
@@ -28,7 +29,6 @@ class MyChartWidget(MyQWidget):
 
         ObjectManager.set("charts", self)
 
-
     def initCharts(self):
         # 图表初始化
         fontColor: QColor = None
@@ -40,6 +40,7 @@ class MyChartWidget(MyQWidget):
         # 创建折线视图
         self.data_index = 0
         self.x_data_length = 100
+        self.maxLen = 200
 
         self.chart = QChart()
         # self.chart.setAnimationOptions(QChart.AnimationOption.NoAnimation)
@@ -66,7 +67,7 @@ class MyChartWidget(MyQWidget):
         self.x_Aix.setLinePenColor(fontColor)
         self.x_Aix.setGridLineColor(fontColor)
 
-        self.y_Aix = QValueAxis() 
+        self.y_Aix = QValueAxis()
         self.y_Aix.setRange(0.00, 1.00)
         self.y_Aix.setGridLineVisible(False)  # 隐藏参考线
         self.y_Aix.setMinorGridLineVisible(False)
@@ -98,7 +99,6 @@ class MyChartWidget(MyQWidget):
         self.chartview.setRenderHint(QPainter.RenderHint.Antialiasing)  # 抗锯齿
         self.chartview.setGeometry(0, 0, 600, 600)
 
-
         ### 表2
         self.chart2 = QChart()
         self.chart2.setBackgroundVisible(False)
@@ -110,7 +110,7 @@ class MyChartWidget(MyQWidget):
         self.y_Aix2.append("Positive", 0.5)
         self.y_Aix2.append("Neutral", 1)
         self.y_Aix2.append("Negative", 1.5)
-        self.y_Aix2.setRange(0,1.5)
+        self.y_Aix2.setRange(0, 1.5)
 
         self.x_Aix2 = QValueAxis()
         self.x_Aix2.setLinePenColor(fontColor)
@@ -130,15 +130,13 @@ class MyChartWidget(MyQWidget):
         self.chart2.addSeries(self.series_4)
         self.series_4.attachAxis(self.x_Aix2)
         self.series_4.attachAxis(self.y_Aix2)
-        
 
         self.chartview2 = QChartView(self.chart2)
-        #self.chart2.legend().setAlignment(Qt.AlignmentFlag.AlignRight)
+        # self.chart2.legend().setAlignment(Qt.AlignmentFlag.AlignRight)
         self.chart2.legend().hide()
         self.chart2.legend().setLabelColor(fontColor)
         self.chartview2.setRenderHint(QPainter.RenderHint.Antialiasing)  # 抗锯齿
         self.chartview2.setGeometry(0, 0, 600, 600)
-
 
         # 添加到窗体中
         # self.__ui.lineGraphFrame.layout().addWidget(self.chartview)
@@ -147,7 +145,6 @@ class MyChartWidget(MyQWidget):
         layout.addWidget(self.chartview)
         layout.addWidget(self.chartview2)
 
-
         layout3 = QVBoxLayout()
         layout3.setContentsMargins(0, 0, 0, 0)
         layout3.addItem(layout)
@@ -155,9 +152,9 @@ class MyChartWidget(MyQWidget):
         self.setLayout(layout3)
 
         # 增加数据点
+
     def addChartDatas(self, series, data):
         series.append(self.data_index, data)
-        
 
     def refresh(self):
         # if ObjectManager.get("refreshFlag") == self.lastRefreshTime:
@@ -170,7 +167,7 @@ class MyChartWidget(MyQWidget):
         else:
             fontColor = QColor(255, 255, 255)
         # print(fontColor)
-        
+
         self.chart.legend().setLabelColor(fontColor)
 
         self.x_Aix.setLabelsColor(fontColor)
@@ -189,61 +186,64 @@ class MyChartWidget(MyQWidget):
         self.y_Aix2.setLabelsColor(fontColor)
         self.y_Aix2.setGridLineColor(fontColor)
 
+    def setXLength(self, startLength, maxLength):
+        self.x_data_length = startLength
+        self.maxLen = maxLength
 
-    #清除数据
+    # 清除数据
     def cleanDatas(self):
         self.data_index = 0
         self.series_1.clear()
         self.series_2.clear()
         self.series_3.clear()
         self.series_4.clear()
-        self.data1 = [{'x':[], 'y':[]} for _ in range(3)]
+        self.data1 = [{'x': [], 'y': []} for _ in range(3)]
         self.x_Aix.setRange(0.00, self.x_data_length)
         self.x_Aix2.setRange(0.00, self.x_data_length)
-
 
     # 更新数据
     def updateSeries(self, result):
         self.data_index += self.duration
-        # print(result)
+
         self.addChartDatas(self.series_3, result[2])
         self.addChartDatas(self.series_2, result[1])
         self.addChartDatas(self.series_1, result[0])
 
-        self.data1[0]['y'].append(str.format("{:.0f}", result[2]*1000))
-        self.data1[1]['y'].append(str.format("{:.0f}", result[0]*1000))
-        
-        # self.data1[0].append(str.format("{:.0f}", result[0]*1000))
+        self.data1[0]['y'].append(str.format("{:.0f}", result[2] * 1000))
+        self.data1[1]['y'].append(str.format("{:.0f}", result[0] * 1000))
 
-        averge = 0.333
-        for i in range(0,3):
-            if result[i] > averge:
-                category = ((2 - i) / 2.0) + 0.25
-                # print(category)
-                self.addChartDatas(self.series_4, category)
-                self.data1[2]['y'].append(str.format("{:.0f}", 2 - i))
-                break
+        m = 0
+        mval = 0
+        for i in range(0, 3):
+            if result[i] > result[m]:
+                m = i
 
+        category = ((2 - m) / 2.0) + 0.25
+        self.addChartDatas(self.series_4, category)
+        self.data1[2]['y'].append(str.format("{:.0f}", 2 - m))
         # 当时间轴大于现有时间轴，进行更新坐标轴，并删除之前数据
-        xp2 = self.x_data_length // 2
         sub = self.data_index - self.x_data_length
-        # print(self.data_index, self.x_data_length)
-        if sub >= 0 and sub % xp2 <= self.duration:
-            left = self.data_index - xp2
-            right = self.data_index + xp2
-            self.x_Aix.setRange(left, right)
-            self.x_Aix2.setRange(left, right)
-
+        if sub >= 0:
+            if self.x_data_length < self.maxLen:
+                self.x_data_length <<= 1
+                self.x_Aix.setRange(0, self.x_data_length)
+                self.x_Aix2.setRange(0, self.x_data_length)
+            else:
+                half = self.maxLen // 2
+                self.x_Aix.setRange(self.data_index - half,
+                                    self.data_index + half)
+                self.x_Aix2.setRange(self.data_index - half,
+                                     self.data_index + half)
+                self.x_data_length += half
         self.last = result
-
 
     def getData(self):
         total = len(self.data1[0]['y'])
         # print("total:", total)
         # print("data_index:", self.data_index)
-        
+
         self.data1[0]['x'] = self.data1[1]['x'] = self.data1[2]['x'] = \
-            [str.format("{:.0f}", 1+x*self.duration) for x in range(0, total)]
+            [str.format("{:.0f}", 1 + x * self.duration) for x in range(0, total)]
         data = [
             {
                 'type': 0,
@@ -263,10 +263,8 @@ class MyChartWidget(MyQWidget):
         ]
         return data
 
-
     def outputData(self):
         self.output.emit()
-
 
     def repeatLast(self):
         if len(self.last) > 0:

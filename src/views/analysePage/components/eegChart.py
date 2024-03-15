@@ -159,8 +159,13 @@ class EEGChartWidget(MyQWidget):
         if sub >= 0 :
             # left = self.data_index - xp2
             # right = self.data_index + xp2
+            maxLen = 1000
             self.x_data_length <<= 1
-            self.x_Aix.setRange(0, self.x_data_length)
+            if self.x_data_length <= maxLen:
+                self.x_Aix.setRange(0, self.x_data_length)
+            else:
+                self.x_Aix.setRange(self.x_data_length-maxLen-xp2,
+                                    self.x_data_length-xp2)
 
         if math.fabs(result) > self.maxAbsY:
             self.maxAbsY = math.fabs(result)

@@ -67,6 +67,7 @@ class AnalysePageWidget(StackPage):
         self.chartWidget = MyChartWidget()
         self.modelManager.setChartWidget(self.chartWidget)
         self.chartWidget.output.connect(self.uploadData)
+        self.chartWidget.setXLength(500, 1000)
 
         # leftSplitter.addWidget(self.videoPlayerWidget)
         leftSplitter.addWidget(self.eegChartGroup)

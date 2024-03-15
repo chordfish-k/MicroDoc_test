@@ -27,8 +27,8 @@ class EEGChartGroup(MyQWidget):
         self.setLayout(self.layout)
 
         self.addChart(0, QColor(50, 50, 250))
-        self.addChart(1, QColor(50, 250, 50))
-        self.addChart(2, QColor(50, 250, 250))
+        self.addChart(30, QColor(50, 250, 50))
+        self.addChart(33, QColor(50, 250, 250))
 
     def setNpyDataSource(self, path: str):
         self.npyPath = path
@@ -39,6 +39,7 @@ class EEGChartGroup(MyQWidget):
     def addChart(self, channel: int, color: QColor):
 
         eegChart = EEGChartWidget()
+        eegChart.setXLength(500, 1000)
         eegChart.setSeriesColor(color)
         self.layout.addWidget(eegChart)
         self.channels.append(channel)
@@ -54,6 +55,8 @@ class EEGChartGroup(MyQWidget):
     def updateData(self):
         for n in range(0, self.duration):
             for i in range(0, len(self.channels)):
+                if self.pointer >= self.npyData.shape[1]:
+                    return
                 y = self.npyData[self.channels[i]][self.pointer]
                 self.eegCharts[i].updateSeries(y)
                 self.dataBuf[i]["y"].append(str.format("{:.0f}", y*1000))

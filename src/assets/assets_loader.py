@@ -89,7 +89,7 @@ class Assets:
             if not ui:
                 ui = loadUiType(path)[0]
                 Assets.uiCache[name] = ui
-                logger.info("正在加载UI文件: " + os.path.basename(path))
+                logger.debug("正在加载UI文件: " + os.path.basename(path))
 
             qtInstance.ui = ui()
 
